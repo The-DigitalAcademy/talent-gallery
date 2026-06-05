@@ -9,9 +9,9 @@ type TalentColDef = {
     id: string,
     fullname: string,
     profile_image_url: string,
-    programs: { name: string }[],
-    cohorts: { name: string }[],
-    talent_statuses: { name: string }[],
+    programs: { name: string, id: string }[],
+    cohorts: { name: string, id: string }[],
+    talent_statuses: { name: string, id: string }[],
     created_at: string
 }
 export const columns: ColumnDef<TalentColDef>[] = [
@@ -26,7 +26,7 @@ export const columns: ColumnDef<TalentColDef>[] = [
         header: "program",
         cell: ({ row }) => {
             const c: { name: string } = row.getValue("programs")
-            return c.name
+            return c?.name
         }
     },
     {

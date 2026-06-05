@@ -23,6 +23,10 @@ const mainNav = [
         name: "Capabilities",
         href: "/admin/collections/capabilities"
     },
+    {
+        name: "Talent Statuses",
+        href: "/admin/collections/talent-statuses"
+    },
 ]
 
 export default function Sidebar() {

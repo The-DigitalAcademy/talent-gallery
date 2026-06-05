@@ -1,11 +1,12 @@
 "use client"
-import { Capability } from "@/app/lib/definitions";
+import { TalentStatus } from "@/app/lib/definitions";
 import CollectionItemActions from "@/components/admin/collection-item-actions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 
-export const columns: ColumnDef<Capability>[] = [
+export const columns: ColumnDef<TalentStatus>[] = [
     { accessorKey: "name", header: "name" },
+    { accessorKey: "description", header: "description" },
     {
         accessorKey: "created_at",
         header: "created",
