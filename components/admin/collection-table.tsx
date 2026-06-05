@@ -5,13 +5,13 @@ export default function CollectionTable<T>({ data, columns }: { data: T[], colum
     const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
 
     return (
-        <>
-            <table className='w-full text-left border border-slate-300'>
-                <thead className='border-b border-slate-300'>
+        <div className='border0 border-gray-300 rounded-lg overflow-hidden'>
+            <table className='w-full text-left'>
+                <thead className='border-b border-gray-300'>
                     {table.getHeaderGroups().map((hg) => (
-                        <tr key={hg.id}>
+                        <tr key={hg.id} className='h-12'>
                             {hg.headers.map((header) => (
-                                <th key={header.id} className='px-4 py-3 font-medium capitalize'>
+                                <th key={header.id} className='px-4 text-sm text-gray-500 font-semibold capitalize'>
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </th>
                             ))}
@@ -20,9 +20,9 @@ export default function CollectionTable<T>({ data, columns }: { data: T[], colum
                 </thead>
                 <tbody>
                     {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id} className='odd:bg-slate-50 text-sm border-b border-slate-300 last:border-b-0 hover:bg-slate-100'>
+                        <tr key={row.id} className='h-12 text-sm border-b border-gray-300 last:border-b-0 transition hover:bg-gray-100'>
                             {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id} className='px-4 py-1.5'>
+                                <td key={cell.id} className='px-4'>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}
@@ -30,6 +30,6 @@ export default function CollectionTable<T>({ data, columns }: { data: T[], colum
                     ))}
                 </tbody>
             </table>
-        </>
+        </div>
     )
 }
