@@ -5,9 +5,9 @@ import Link from "next/link";
 export default function CollectionItemActions({ id, itemName, collectionSlug }: { id: string, itemName: string, collectionSlug: string }) {
     return (
         <div className='flex gap-4 justify-end'>
-            <Link href={`/admin/collections/${collectionSlug}/${id}/edit`}><SquarePenIcon className='size-5' /></Link>
+            <Link href={`/admin/collections/${collectionSlug}/${id}/edit`} className="cursor-pointer"><SquarePenIcon className='size-4' /></Link>
             <AlertDialog.Root>
-                <AlertDialog.Trigger><Trash2Icon className='size-5' /></AlertDialog.Trigger>
+                <AlertDialog.Trigger><Trash2Icon className='size-4 cursor-pointer' /></AlertDialog.Trigger>
                 <AlertDialog.Portal>
                     <AlertDialog.Backdrop className="fixed inset-0 min-h-dvh bg-black opacity-20 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-50 supports-[-webkit-touch-callout:none]:absolute" />
                     <AlertDialog.Popup className="fixed top-1/2 left-1/2 -mt-8 flex w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 bg-white dark:bg-neutral-950 p-4 text-neutral-950 dark:text-white border border-neutral-950 dark:border-white transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
