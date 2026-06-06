@@ -17,12 +17,10 @@ export default async function Page(props: PageProps) {
     const { data, error } = await supabase.from("locations").select("id, city, country, created_at").ilike('city', `%${searchParams?.city || ""}%`);
 
     return (
-        <div className="flex flex-col gap-5">
-            <CollectionHeader title="Locations" totalEntries={data?.length || 0} slug="locations" />
-            <div className="flex gap-5">
-                <CollectionSearch title="City" keyName="city" />
-            </div>
+        <>
+            <CollectionHeader title="Locations" totalEntries={data?.length || 0} />
+            <CollectionSearch title="City" keyName="city" />
             <CollectionTable data={data || []} columns={columns} />
-        </div>
+        </>
     )
 }

@@ -24,17 +24,15 @@ export default async function Page(props: PageProps) {
     const { data: statuses, error: statusesError } = await supabase.from("talent_statuses").select("id, name")
 
     return (
-        <div className="flex flex-col gap-5">
-            <CollectionHeader title="Talents" totalEntries={data?.length || 0} slug="capabilities" />
-
+        <>
+            <CollectionHeader title="Talents" totalEntries={data?.length || 0} />
             <div className="flex gap-5">
                 <CollectionSearch title="Name" keyName="fullname" />
                 <CollectionFilter title="Program" keyName="program" options={programs?.map(i => ({ label: i.name, value: i.id })) || []} />
                 <CollectionFilter title="Cohort" keyName="cohort" options={cohorts?.map(i => ({ label: i.name, value: i.id })) || []} />
                 <CollectionFilter title="Status" keyName="status" options={statuses?.map(i => ({ label: i.name, value: i.id })) || []} />
             </div>
-
             <CollectionTable data={data || []} columns={columns} />
-        </div>
+        </>
     )
 }

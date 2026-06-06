@@ -17,9 +17,6 @@ export default function CollectionFilter({ title, options, keyName }: { title: s
     return (
         <div className="flex flex-col items-start gap-1">
             <Select.Root items={options} onValueChange={(val) => handleSelect(val)}>
-                <Select.Label className="cursor-default text-sm font-medium text-neutral-950 dark:text-white">
-                    {title}
-                </Select.Label>
                 <Select.Trigger className="flex h-8 min-w-40 items-center justify-between gap-3 pl-2 pr-1 text-sm leading-none whitespace-nowrap border border-slate-300 dark:border-white bg-white dark:bg-neutral-950 text-neutral-950 dark:text-white select-none hover:not-data-disabled:bg-slate-100 dark:hover:not-data-disabled:bg-neutral-800 active:not-data-disabled:bg-neutral-200 dark:active:not-data-disabled:bg-neutral-700 data-disabled:border-neutral-500 data-disabled:text-neutral-500 disabled:border-neutral-500 disabled:text-neutral-500 dark:data-disabled:border-neutral-400 dark:data-disabled:text-neutral-400 data-popup-open:bg-neutral-100 dark:data-popup-open:bg-neutral-800 font-normal focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 dark:focus-visible:outline-white">
                     <Select.Value
                         className="data-placeholder:text-neutral-500 dark:data-placeholder:text-neutral-400"
