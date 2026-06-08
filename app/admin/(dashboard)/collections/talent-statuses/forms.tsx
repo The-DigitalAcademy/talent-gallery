@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Button } from '@base-ui/react/button';
-import { FormState, createCohort, deleteCohort, updateCohort } from './actions';
 import clsx from 'clsx';
 import { Dialog } from '@base-ui/react';
 import { PlusIcon, SquarePenIcon, Trash2Icon, TrashIcon, XIcon } from 'lucide-react';
+import { createTalentStatus, deleteTalentStatus, FormState, updateTalentStatus } from './actions';
 
 const initialState: FormState = {
     success: false,
@@ -14,7 +14,7 @@ const initialState: FormState = {
 };
 
 export function CreateFormDialog() {
-    const [state, formAction, isPending] = React.useActionState(createCohort, initialState);
+    const [state, formAction, isPending] = React.useActionState(createTalentStatus, initialState);
 
     return (
         <Dialog.Root>
@@ -26,7 +26,7 @@ export function CreateFormDialog() {
                 <Dialog.Viewport>
                     <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 flex flex-col gap-4 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 shadow bg-white border border-gray-300 p-4 rounded-xl transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.9] data-starting-style:opacity-0">
                         <div className='flex justify-between items-center'>
-                            <Dialog.Title className="font-semibold">Create a new Cohort</Dialog.Title>
+                            <Dialog.Title className="font-semibold">Create a new Talent Status</Dialog.Title>
                             <Dialog.Close className="text-black" ><XIcon /></Dialog.Close>
                         </div>
                         <Form
@@ -48,7 +48,21 @@ export function CreateFormDialog() {
                                     disabled={isPending}
                                     required
                                     defaultValue=""
-                                    placeholder="Cohort name"
+                                    placeholder="Talent status name"
+                                    className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                />
+                                <Field.Error className="text-xs text-red-700" />
+                            </Field.Root>
+                            <Field.Root name="description" className="flex flex-col items-start gap-2">
+                                <Field.Label className="text-xs text-gray-700">
+                                    Description
+                                </Field.Label>
+                                <Field.Control
+                                    type="text"
+                                    disabled={isPending}
+                                    required
+                                    defaultValue=""
+                                    placeholder="Talent status description"
                                     className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                                 />
                                 <Field.Error className="text-xs text-red-700" />
@@ -59,7 +73,7 @@ export function CreateFormDialog() {
                                 type="submit"
                                 className="rounded-xl border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
                             >
-                                {isPending ? "Creating..." : "Create Cohort"}
+                                {isPending ? "Creating..." : "Create Talent Status"}
                             </Button>
                         </Form>
                     </Dialog.Popup>
@@ -69,9 +83,9 @@ export function CreateFormDialog() {
     );
 }
 
-export function UpdateFormDialog({ item }: { item: { id: string, name: string } }) {
-    const updateCohortWithId = updateCohort.bind(null, item.id)
-    const [state, formAction, isPending] = React.useActionState(updateCohortWithId, initialState);
+export function UpdateFormDialog({ item }: { item: { id: string, name: string, description: string } }) {
+    const updateTalentStatusWithId = updateTalentStatus.bind(null, item.id)
+    const [state, formAction, isPending] = React.useActionState(updateTalentStatusWithId, initialState);
 
     return (
         <Dialog.Root>
@@ -105,7 +119,21 @@ export function UpdateFormDialog({ item }: { item: { id: string, name: string } 
                                     disabled={isPending}
                                     required
                                     defaultValue={item.name}
-                                    placeholder="eg. UI/UX"
+                                    placeholder=""
+                                    className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                />
+                                <Field.Error className="text-xs text-red-700" />
+                            </Field.Root>
+                            <Field.Root name="description" className="flex flex-col items-start gap-2">
+                                <Field.Label className="text-xs text-gray-700">
+                                    Description
+                                </Field.Label>
+                                <Field.Control
+                                    type="text"
+                                    disabled={isPending}
+                                    required
+                                    defaultValue={item.description}
+                                    placeholder=""
                                     className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                                 />
                                 <Field.Error className="text-xs text-red-700" />
@@ -126,9 +154,9 @@ export function UpdateFormDialog({ item }: { item: { id: string, name: string } 
     );
 }
 
-export function DeleteFormDialog({ item }: { item: { id: string, name: string } }) {
-    const deleteCohortWithId = deleteCohort.bind(null, item.id)
-    const [state, formAction, isPending] = React.useActionState(deleteCohortWithId, initialState);
+export function DeleteFormDialog({ item }: { item: { id: string, name: string, description: string } }) {
+    const deleteTalentStatusWithId = deleteTalentStatus.bind(null, item.id)
+    const [state, formAction, isPending] = React.useActionState(deleteTalentStatusWithId, initialState);
 
     return (
         <Dialog.Root>

@@ -1,8 +1,8 @@
 "use client"
 import { Talent } from "@/app/lib/definitions";
-import CollectionItemActions from "@/components/admin/collection-item-actions";
 import TalentAvatar from "@/components/admin/talent-avatar";
 import { ColumnDef } from "@tanstack/react-table";
+import { SquarePenIcon, Trash2Icon } from "lucide-react";
 import moment from "moment";
 
 type TalentColDef = {
@@ -53,6 +53,9 @@ export const columns: ColumnDef<TalentColDef>[] = [
     {
         accessorKey: "id",
         header: "",
-        cell: ({ row }) => <CollectionItemActions id={row.getValue("id")} collectionSlug="talents" itemName={row.getValue("fullname")} />
+        cell: ({ row }) => (<div className="flex gap-3">
+            <SquarePenIcon className='size-4 hover:text-blue-500' />
+            <Trash2Icon className='size-4 hover:text-red-500' />
+        </div>)
     }
 ]

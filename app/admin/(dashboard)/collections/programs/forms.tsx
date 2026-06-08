@@ -159,7 +159,7 @@ export function DeleteFormDialog({ item }: { item: { id: string, name: string } 
                                 type="submit"
                                 className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
                             >
-                                Delete"
+                                Delete
                             </Button>}
                         </Form>
                     </Dialog.Popup>

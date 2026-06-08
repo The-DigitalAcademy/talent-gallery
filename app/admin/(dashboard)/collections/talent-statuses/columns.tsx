@@ -1,8 +1,8 @@
 "use client"
 import { TalentStatus } from "@/app/lib/definitions";
-import CollectionItemActions from "@/components/admin/collection-item-actions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
+import { DeleteFormDialog, UpdateFormDialog } from "./forms";
 
 export const columns: ColumnDef<TalentStatus>[] = [
     { accessorKey: "name", header: "name" },
@@ -15,6 +15,12 @@ export const columns: ColumnDef<TalentStatus>[] = [
     {
         accessorKey: "id",
         header: "",
-        cell: ({ row }) => <CollectionItemActions id={row.getValue("id")} collectionSlug="cohorts" itemName={row.getValue("name")} />
+        cell: ({ row }) => {
+            const item: { id: string, name: string, description: string } = { id: row.getValue("id"), name: row.getValue("name"), description: row.getValue("description") }
+            return (<div key={item.id} className='flex gap-4 justify-end'>
+                <UpdateFormDialog item={item} />
+                <DeleteFormDialog item={item} />
+            </div>)
+        }
     }
 ]
