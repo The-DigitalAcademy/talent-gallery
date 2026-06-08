@@ -17,7 +17,7 @@ export default async function Page(props: PageProps) {
     const { data, error } = await supabase.from("capabilities").select("id, name, created_at").ilike('name', `%${searchParams?.name || ""}%`).order('created_at', { ascending: false });
 
     return (
-        <div className="flex flex-col gap-5">
+        <>
             <div className="flex justify-between items-start">
                 <CollectionHeader title="Capabilities" totalEntries={data?.length || 0} />
                 <CreateFormDialog />
@@ -26,6 +26,6 @@ export default async function Page(props: PageProps) {
                 <CollectionSearch title="Name" keyName="name" />
             </div>
             <CollectionTable data={data || []} columns={columns} />
-        </div>
+        </>
     )
 }

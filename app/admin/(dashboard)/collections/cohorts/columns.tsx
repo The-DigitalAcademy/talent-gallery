@@ -1,10 +1,10 @@
 "use client"
-import { Capability } from "@/app/lib/definitions";
-import CollectionItemActions from "@/components/admin/collection-item-actions";
+import { Cohort } from "@/app/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
+import { DeleteFormDialog, UpdateFormDialog } from "./forms";
 
-export const columns: ColumnDef<Capability>[] = [
+export const columns: ColumnDef<Cohort>[] = [
     { accessorKey: "name", header: "name" },
     {
         accessorKey: "created_at",
@@ -14,6 +14,12 @@ export const columns: ColumnDef<Capability>[] = [
     {
         accessorKey: "id",
         header: "",
-        cell: ({ row }) => <CollectionItemActions id={row.getValue("id")} collectionSlug="capabilities" itemName={row.getValue("name")} />
+        cell: ({ row }) => {
+            const item: { id: string, name: string } = { id: row.getValue("id"), name: row.getValue("name") }
+            return (<div key={item.id} className='flex gap-4 justify-end'>
+                <UpdateFormDialog item={item} />
+                <DeleteFormDialog item={item} />
+            </div>)
+        }
     }
 ]
