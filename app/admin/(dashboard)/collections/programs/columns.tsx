@@ -1,8 +1,8 @@
 "use client"
 import { Program } from "@/app/lib/definitions";
-import CollectionItemActions from "@/components/admin/collection-item-actions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
+import { DeleteFormDialog, UpdateFormDialog } from "./forms";
 
 export const columns: ColumnDef<Program>[] = [
     { accessorKey: "name", header: "name" },
@@ -14,6 +14,12 @@ export const columns: ColumnDef<Program>[] = [
     {
         accessorKey: "id",
         header: "",
-        cell: ({ row }) => <CollectionItemActions id={row.getValue("id")} collectionSlug="programs" itemName={row.getValue("name")} />
+        cell: ({ row }) => {
+            const item: { id: string, name: string } = { id: row.getValue("id"), name: row.getValue("name") }
+            return (<div key={item.id} className='flex gap-4 justify-end'>
+                <UpdateFormDialog item={item} />
+                <DeleteFormDialog item={item} />
+            </div>)
+        }
     }
 ]
