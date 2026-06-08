@@ -73,7 +73,7 @@ export default function Sidebar({ user }: { user: { name: string, email: string,
                         className="w-10"
                     />
                     <Avatar.Fallback delay={600} className="flex size-7 items-center justify-center text-xs ">
-                        {(user.name || "user")
+                        {user.name
                             .trim()
                             .split(/\s+/) // Splits by any amount of whitespace
                             .map(part => part[0].toUpperCase())

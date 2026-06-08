@@ -1,7 +1,7 @@
 import Sidebar from "@/components/admin/sidebar";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
-import { createClient } from "../lib/supabase/server";
+import { createClient } from "../../lib/supabase/server";
 
 
 const inter = Inter({

@@ -17,7 +17,7 @@ export default async function Page(props: PageProps) {
 
     return (
         <div className="flex flex-col gap-5">
-            <CollectionHeader title="Capabilities" totalEntries={data?.length || 0} slug="capabilities" />
+            <CollectionHeader title="Capabilities" totalEntries={data?.length || 0} />
             <div className="flex gap-5">
                 <CollectionSearch title="Name" keyName="name" />
             </div>
