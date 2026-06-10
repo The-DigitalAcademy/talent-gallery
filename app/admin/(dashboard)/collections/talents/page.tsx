@@ -5,6 +5,7 @@ import CollectionFilter from "@/components/admin/collection-filter";
 import CollectionHeader from "@/components/admin/collection-header";
 import CollectionSearch from "@/components/admin/collection-search";
 import { fetchTalents } from "@/app/lib/data";
+import Link from "next/link";
 
 type PageProps = {
     searchParams?: Promise<{
@@ -25,7 +26,12 @@ export default async function Page(props: PageProps) {
 
     return (
         <>
-            <CollectionHeader title="Talents" totalEntries={data?.length || 0} />
+            <div className="flex justify-between items-start">
+                <CollectionHeader title="Talents" totalEntries={data?.length || 0} />
+                <Link href="/admin/collections/talents/create" className="text-black px-3 text-sm font-medium flex items-center gap-2 rounded-lg cursor-pointer hover:bg-gray-200 shadow h-8 border border-gray-300">
+                    Add Item
+                </Link>
+            </div>
             <div className="flex gap-5">
                 <CollectionSearch title="Name" keyName="fullname" />
                 <CollectionFilter title="Program" keyName="program" options={programs?.map(i => ({ label: i.name, value: i.id })) || []} />
