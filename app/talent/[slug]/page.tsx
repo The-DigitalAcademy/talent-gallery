@@ -1,16 +1,50 @@
 import { createClient } from "@/app/lib/supabase/server";
+import { TalentProfile } from "./_components/TalentProfile";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params
-    const supabase = await createClient();
-    const { data: talent, error: talentError } = await supabase.from("talents").select("id, fullname, bio").eq("slug", slug).single()
-    return (
-        <div>
-            <h1 className="text-2xl ml-10 mt-10 mb-5 font-semibold">Talent</h1>
-            <div className="ml-10 flex flex-col">
-                <h2>{talent?.fullname}</h2>
-                <p>{talent?.bio}</p>
-            </div>
-        </div>
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: talent, error } = await supabase
+  .from("talents")
+  .select(`
+    *,
+    location:locations(city, country),
+    cohort:cohorts(name),
+    program:programs(name),
+    talent_status:talent_statuses(name),
+    capabilities:talent_capabilities(
+      capability:capabilities(id, name)
+    ),
+    work_experiences(*),
+    projects:talent_projects(
+      project:projects(
+        id,
+        name,
+        description,
+        capabilities:project_capabilities(
+          capability:capabilities(name)
+        )
+      )
+    ),
+    endorsements(
+      id,
+      endorser_name,
+      message
     )
+  `)
+  .eq("slug", slug)
+  .eq("is_published", true)
+  .single();
+    console.log(talent)
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500">Failed to load talent profile.</p>
+      </main>
+    );
+  }
+
+  return <TalentProfile talent={talent} />;
 }
