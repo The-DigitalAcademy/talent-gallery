@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Button } from '@base-ui/react/button';
-import { FormState, createProject, deleteProject, updateProject } from './actions';
+import { FormState, deleteProject, upsert } from './actions';
 import clsx from 'clsx';
 import { Dialog } from '@base-ui/react';
 import { PlusIcon, SquarePenIcon, Trash2Icon, XIcon } from 'lucide-react';
@@ -14,6 +14,7 @@ const initialState: FormState = {
 };
 
 export function CreateFormDialog() {
+    const createProject = upsert.bind(null, null)
     const [state, formAction, isPending] = React.useActionState(createProject, initialState);
 
     return (
@@ -57,13 +58,14 @@ export function CreateFormDialog() {
                                 <Field.Label className="text-xs text-gray-700">
                                     Description
                                 </Field.Label>
-                                <Field.Control
-                                    type="text"
+                                <textarea
+                                    rows={4}
+                                    id='description'
+                                    name='description'
                                     disabled={isPending}
                                     required
-                                    defaultValue=""
-                                    placeholder="Project description"
-                                    className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                    placeholder=""
+                                    className="border p-1 text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                                 />
                                 <Field.Error className="text-xs text-red-700" />
                             </Field.Root>
@@ -84,7 +86,7 @@ export function CreateFormDialog() {
 }
 
 export function UpdateFormDialog({ item }: { item: { id: string, name: string, description: string } }) {
-    const updateProjectWithId = updateProject.bind(null, item.id)
+    const updateProjectWithId = upsert.bind(null, item.id)
     const [state, formAction, isPending] = React.useActionState(updateProjectWithId, initialState);
 
     return (
@@ -136,7 +138,7 @@ export function UpdateFormDialog({ item }: { item: { id: string, name: string, d
                                     required
                                     defaultValue={item.description}
                                     placeholder=""
-                                    className="border text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                    className="border p-1 text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                                 />
                                 <Field.Error className="text-xs text-red-700" />
                             </Field.Root>
