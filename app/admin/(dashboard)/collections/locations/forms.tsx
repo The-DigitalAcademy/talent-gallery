@@ -6,7 +6,7 @@ import { Button } from '@base-ui/react/button';
 import clsx from 'clsx';
 import { Dialog } from '@base-ui/react';
 import { PlusIcon, SquarePenIcon, Trash2Icon, XIcon } from 'lucide-react';
-import { createLocation, deleteLocation, FormState, updateLocation } from './actions';
+import { deleteLocation, FormState, upsert } from './actions';
 
 const initialState: FormState = {
     success: false,
@@ -14,6 +14,7 @@ const initialState: FormState = {
 };
 
 export function CreateFormDialog() {
+    const createLocation = upsert.bind(null, null)
     const [state, formAction, isPending] = React.useActionState(createLocation, initialState);
 
     return (
@@ -84,7 +85,7 @@ export function CreateFormDialog() {
 }
 
 export function UpdateFormDialog({ item }: { item: { id: string, city: string, country: string } }) {
-    const updateLocationWithId = updateLocation.bind(null, item.id)
+    const updateLocationWithId = upsert.bind(null, item.id)
     const [state, formAction, isPending] = React.useActionState(updateLocationWithId, initialState);
 
     return (

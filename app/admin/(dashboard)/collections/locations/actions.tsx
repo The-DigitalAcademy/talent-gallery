@@ -29,47 +29,7 @@ export type FormState = {
     };
 };
 
-export async function createLocation(prevState: FormState, formData: FormData): Promise<FormState> {
-    // Extract and validate raw form entries using the schema
-    const validatedFields = FormSchema.safeParse({
-        city: formData.get('city'),
-        country: formData.get('country')
-    });
-
-    // If validation fails, format the Zod errors and return them to the UI
-    if (!validatedFields.success) {
-        return {
-            success: false,
-            message: 'Validation failed. Please check the fields below.',
-            errors: validatedFields.error.flatten().fieldErrors,
-        };
-    }
-
-    // At this point, the data is completely valid and strictly typed
-    const { city, country } = validatedFields.data;
-
-    try {
-        // Perform database operations here (e.g., db.insert({ name, description }))
-        console.log('Successfully validated:', { city, country });
-        const supabase = await createClient()
-        const { error } = await supabase.from("locations").insert({ city, country })
-        if (error) throw error
-
-        revalidatePath("/admin/collections/locations");
-        return {
-            success: true,
-            message: 'Success! Item created',
-        };
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
-    }
-}
-
-export async function updateLocation(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+export async function upsert(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
     // Extract and validate raw form entries using the schema
     const validatedFields = FormSchema.safeParse({
         city: formData.get('city'),
@@ -88,25 +48,47 @@ export async function updateLocation(id: string, prevState: FormState, formData:
     // At this point, the data is completely valid and strictly typed
     const { city, country } = validatedFields.data;
 
-    try {
-        // Perform database operations here (e.g., db.insert({ name, description }))
-        console.log('Successfully validated', { city, country });
-        const supabase = await createClient()
-        const { error } = await supabase.from("locations").update({ city, country }).eq('id', id)
-        if (error) throw error
+    if (id === null) {
+        // create
+        try {
+            const supabase = await createClient()
+            const { error } = await supabase.from("locations").insert({ city, country })
+            if (error) throw error
 
-        revalidatePath("/admin/collections/locations");
-        return {
-            success: true,
-            message: 'Success! Item updated',
-        };
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
+            revalidatePath("/admin/collections/locations");
+            return {
+                success: true,
+                message: 'Success! Item created',
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: 'A database error occurred. Please try again.',
+            };
+        }
+    } else {
+        // update
+        try {
+            const supabase = await createClient()
+            const { error } = await supabase.from("locations").update({ city, country }).eq('id', id)
+            if (error) throw error
+
+            revalidatePath("/admin/collections/locations");
+            return {
+                success: true,
+                message: 'Success! Item updated',
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: 'A database error occurred. Please try again.',
+            };
+        }
     }
+
+
 }
 
 export async function deleteLocation(id: string) {
