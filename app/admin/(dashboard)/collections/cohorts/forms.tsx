@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Button } from '@base-ui/react/button';
-import { FormState, createCohort, deleteCohort, updateCohort } from './actions';
+import { FormState, deleteCohort, upsert } from './actions';
 import clsx from 'clsx';
 import { Dialog } from '@base-ui/react';
-import { PlusIcon, SquarePenIcon, Trash2Icon, TrashIcon, XIcon } from 'lucide-react';
+import { PlusIcon, SquarePenIcon, Trash2Icon, XIcon } from 'lucide-react';
 
 const initialState: FormState = {
     success: false,
@@ -14,6 +14,7 @@ const initialState: FormState = {
 };
 
 export function CreateFormDialog() {
+    const createCohort = upsert.bind(null, null) //bind null for id param to perform insert
     const [state, formAction, isPending] = React.useActionState(createCohort, initialState);
 
     return (
@@ -70,7 +71,7 @@ export function CreateFormDialog() {
 }
 
 export function UpdateFormDialog({ item }: { item: { id: string, name: string } }) {
-    const updateCohortWithId = updateCohort.bind(null, item.id)
+    const updateCohortWithId = upsert.bind(null, item.id)
     const [state, formAction, isPending] = React.useActionState(updateCohortWithId, initialState);
 
     return (

@@ -23,46 +23,7 @@ export type FormState = {
     };
 };
 
-export async function createCohort(prevState: FormState, formData: FormData): Promise<FormState> {
-    // Extract and validate raw form entries using the schema
-    const validatedFields = FormSchema.safeParse({
-        name: formData.get('name')
-    });
-
-    // If validation fails, format the Zod errors and return them to the UI
-    if (!validatedFields.success) {
-        return {
-            success: false,
-            message: 'Validation failed. Please check the fields below.',
-            errors: validatedFields.error.flatten().fieldErrors,
-        };
-    }
-
-    // At this point, the data is completely valid and strictly typed
-    const { name } = validatedFields.data;
-
-    try {
-        // Perform database operations here (e.g., db.insert({ name, description }))
-        console.log('Successfully validated and saved:', { name });
-        const supabase = await createClient()
-        const { error } = await supabase.from("cohorts").insert({ name })
-        if (error) throw error
-
-        revalidatePath("/admin/collections/cohorts");
-        return {
-            success: true,
-            message: 'Success! Item created',
-        };
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
-    }
-}
-
-export async function updateCohort(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+export async function upsert(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
     // Extract and validate raw form entries using the schema
     const validatedFields = FormSchema.safeParse({
         name: formData.get('name')
@@ -80,24 +41,44 @@ export async function updateCohort(id: string, prevState: FormState, formData: F
     // At this point, the data is completely valid and strictly typed
     const { name } = validatedFields.data;
 
-    try {
-        // Perform database operations here (e.g., db.insert({ name, description }))
-        console.log('Successfully validated', { name });
-        const supabase = await createClient()
-        const { error } = await supabase.from("cohorts").update({ name }).eq('id', id)
-        if (error) throw error
+    if (id === null) {
+        // // Insert
+        try {
+            const supabase = await createClient()
+            const { error } = await supabase.from("cohorts").insert({ name })
+            if (error) throw error
 
-        revalidatePath("/admin/collections/cohorts");
-        return {
-            success: true,
-            message: 'Success! Item updated',
-        };
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
+            revalidatePath("/admin/collections/cohorts");
+            return {
+                success: true,
+                message: 'Success! Item created',
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: 'A database error occurred. Please try again.',
+            };
+        }
+    } else {
+        // Update
+        try {
+            const supabase = await createClient()
+            const { error } = await supabase.from("cohorts").update({ name }).eq('id', id)
+            if (error) throw error
+
+            revalidatePath("/admin/collections/cohorts");
+            return {
+                success: true,
+                message: 'Success! Item updated',
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: 'A database error occurred. Please try again.',
+            };
+        }
     }
 }
 
