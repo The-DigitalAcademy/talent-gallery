@@ -85,7 +85,6 @@ export async function updateCohort(id: string, prevState: FormState, formData: F
         console.log('Successfully validated', { name });
         const supabase = await createClient()
         const { error } = await supabase.from("cohorts").update({ name }).eq('id', id)
-        console.log({ error })
         if (error) throw error
 
         revalidatePath("/admin/collections/cohorts");

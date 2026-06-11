@@ -93,7 +93,6 @@ export async function updateTalentStatus(id: string, prevState: FormState, formD
         console.log('Successfully validated', { name, description });
         const supabase = await createClient()
         const { error } = await supabase.from("talent_statuses").update({ name, description }).eq('id', id)
-        console.log({ error })
         if (error) throw error
 
         revalidatePath("/admin/collections/talent-statuses");

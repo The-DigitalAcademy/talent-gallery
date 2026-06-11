@@ -93,7 +93,6 @@ export async function updateLocation(id: string, prevState: FormState, formData:
         console.log('Successfully validated', { city, country });
         const supabase = await createClient()
         const { error } = await supabase.from("locations").update({ city, country }).eq('id', id)
-        console.log({ error })
         if (error) throw error
 
         revalidatePath("/admin/collections/locations");

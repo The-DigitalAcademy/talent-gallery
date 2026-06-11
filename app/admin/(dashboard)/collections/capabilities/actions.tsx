@@ -85,7 +85,6 @@ export async function updateCapability(id: string, prevState: FormState, formDat
         console.log('Successfully validated', { name });
         const supabase = await createClient()
         const { error } = await supabase.from("capabilities").update({ name }).eq('id', id)
-        console.log({ error })
         if (error) throw error
 
         revalidatePath("/admin/collections/capabilities");
