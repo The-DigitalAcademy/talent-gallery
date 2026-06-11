@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Button } from '@base-ui/react/button';
-import { FormState, createCapability, deleteCapability, updateCapability } from './actions';
+import { FormState, deleteCapability, upsert } from './actions';
 import clsx from 'clsx';
 import { Dialog } from '@base-ui/react';
 import { PlusIcon, SquarePenIcon, Trash2Icon, TrashIcon, XIcon } from 'lucide-react';
@@ -14,6 +14,7 @@ const initialState: FormState = {
 };
 
 export function CreateFormDialog() {
+    const createCapability = upsert.bind(null, null)
     const [state, formAction, isPending] = React.useActionState(createCapability, initialState);
 
     return (
@@ -70,7 +71,7 @@ export function CreateFormDialog() {
 }
 
 export function UpdateFormDialog({ item }: { item: { id: string, name: string } }) {
-    const updateCapabilityWithId = updateCapability.bind(null, item.id)
+    const updateCapabilityWithId = upsert.bind(null, item.id)
     const [state, formAction, isPending] = React.useActionState(updateCapabilityWithId, initialState);
 
     return (
