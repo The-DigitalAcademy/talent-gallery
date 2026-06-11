@@ -99,7 +99,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
               {location && <p className="text-gray-500 text-sm">{location}</p>}
             </div>
           </div>
-          <a href="/gallery" aria-label="Back to gallery">
+          <a href="/talents" aria-label="Back to gallery">
             <CloseButton onClick={() => {}} />
           </a>
         </div>
