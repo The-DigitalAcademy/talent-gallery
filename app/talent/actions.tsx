@@ -33,7 +33,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     endorsements(id, endorser_name, message)
   `);
 
-  // 💡 EVERY filter now completely ignores uppercase vs lowercase strings
+  //  EVERY filter now completely ignores uppercase vs lowercase strings
   if (filters.cohort) {
     query = query.ilike("cohorts.name", filters.cohort);
   }
@@ -49,7 +49,7 @@ export async function getFilteredTalents(filters: FilterParams) {
   if (filters.status) {
     query = query.ilike("talent_statuses.name", filters.status);
   }
-
+query = query.range(0, 11);
   const { data, error } = await query;
 
   if (error) {

@@ -2,8 +2,8 @@
 import FilterControls from '../components/ui/FilterControls'; 
 import TalentCard from '../components/ui/TalentCard';
 import { getFilteredTalents, FilterParams } from './actions';
-
-import { createClient } from '../lib/supabase/server'; // Adjust this path to match your server client location
+import Link from "next/link";
+import { createClient } from '../lib/supabase/server'; 
 
 interface PageProps {
   searchParams: Promise<FilterParams>;
@@ -23,33 +23,43 @@ interface ConfirmedTalentSchema {
 }
 
 export default async function Home({ searchParams }: PageProps) {
-  const filters = await searchParams;
   const supabase = await createClient();
+  
+  const filters = await searchParams;
+  const currentPage = Math.max(1, parseInt(filters.page || "1", 10));
 
-  // 1. Fetch filtered talents and dropdown options in parallel
   const [
     rawTalents,
+    { data: cohorts },
     { data: locations },
     { data: programs },
-    { data: cohorts },
     { data: statuses },
     { data: capabilities }
   ] = await Promise.all([
     getFilteredTalents(filters),
+    supabase.from("cohorts").select("id, name"),
     supabase.from("locations").select("id, city"),
     supabase.from("programs").select("id, name"),
-    supabase.from("cohorts").select("id, name"),
     supabase.from("talent_statuses").select("id, name"),
     supabase.from("capabilities").select("id, name")
   ]);
 
   const talents = (rawTalents as unknown as ConfirmedTalentSchema[]) || [];
 
+  // 💡 Pluralized to match your exact file destination directory path structure safely
+  const buildPaginationUrl = (pageTarget: number) => {
+    const nextParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, val]) => {
+      if (val) nextParams.set(key, val);
+    });
+    nextParams.set("page", pageTarget.toString());
+    return `/talent?${nextParams.toString()}`;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50/50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6">
         
-        {/* 2. Pass the live database arrays straight into your control filters */}
         <FilterControls 
           locations={locations || []}
           programs={programs || []}
@@ -58,15 +68,15 @@ export default async function Home({ searchParams }: PageProps) {
           capabilities={capabilities || []}
         />
 
+        {/* 💡 FIXED: Stripped out the broken page.length reference to prevent client crashing */}
         <div className="text-sm text-slate-600 font-medium px-1">
-          Showing <span className="text-blue-600 font-bold">{talents.length}</span> of{' '}
-          <span className="font-bold">{talents.length}</span> talent profiles
+          Showing page <span className="text-blue-600 font-bold">{currentPage}</span> of results
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {talents.length === 0 ? (
             <div className="col-span-full bg-white text-center py-16 border rounded-2xl shadow-sm">
-              <p className="text-slate-400 font-medium">No talent profiles match your current filter settings.</p>
+              <p className="text-slate-400 font-medium">No talent profiles found on this page matching your settings.</p>
             </div>
           ) : (
             talents.map((talent) => (
@@ -74,6 +84,34 @@ export default async function Home({ searchParams }: PageProps) {
             ))
           )}
         </div>
+
+        {/* PAGINATION PANEL */}
+        {talents.length > 0 && (
+          <div className="flex items-center justify-center gap-4 pt-8 pb-4">
+            {currentPage > 1 && (
+              <Link 
+                href={buildPaginationUrl(currentPage - 1)}
+                className="bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-slate-50 shadow-sm transition-colors"
+              >
+                ← Previous Page
+              </Link>
+            )}
+            
+            <span className="text-sm font-semibold text-slate-500 bg-slate-100/80 px-3 py-1.5 rounded-lg">
+              Page {currentPage}
+            </span>
+
+            {talents.length === 12 && (
+              <Link 
+                href={buildPaginationUrl(currentPage + 1)}
+                className="bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-slate-50 shadow-sm transition-colors"
+              >
+                Next Page →
+              </Link>
+            )}
+          </div>
+        )}
+
       </div>
     </div>
   );

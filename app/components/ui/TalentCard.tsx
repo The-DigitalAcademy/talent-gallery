@@ -44,9 +44,11 @@ export default function TalentCard({ talent }: TalentCardProps) {
   const displayStatus = talent.talent_status?.name;
 
   return (
-    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}>
+    <div 
+    style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
+    className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}>
       
-      {/* 🛠️ TOP UTILITIES: e.stopPropagation() prevents the card link from firing */}
+      {/* TOP UTILITIES: e.stopPropagation() prevents the card link from firing */}
       <div 
         className="absolute top-4 right-4 flex items-center gap-3 text-slate-400 z-10"
         onClick={(e) => e.stopPropagation()}
