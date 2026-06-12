@@ -95,17 +95,22 @@ export default function TalentCard({ talent }: TalentCardProps) {
           {talent.bio}
         </p>
 
-        {/* Capability Tag Matrix */}
+        
         <div className="flex flex-wrap gap-1.5 mb-6">
-          {talent.capabilities?.map((c) => (
-            <span 
-              key={c.capability.id} 
-              className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md"
-            >
-              {c.capability.name}
-            </span>
-          ))}
-        </div>
+  {talent.capabilities?.map((c, index) => {
+    // 💡 Defensively skip rendering if the capability link is broken or null
+    if (!c.capability?.name) return null;
+
+    return (
+      <span 
+        key={c.capability.id || index} 
+        className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md"
+      >
+        {c.capability.name}
+      </span>
+    );
+  })}
+</div>
       </div>
 
       {/* Link matching your teammate's dynamic directory structure */}
