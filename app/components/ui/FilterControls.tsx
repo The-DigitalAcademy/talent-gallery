@@ -104,7 +104,7 @@ export default function FilterControls({
       {/* Clear Active Filters Utility */}
       {searchParams.toString() && (
         <button 
-          onClick={() => router.push('/talents')}
+          onClick={() => router.push('/talent')}
           className="text-xs text-red-500 font-semibold hover:underline ml-auto"
         >
           Clear Filters
