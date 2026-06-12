@@ -5,8 +5,13 @@ import { getFilteredTalents, FilterParams } from './actions';
 import Link from "next/link";
 import { createClient } from '../lib/supabase/server'; 
 
+// 💡 THE FIX: Extended the original FilterParams type to include the optional page property cleanly
+interface ExtendedFilterParams extends FilterParams {
+  page?: string;
+}
+
 interface PageProps {
-  searchParams: Promise<FilterParams>;
+  searchParams: Promise<ExtendedFilterParams>;
 }
 
 interface ConfirmedTalentSchema {
@@ -26,6 +31,7 @@ export default async function Home({ searchParams }: PageProps) {
   const supabase = await createClient();
   
   const filters = await searchParams;
+  // TypeScript is now completely happy tracking the `.page` property string here:
   const currentPage = Math.max(1, parseInt(filters.page || "1", 10));
 
   const [
@@ -46,7 +52,6 @@ export default async function Home({ searchParams }: PageProps) {
 
   const talents = (rawTalents as unknown as ConfirmedTalentSchema[]) || [];
 
-  // 💡 Pluralized to match your exact file destination directory path structure safely
   const buildPaginationUrl = (pageTarget: number) => {
     const nextParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, val]) => {
@@ -68,7 +73,6 @@ export default async function Home({ searchParams }: PageProps) {
           capabilities={capabilities || []}
         />
 
-        {/* 💡 FIXED: Stripped out the broken page.length reference to prevent client crashing */}
         <div className="text-sm text-slate-600 font-medium px-1">
           Showing page <span className="text-blue-600 font-bold">{currentPage}</span> of results
         </div>
