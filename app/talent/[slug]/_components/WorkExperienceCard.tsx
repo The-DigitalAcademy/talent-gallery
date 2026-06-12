@@ -6,7 +6,7 @@ interface WorkExperienceCardProps {
 
 export function WorkExperienceCard({ role, company, duration }: WorkExperienceCardProps) {
   return (
-    <div className="border border-gray-200 rounded-lg p-4 bg-white flex items-start gap-3">
+    <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 flex items-start gap-3">
       {/* Briefcase icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   .eq("slug", slug)
   .eq("is_published", true)
   .single();
-    console.log(talent)
+
 
   if (error) {
     return (

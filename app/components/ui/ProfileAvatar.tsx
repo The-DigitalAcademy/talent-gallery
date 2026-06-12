@@ -7,8 +7,8 @@ interface ProfileAvatarProps {
   name?: string;
   size?: string;
   radius?: string;
-  borderColor?: string;
-  borderWidth?: string;
+  ringColor?: string;
+  ringWidth?: string;
   statusColor?: string;
 }
 
@@ -27,20 +27,20 @@ export function ProfileAvatar({
   name,
   size = "w-14 h-14",
   radius = "rounded-full",
-  borderColor = "border-blue-800",
-  borderWidth = "border-2",
+  ringColor = "ring-blue-800",
+  ringWidth = "ring-2",
   statusColor
 }: ProfileAvatarProps) {
   const initials = fallback ?? getInitials(name);
-
+  console.log(radius)
   return (
     <div className={cn("relative inline-flex shrink-0", size)}>
       <div
         className={cn(
           "w-full h-full overflow-hidden bg-gray-100",
           radius,
-          borderWidth,
-          borderColor
+          ringWidth,
+          ringColor
         )}
       >
         {imageUrl ? (
@@ -48,7 +48,7 @@ export function ProfileAvatar({
             src={imageUrl}
             alt={name ?? "Avatar"}
             fill
-            className="object-cover"
+            className={cn("object-cover", radius)}
             sizes="112px"
           />
         ) : (

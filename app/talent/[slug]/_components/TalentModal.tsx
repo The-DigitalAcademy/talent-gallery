@@ -139,8 +139,8 @@ export function TalentModal({ talent, onClose }: TalentModalProps) {
               name={talent.fullname}
               size="w-20 h-20"
               radius="rounded-full"
-              borderColor="border-blue-800"
-              borderWidth="border-2"
+              ringColor="border-blue-800"
+              ringWidth="border-2"
             />
             <div>
               <h2 className="text-2xl font-bold text-blue-900">{talent.fullname}</h2>
