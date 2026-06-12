@@ -1,4 +1,4 @@
-// components/ui/TalentCard.tsx
+'use client';
 import Link from 'next/link';
 
 interface TalentCardProps {
@@ -44,82 +44,100 @@ export default function TalentCard({ talent }: TalentCardProps) {
   const displayStatus = talent.talent_status?.name;
 
   return (
-    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden p-6 relative ${topAccent}`}>
+    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}>
       
-      {/* Top action utilities */}
-      <div className="absolute top-4 right-4 flex items-center gap-3 text-slate-400">
-        <button className="hover:text-slate-600 text-sm">✓</button>
-        <button className="hover:text-slate-600 text-sm">
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-</svg>
+      {/* 🛠️ TOP UTILITIES: e.stopPropagation() prevents the card link from firing */}
+      <div 
+        className="absolute top-4 right-4 flex items-center gap-3 text-slate-400 z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button 
+          onClick={() => alert('Marked/Verified')} 
+          className="hover:text-slate-600 text-sm font-medium transition-colors p-1"
+        >
+          ✓
+        </button>
+        <button 
+          onClick={() => {
+            navigator.clipboard.writeText(`${window.location.origin}/talent/${talent.slug}`);
+            alert('Profile link copied to clipboard!');
+          }} 
+          className="hover:text-slate-600 transition-colors p-1"
+          title="Share Profile"
+        >
+          {/* Clean, recognizable Curved Arrow Share Icon */}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+          </svg>
         </button>
       </div>
 
-      <div>
-        {/* User Block info */}
-        <div className="flex items-center gap-4 mb-4">
-          <img 
-            src={talent.profile_image_url || 'https://via.placeholder.com/150'} 
-            alt={talent.fullname}
-            className="w-14 h-14 rounded-full object-cover border bg-slate-50"
-          />
-          <div>
-            <h3 className="font-bold text-slate-900 text-base leading-tight">{talent.fullname}</h3>
-            <p className="text-sm text-slate-500 font-medium mt-0.5">{talent.program?.name || 'Talent Profile'}</p>
+      {/* 🖱️ CLICKABLE CARD BODY */}
+      <Link href={`/talent/${talent.slug}`} className="p-6 block flex-1 group select-none">
+        <div>
+          {/* User Block info */}
+          <div className="flex items-center gap-4 mb-4">
+            <img 
+              src={talent.profile_image_url || 'https://via.placeholder.com/150'} 
+              alt={talent.fullname}
+              className="w-14 h-14 rounded-full object-cover border bg-slate-50"
+            />
+            <div>
+              <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-blue-600 transition-colors">
+                {talent.fullname}
+              </h3>
+              <p className="text-sm text-slate-500 font-medium mt-0.5">
+                {talent.program?.name || 'Talent Profile'}
+              </p>
+            </div>
+          </div>
+
+          {/* Location Element */}
+          <div className="text-xs text-slate-400 font-medium flex items-center gap-1 mb-4">
+            <span className="text-sm opacity-70">📍</span> 
+            {talent.location ? `${talent.location.city}, ${talent.location.country}` : 'Remote'}
+          </div>
+
+          {/* Program and Status Pill Row */}
+          <div className="flex flex-wrap gap-2 text-[11px] font-bold tracking-wide mb-4">
+            {talent.program && (
+              <span className="bg-blue-900 text-white px-2.5 py-1 rounded">
+                {talent.program.name}
+              </span>
+            )}
+            {displayStatus && (
+              <span className={`px-2.5 py-1 rounded ${getStatusBadgeStyle(displayStatus)}`}>
+                {displayStatus}
+              </span>
+            )}
+          </div>
+
+          {/* Clamped Bio Paragraph */}
+          <p className="text-sm text-slate-600 font-normal leading-relaxed line-clamp-4 mb-5">
+            {talent.bio}
+          </p>
+
+          {/* Capability Tag Matrix */}
+          <div className="flex flex-wrap gap-1.5">
+            {talent.capabilities?.map((c, index) => {
+              if (!c.capability?.name) return null;
+              return (
+                <span 
+                  key={c.capability.id || index} 
+                  className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md"
+                >
+                  {c.capability.name}
+                </span>
+              );
+            })}
           </div>
         </div>
-
-        {/* Location Element */}
-        <div className="text-xs text-slate-400 font-medium flex items-center gap-1 mb-4">
-          <span className="text-sm opacity-70">📍</span> 
-          {talent.location ? `${talent.location.city}, ${talent.location.country}` : 'Remote'}
-        </div>
-
-        {/* Program and Status Pill Row */}
-        <div className="flex flex-wrap gap-2 text-[11px] font-bold tracking-wide mb-4">
-          {talent.program && (
-            <span className="bg-blue-900 text-white px-2.5 py-1 rounded">
-              {talent.program.name}
-            </span>
-          )}
-          {displayStatus && (
-            <span className={`px-2.5 py-1 rounded ${getStatusBadgeStyle(displayStatus)}`}>
-              {displayStatus}
-            </span>
-          )}
-        </div>
-
-        {/* Clamped Bio Paragraph */}
-        <p className="text-sm text-slate-600 font-normal leading-relaxed line-clamp-4 mb-5">
-          {talent.bio}
-        </p>
-
-        
-        <div className="flex flex-wrap gap-1.5 mb-6">
-  {talent.capabilities?.map((c, index) => {
-    // 💡 Defensively skip rendering if the capability link is broken or null
-    if (!c.capability?.name) return null;
-
-    return (
-      <span 
-        key={c.capability.id || index} 
-        className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md"
-      >
-        {c.capability.name}
-      </span>
-    );
-  })}
-</div>
-      </div>
-
-      {/* Link matching your teammate's dynamic directory structure */}
-      <Link 
-        href={`/talent/${talent.slug}`}
-        className="w-full text-center border-t border-slate-100 pt-4 text-xs font-semibold text-slate-400 hover:text-blue-600 transition-colors"
-      >
-        Click to view full profile
       </Link>
+
+      {/* Subtle Visual Anchor Bottom Bar */}
+      <div className="border-t border-slate-50 bg-slate-50/30 py-3 text-center text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors rounded-b-2xl">
+        View Full Profile →
+      </div>
     </div>
   );
 }
