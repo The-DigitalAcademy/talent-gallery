@@ -117,20 +117,19 @@ export default function TalentCard({ talent }: TalentCardProps) {
             {talent.bio}
           </p>
 
-          {/* Capability Tag Matrix */}
-          <div className="flex flex-wrap gap-1.5">
-            {talent.capabilities?.map((c, index) => {
-              if (!c.capability?.name) return null;
-              return (
-                <span 
-                  key={c.capability.id || index} 
-                  className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md"
-                >
-                  {c.capability.name}
-                </span>
-              );
-            })}
-          </div>
+<div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
+  {talent.capabilities?.map((c, index) => {
+    if (!c.capability?.name) return null;
+    return (
+      <span 
+        key={c.capability.id || index} 
+        className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
+      >
+        {c.capability.name}
+      </span>
+    );
+  })}
+</div>
         </div>
       </Link>
 
