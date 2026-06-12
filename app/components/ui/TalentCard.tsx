@@ -50,9 +50,9 @@ export default function TalentCard({ talent }: TalentCardProps) {
       <div className="absolute top-4 right-4 flex items-center gap-3 text-slate-400">
         <button className="hover:text-slate-600 text-sm">✓</button>
         <button className="hover:text-slate-600 text-sm">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l4.632-2.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316l4.632-2.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684z" />
-          </svg>
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+</svg>
         </button>
       </div>
 
