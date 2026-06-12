@@ -74,7 +74,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
         </button>
       </div>
 
-      {/* 🖱️ CLICKABLE CARD BODY */}
+      {/* CLICKABLE CARD BODY */}
       <Link href={`/talent/${talent.slug}`} className="p-6 block flex-1 group select-none">
         <div>
           {/* User Block info */}
@@ -137,7 +137,9 @@ export default function TalentCard({ talent }: TalentCardProps) {
 
       {/* Subtle Visual Anchor Bottom Bar */}
       <div className="border-t border-slate-50 bg-slate-50/30 py-3 text-center text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors rounded-b-2xl">
-        View Full Profile →
+       <Link href={`/talent/${talent.slug}`} className="text-blue-600 hover:text-blue-800">
+         View Full Profile →
+       </Link>
       </div>
     </div>
   );
