@@ -4,6 +4,7 @@ import TalentAvatar from "@/components/admin/talent-avatar";
 import { ColumnDef } from "@tanstack/react-table";
 import { SquarePenIcon, Trash2Icon } from "lucide-react";
 import moment from "moment";
+import Link from "next/link";
 
 type TalentColDef = {
     id: string,
@@ -54,7 +55,7 @@ export const columns: ColumnDef<TalentColDef>[] = [
         accessorKey: "id",
         header: "",
         cell: ({ row }) => (<div className="flex gap-3">
-            <SquarePenIcon className='size-4 hover:text-blue-500' />
+            <Link href={`/admin/collections/talents/${row.getValue("id")}`}><SquarePenIcon className='size-4 hover:text-blue-500' /></Link>
             <Trash2Icon className='size-4 hover:text-red-500' />
         </div>)
     }
