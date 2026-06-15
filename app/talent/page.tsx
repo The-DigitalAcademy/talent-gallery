@@ -61,19 +61,36 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-50/50 pb-12">
+
+
+
+{/* 💻 GLOBAL BRAND NAVBAR */}
+<header className="bg-white border-b border-slate-100 py-6 px-4 sm:px-6 lg:px-8 mb-8">
+  <div className="max-w-7xl mx-auto -mt-4 ">
+    
+    {/* 💡 THE FIX: items-start aligns the absolute top edges of both elements */}
+    <div className="flex items-start gap-4">
       
-      {/* GLOBAL BRAND NAVBAR */}
-      <header className="bg-white border-b border-slate-100 py-5 px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-1.5 text-2xl font-bold tracking-tight">
-            <span className="text-slate-900">Shaper</span>
-            <span className="text-blue-900">Talent</span>
-          </div>
-          <p className="text-xs text-slate-500 font-medium mt-1">
-            Discover and connect with our talented learners
-          </p>
-        </div>
-      </header>
+      {/* 🖼️ THE LOGO */}
+      <div className="flex-shrink-0">
+        <img 
+          src="https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png" 
+          alt="Logo" 
+        className="h-12 w-auto max-w-none object-contain -ml-2 -mr-3 pt-[5px]" 
+        />
+      </div>
+      
+      {/* Brand Text Identifier: text-4xl scales up the T to cleanly match the taller logo top */}
+      <span className="text-3xl font-bold tracking-tight text-blue-900 font-sans leading-none pt-[10px]">
+        Talent
+      </span>
+    </div>
+    
+    <p className="text-[13px] text-slate-500 font-medium ">
+      Discover and connect with our talented learners
+    </p>
+  </div>
+</header>
 
       {/* MAIN CONTAINER LAYOUT */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
