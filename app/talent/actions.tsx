@@ -1,6 +1,6 @@
 import { createClient } from "@/app/lib/supabase/server";
 
-// 💡 Update interface to include the page property
+// Update interface to include the page property
 export interface FilterParams {
   cohort?: string;
   programme?: string;
@@ -59,13 +59,13 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("talent_statuses.name", filters.status);
   }
 
-  // 💡 THE FIX: Use dynamic calculation instead of static (0, 11)
+  // THE FIX: Use dynamic calculation instead of static (0, 11)
   query = query.range(from, to);
 
   const { data, error } = await query;
 
   if (error) {
-    console.error("Database Query Breakdown:", error);
+    console.error("Database Query Breakdown: check superbase or SQL syntax", error);
     return [];
   }
 
