@@ -5,7 +5,6 @@ import { getFilteredTalents, FilterParams } from './actions';
 import Link from "next/link";
 import { createClient } from '../lib/supabase/server'; 
 
-// 💡 THE FIX: Extended the original FilterParams type to include the optional page property cleanly
 interface ExtendedFilterParams extends FilterParams {
   page?: string;
 }
@@ -31,7 +30,6 @@ export default async function Home({ searchParams }: PageProps) {
   const supabase = await createClient();
   
   const filters = await searchParams;
-  // TypeScript is now completely happy tracking the `.page` property string here:
   const currentPage = Math.max(1, parseInt(filters.page || "1", 10));
 
   const [
@@ -58,29 +56,60 @@ export default async function Home({ searchParams }: PageProps) {
       if (val) nextParams.set(key, val);
     });
     nextParams.set("page", pageTarget.toString());
-    return `/talent?${nextParams.toString()}`;
+    return `/talents?${nextParams.toString()}`;
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        
-        <FilterControls 
-          locations={locations || []}
-          programs={programs || []}
-          cohorts={cohorts || []}
-          statuses={statuses || []}
-          capabilities={capabilities || []}
-        />
+    <div className="min-h-screen bg-slate-50/50 pb-12">
+      
+      {/* GLOBAL BRAND NAVBAR */}
+      <header className="bg-white border-b border-slate-100 py-5 px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-1.5 text-2xl font-bold tracking-tight">
+            <span className="text-slate-900">Shaper</span>
+            <span className="text-blue-900">Talent</span>
+          </div>
+          <p className="text-xs text-slate-500 font-medium mt-1">
+            Discover and connect with our talented learners
+          </p>
+        </div>
+      </header>
 
-        <div className="text-sm text-slate-600 font-medium px-1">
-          Showing page <span className="text-blue-600 font-bold">{currentPage}</span> of results
+      {/* MAIN CONTAINER LAYOUT */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        
+        {/* FILTER BOX CONTAINER */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+          
+          {/* FILTER TALENT HEADING WITH ICON */}
+          <div className="flex items-center gap-2 text-slate-900 font-bold orange-500 text-base tracking-tight">
+          <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+     className="h-5 w-5 text-orange-500">
+  <path strokeLinecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+</svg>
+            <h2 className='text-blue-900'>Filter Talent</h2>
+          </div>
+
+          {/* Core Interactive Dropdown Fields */}
+          <FilterControls 
+            locations={locations || []}
+            programs={programs || []}
+            cohorts={cohorts || []}
+            statuses={statuses || []}
+            capabilities={capabilities || []}
+          />
         </div>
 
+        {/* Dynamic Results Counter */}
+        <div className="text-xs text-slate-500 font-semibold px-1">
+          Showing <span className="text-blue-600 font-bold">{talents.length}</span> of <span className="text-slate-800 font-bold">{talents.length}</span> talent profiles
+        </div>
+
+        {/* Talent Cards Grid Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {talents.length === 0 ? (
             <div className="col-span-full bg-white text-center py-16 border rounded-2xl shadow-sm">
-              <p className="text-slate-400 font-medium">No talent profiles found on this page matching your settings.</p>
+              <p className="text-slate-400 font-medium">No talent profiles found matching your settings.</p>
             </div>
           ) : (
             talents.map((talent) => (
@@ -89,9 +118,9 @@ export default async function Home({ searchParams }: PageProps) {
           )}
         </div>
 
-        {/* PAGINATION PANEL */}
+        {/* PAGINATION HUBS */}
         {talents.length > 0 && (
-          <div className="flex items-center justify-center gap-4 pt-8 pb-4">
+          <div className="flex items-center justify-center gap-4 pt-6">
             {currentPage > 1 && (
               <Link 
                 href={buildPaginationUrl(currentPage - 1)}

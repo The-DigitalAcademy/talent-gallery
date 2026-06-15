@@ -39,7 +39,7 @@ export default function FilterControls({
   };
 
   return (
-    <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-wrap gap-4 items-center">
+<div className="flex flex-wrap gap-x-6 gap-y-4 items-center w-full">
       
       {/* Dynamic Locations Dropdown */}
       <select 
