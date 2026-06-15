@@ -56,7 +56,7 @@ export default async function Home({ searchParams }: PageProps) {
       if (val) nextParams.set(key, val);
     });
     nextParams.set("page", pageTarget.toString());
-    return `/talents?${nextParams.toString()}`;
+    return `/talent?${nextParams.toString()}`;
   };
 
   return (
