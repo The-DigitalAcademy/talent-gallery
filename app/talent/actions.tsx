@@ -15,7 +15,7 @@ export async function getFilteredTalents(filters: FilterParams) {
   const page = Math.max(1, parseInt(filters.page || "1", 10));
   
   // 2. Calculate dynamic pagination range indices
-  const itemsPerPage = 10;
+  const itemsPerPage = 9;
   const from = (page - 1) * itemsPerPage;
   const to = from + itemsPerPage - 1;
 

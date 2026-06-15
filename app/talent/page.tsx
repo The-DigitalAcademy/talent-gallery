@@ -138,8 +138,8 @@ export default async function Home({ searchParams }: PageProps) {
               Page {currentPage}
             </span>
 
-            {/* If we received less than 12 elements, we reached the last page */}
-            {talents.length === 12 && (
+            {/* If we received less than 9 elements, we reached the last page */}
+            {talents.length === 9 && (
               <Link 
                 href={buildPaginationUrl(currentPage + 1)}
                 className="bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-slate-50 shadow-sm transition-colors"
