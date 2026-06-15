@@ -1,17 +1,26 @@
-// app/talents/talent/actions.ts
 import { createClient } from "@/app/lib/supabase/server";
 
+// 💡 Update interface to include the page property
 export interface FilterParams {
   cohort?: string;
   programme?: string;
   capability?: string;
   status?: string;
   location?: string;
+  page?: string; 
 }
 
 export async function getFilteredTalents(filters: FilterParams) {
-  const supabase = await createClient();
+  // 1. Parse and fall back to page 1 safely
+  const page = Math.max(1, parseInt(filters.page || "1", 10));
+  
+  // 2. Calculate dynamic pagination range indices
+  const itemsPerPage = 12;
+  const from = (page - 1) * itemsPerPage;
+  const to = from + itemsPerPage - 1;
 
+  const supabase = await createClient();
+  
   // Using !inner tells Supabase to drop the core talent row if the joined filter doesn't match
   let query = supabase.from("talents").select(`
     id,
@@ -33,7 +42,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     endorsements(id, endorser_name, message)
   `);
 
-  //  EVERY filter now completely ignores uppercase vs lowercase strings
+  // EVERY filter now completely ignores uppercase vs lowercase strings
   if (filters.cohort) {
     query = query.ilike("cohorts.name", filters.cohort);
   }
@@ -49,7 +58,10 @@ export async function getFilteredTalents(filters: FilterParams) {
   if (filters.status) {
     query = query.ilike("talent_statuses.name", filters.status);
   }
-query = query.range(0, 11);
+
+  // 💡 THE FIX: Use dynamic calculation instead of static (0, 11)
+  query = query.range(from, to);
+
   const { data, error } = await query;
 
   if (error) {
