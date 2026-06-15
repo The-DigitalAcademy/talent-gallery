@@ -1,7 +1,7 @@
-import { createClient } from "@/app/lib/supabase/server";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../forms/basic-info-form";
+import EnrolmentFormPlaceholder from "@/components/admin/enrolment-form-placeholder";
 
 export default async function Page() {
     return (
@@ -14,6 +14,7 @@ export default async function Page() {
             </div>
             <div className="flex w-full flex-col gap-5">
                 <BasicInfoForm />
+                <EnrolmentFormPlaceholder />
             </div >
         </div >
     )
