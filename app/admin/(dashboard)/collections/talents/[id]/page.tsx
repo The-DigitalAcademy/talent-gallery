@@ -3,12 +3,13 @@ import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../forms/basic-info-form";
 import EnrolmentForm from "../forms/enrolment-form";
+import URLsForm from "../forms/urls-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id")
+        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url")
         .eq("id", id)
         .single()
 
@@ -30,6 +31,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         location: talent?.location_id,
         status: talent?.talent_status_id
     }
+    const urlValues = {
+        id: talent?.id,
+        youtube: talent?.youtube_url,
+        portfolio: talent?.portfolio_url,
+        linkedin: talent?.linkedin_url,
+        github: talent?.github_url,
+    }
     return (
         <div>
             <div className="mb-5">
@@ -41,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="flex w-full flex-col gap-5">
                 <BasicInfoForm values={talent!} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
+                <URLsForm values={urlValues} />
             </div >
         </div >
     )
