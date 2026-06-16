@@ -16,70 +16,65 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
     const [state, formAction, isPending] = useActionState(createWorkExperience, initialState);
 
     return (
-        <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
-            <div className="grid grid-cols-3 gap-7">
-                <Form
-                    action={formAction}
-                    errors={state.errors}
-                    className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
-                    <div className="text-sm font-semibold text-gray-700">
-                        Add Work Experience
-                    </div>
-                    {state.message && (
-                        <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                            {state.message}
-                        </div>
-                    )}
-                    <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
-                        <Field.Control
-                            type="text"
-                            required
-                            placeholder="Company"
-                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Field.Root name="role" className="flex flex-col items-start gap-2 w-full">
-                        <Field.Control
-                            type="text"
-                            required
-                            placeholder="Role"
-                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Field.Root name="duration" className="flex flex-col items-start gap-2 w-full">
-                        <Field.Control
-                            type="text"
-                            required
-                            placeholder="Duration"
-                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
-                        <textarea
-                            name="description"
-                            rows={3}
-                            required
-                            placeholder="Description"
-                            className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Button
-                        focusableWhenDisabled
-                        type="submit"
-                        className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
-                    >
-                        Add
-                    </Button>
-                </Form>
-                <div className="flex flex-col gap-3 col-span-2">
-                    <div className="text-sm text-gray-700">
-                        Work Experience
-                    </div>
-                    <div className="flex flex-col gap-3 overflow-y-scroll max-h-65 pr-5">
+        <div>
+            <h2 className="mb-2 font-semibold">Work Experience</h2>
+            <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
+                <div className="grid grid-cols-3 gap-7">
+                    <Form
+                        action={formAction}
+                        errors={state.errors}
+                        className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
+                        {state.message && (
+                            <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
+                                {state.message}
+                            </div>
+                        )}
+                        <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
+                            <Field.Control
+                                type="text"
+                                required
+                                placeholder="Company"
+                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Field.Root name="role" className="flex flex-col items-start gap-2 w-full">
+                            <Field.Control
+                                type="text"
+                                required
+                                placeholder="Role"
+                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Field.Root name="duration" className="flex flex-col items-start gap-2 w-full">
+                            <Field.Control
+                                type="text"
+                                required
+                                placeholder="Duration"
+                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
+                            <textarea
+                                name="description"
+                                rows={3}
+                                required
+                                placeholder="Description"
+                                className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Button
+                            focusableWhenDisabled
+                            type="submit"
+                            className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+                        >
+                            Add
+                        </Button>
+                    </Form>
+                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
                         {workExperiences?.map(work => (
                             <div key={work.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: work.id, name: work.role, talentId: work.talent_id }} /></div>
@@ -89,7 +84,6 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 <div className="text-sm text-gray-500">{work.description}</div>
                             </div>))}
                     </div>
-
                 </div>
             </div>
         </div>

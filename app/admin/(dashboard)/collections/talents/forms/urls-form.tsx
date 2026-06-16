@@ -31,86 +31,89 @@ export default function URLsForm({ values }: Props) {
     const [githubLink, setGithubLink] = useState<string | undefined>(values?.github)
 
     return (
-        <Form
-            className="w-full border border-gray-200 p-6 bg-white rounded-lg"
-            action={formAction}
-            errors={state.errors}
-        >
-            {state.message && (
-                <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                    {state.message}
-                </div>
-            )}
-            <div className="grid grid-cols-2 gap-7 mb-5">
-                <Field.Root name="youtube" className="flex flex-col items-start gap-2 w-full">
-                    <Field.Label className="text-xs text-gray-700">
-                        Youtube URL
-                    </Field.Label>
-                    <Field.Control
-                        type="url"
-                        onValueChange={(val) => setYoutubeLink(val)}
-                        required
-                        defaultValue={youtubeLink}
-                        placeholder="http://youtube.com"
-                        className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                    />
-                    <Field.Error className="text-xs text-red-700" />
-                    <LinkPreviewCard targetUrl={youtubeLink} />
-                </Field.Root>
-                <Field.Root name="portfolio" className="flex flex-col items-start gap-2 w-full">
-                    <Field.Label className="text-xs text-gray-700">
-                        Portfolio URL
-                    </Field.Label>
-                    <Field.Control
-                        type="url"
-                        onValueChange={(val) => setPortfolioLink(val)}
-                        required
-                        defaultValue={values.portfolio}
-                        placeholder="http://myportfolio.com"
-                        className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                    />
-                    <Field.Error className="text-xs text-red-700" />
-                    <LinkPreviewCard targetUrl={portfolioLink} />
-                </Field.Root>
-                <Field.Root name="linkedin" className="flex flex-col items-start gap-2 w-full">
-                    <Field.Label className="text-xs text-gray-700">
-                        LinkedIn URL
-                    </Field.Label>
-                    <Field.Control
-                        type="url"
-                        onValueChange={(val) => setLinkedinLink(val)}
-                        required
-                        defaultValue={values.linkedin}
-                        placeholder="https://www.linkedin.com/in/john-doe"
-                        className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                    />
-                    <Field.Error className="text-xs text-red-700" />
-                    <LinkPreviewCard targetUrl={linkedinLink} />
-                </Field.Root>
-                <Field.Root name="github" className="flex flex-col items-start gap-2 w-full">
-                    <Field.Label className="text-xs text-gray-700">
-                        GitHub URL
-                    </Field.Label>
-                    <Field.Control
-                        type="url"
-                        onValueChange={(val) => setGithubLink(val)}
-                        required
-                        defaultValue={values.github}
-                        placeholder="https://www.github.com/in/john-doe"
-                        className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                    />
-                    <Field.Error className="text-xs text-red-700" />
-                    <LinkPreviewCard targetUrl={githubLink} />
-                </Field.Root>
-            </div>
-            <Button
-                disabled={isPending}
-                focusableWhenDisabled
-                type="submit"
-                className="rounded-xl justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+        <div>
+            <h2 className="mb-2 font-semibold">Profile Links</h2>
+            <Form
+                className="w-full border border-gray-200 p-6 bg-white rounded-lg"
+                action={formAction}
+                errors={state.errors}
             >
-                Save Changes
-            </Button>
-        </Form>
+                {state.message && (
+                    <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
+                        {state.message}
+                    </div>
+                )}
+                <div className="grid grid-cols-2 gap-7 mb-5">
+                    <Field.Root name="youtube" className="flex flex-col items-start gap-2 w-full">
+                        <Field.Label className="text-xs text-gray-700">
+                            Youtube URL
+                        </Field.Label>
+                        <Field.Control
+                            type="url"
+                            onValueChange={(val) => setYoutubeLink(val)}
+                            required
+                            defaultValue={youtubeLink}
+                            placeholder="http://youtube.com"
+                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                        />
+                        <Field.Error className="text-xs text-red-700" />
+                        <LinkPreviewCard targetUrl={youtubeLink} />
+                    </Field.Root>
+                    <Field.Root name="portfolio" className="flex flex-col items-start gap-2 w-full">
+                        <Field.Label className="text-xs text-gray-700">
+                            Portfolio URL
+                        </Field.Label>
+                        <Field.Control
+                            type="url"
+                            onValueChange={(val) => setPortfolioLink(val)}
+                            required
+                            defaultValue={values.portfolio}
+                            placeholder="http://myportfolio.com"
+                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                        />
+                        <Field.Error className="text-xs text-red-700" />
+                        <LinkPreviewCard targetUrl={portfolioLink} />
+                    </Field.Root>
+                    <Field.Root name="linkedin" className="flex flex-col items-start gap-2 w-full">
+                        <Field.Label className="text-xs text-gray-700">
+                            LinkedIn URL
+                        </Field.Label>
+                        <Field.Control
+                            type="url"
+                            onValueChange={(val) => setLinkedinLink(val)}
+                            required
+                            defaultValue={values.linkedin}
+                            placeholder="https://www.linkedin.com/in/john-doe"
+                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                        />
+                        <Field.Error className="text-xs text-red-700" />
+                        <LinkPreviewCard targetUrl={linkedinLink} />
+                    </Field.Root>
+                    <Field.Root name="github" className="flex flex-col items-start gap-2 w-full">
+                        <Field.Label className="text-xs text-gray-700">
+                            GitHub URL
+                        </Field.Label>
+                        <Field.Control
+                            type="url"
+                            onValueChange={(val) => setGithubLink(val)}
+                            required
+                            defaultValue={values.github}
+                            placeholder="https://www.github.com/in/john-doe"
+                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                        />
+                        <Field.Error className="text-xs text-red-700" />
+                        <LinkPreviewCard targetUrl={githubLink} />
+                    </Field.Root>
+                </div>
+                <Button
+                    disabled={isPending}
+                    focusableWhenDisabled
+                    type="submit"
+                    className="rounded-xl justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+                >
+                    Save Changes
+                </Button>
+            </Form>
+        </div>
     )
 }

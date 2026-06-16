@@ -16,52 +16,47 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
     const [state, formAction, isPending] = useActionState(createEndorsement, initialState);
 
     return (
-        <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
-            <div className="grid grid-cols-3 gap-7">
-                <Form
-                    action={formAction}
-                    errors={state.errors}
-                    className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
-                    <div className="text-sm font-semibold text-gray-700">
-                        Add Endorsements
-                    </div>
-                    {state.message && (
-                        <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                            {state.message}
-                        </div>
-                    )}
-                    <Field.Root name="name" className="flex flex-col items-start gap-2 w-full">
-                        <Field.Control
-                            type="text"
-                            required
-                            placeholder="Endorser name"
-                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Field.Root name="message" className="flex flex-col items-start gap-2 w-full">
-                        <textarea
-                            name="message"
-                            rows={3}
-                            required
-                            placeholder="Message"
-                            className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                        />
-                        <Field.Error className="text-xs text-red-700" />
-                    </Field.Root>
-                    <Button
-                        focusableWhenDisabled
-                        type="submit"
-                        className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
-                    >
-                        Add
-                    </Button>
-                </Form>
-                <div className="flex flex-col gap-3 col-span-2">
-                    <div className="text-sm text-gray-700">
-                        Endorsements
-                    </div>
-                    <div className="flex flex-col gap-3 overflow-y-scroll max-h-65 pr-5">
+        <div>
+            <h2 className="mb-2 font-semibold">Endorsements</h2>
+            <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
+                <div className="grid grid-cols-3 gap-7">
+                    <Form
+                        action={formAction}
+                        errors={state.errors}
+                        className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
+                        {state.message && (
+                            <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
+                                {state.message}
+                            </div>
+                        )}
+                        <Field.Root name="name" className="flex flex-col items-start gap-2 w-full">
+                            <Field.Control
+                                type="text"
+                                required
+                                placeholder="Endorser name & title"
+                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Field.Root name="message" className="flex flex-col items-start gap-2 w-full">
+                            <textarea
+                                name="message"
+                                rows={3}
+                                required
+                                placeholder="Message"
+                                className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Button
+                            focusableWhenDisabled
+                            type="submit"
+                            className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+                        >
+                            Add
+                        </Button>
+                    </Form>
+                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
                         {endorsements?.map(item => (
                             <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.endorser_name, talentId: item.talent_id }} /></div>
@@ -69,7 +64,6 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                                 <p className="text-sm text-gray-500">{item.endorser_name}</p>
                             </blockquote>))}
                     </div>
-
                 </div>
             </div>
         </div>
