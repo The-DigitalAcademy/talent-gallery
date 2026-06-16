@@ -86,6 +86,16 @@ export interface ProjectCapability {
   created_at: Timestamptz;
 }
 
+export interface WorkExperience {
+  id: UUID;
+  talent_id: UUID;
+  company: string;
+  role: string;
+  duration: string;
+  description: string
+  created_at: Timestamptz;
+}
+
 export type FormState = {
   success: boolean;
   message: string;
