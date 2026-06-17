@@ -70,7 +70,7 @@ export default async function Home({ searchParams }: PageProps) {
   return (
        <div className="min-h-screen bg-slate-50/50 pb-12">
 
-      {/* 💻 GLOBAL BRAND NAVBAR */}
+      {/* GLOBAL BRAND NAVBAR */}
       <header className="bg-white border-b border-slate-100 py-6 px-4 sm:px-6 lg:px-8 mb-8">
         <div className="max-w-7xl mx-auto -mt-4 ">
           <div className="flex items-start gap-4">
@@ -111,7 +111,7 @@ export default async function Home({ searchParams }: PageProps) {
           />
         </div>
 
-        {/* 📊 ACCURATE DYNAMIC RECONCILIATION COUNT COUNTER */}
+        {/*  ACCURATE DYNAMIC RECONCILIATION COUNT COUNTER */}
         <div className="text-xs text-slate-500 font-semibold px-1">
           Showing <span className="text-blue-600 font-bold">{talents.length}</span> of{" "}
           <span className="text-slate-800 font-bold">{totalCount}</span> total talent profiles
@@ -130,7 +130,7 @@ export default async function Home({ searchParams }: PageProps) {
           )}
         </div>
 
-        {/* 🔘 PAGINATION PANEL */}
+        {/*  PAGINATION PANEL */}
         {totalCount > 0 && (
           <div className="flex items-center justify-center gap-4 pt-8">
             {currentPage > 1 && (
@@ -146,7 +146,7 @@ export default async function Home({ searchParams }: PageProps) {
               Page {currentPage} of {totalPages}
             </span>
 
-            {/* 💡 THE KILL SWITCH: Disappears if you hit the final mathematically determined chunk */}
+            {/*  THE KILL SWITCH: Disappears if you hit the final mathematically determined chunk */}
             {currentPage < totalPages && (
               <Link 
                 href={buildPaginationUrl(currentPage + 1)}
