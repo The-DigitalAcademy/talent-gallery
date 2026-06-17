@@ -68,24 +68,24 @@ export default async function Home({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-12">
-      
+       <div className="min-h-screen bg-slate-50/50 pb-12">
+
       {/* 💻 GLOBAL BRAND NAVBAR */}
       <header className="bg-white border-b border-slate-100 py-6 px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto -mt-4 ">
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 overflow-hidden w-[140px] flex items-center justify-start">
+            <div className="flex-shrink-0">
               <img 
-                src="/logo.png" 
+                src="https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png" 
                 alt="Logo" 
-                className="h-12 w-auto max-w-none object-contain -ml-6 -mr-8" 
+                className="h-12 w-auto max-w-none object-contain -ml-2 -mr-3 pt-[5px]" 
               />
             </div>
-            <span className="text-4xl font-bold tracking-tight text-blue-600 font-sans leading-none pt-[2px]">
+            <span className="text-3xl font-bold tracking-tight text-blue-900 font-sans leading-none pt-[10px]">
               Talent
             </span>
           </div>
-          <p className="text-[13px] text-slate-500 font-medium mt-3">
+          <p className="text-[13px] text-slate-500 font-medium ">
             Discover and connect with our talented learners
           </p>
         </div>
@@ -96,13 +96,12 @@ export default async function Home({ searchParams }: PageProps) {
         
         {/* FILTER BOX CONTAINER */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 text-slate-900 font-bold text-base tracking-tight">
-            <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+          <div className="flex items-center gap-2 text-slate-900 font-bold orange-500 text-base tracking-tight">
+            <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 text-orange-500">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
             </svg>
-            <h2>Filter Talent</h2>
+            <h2 className='text-blue-900'>Filter Talent</h2>
           </div>
-
           <FilterControls 
             locations={locations || []}
             programs={programs || []}
