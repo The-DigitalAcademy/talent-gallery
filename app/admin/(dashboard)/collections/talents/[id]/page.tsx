@@ -6,6 +6,7 @@ import EnrolmentForm from "../forms/enrolment-form";
 import URLsForm from "../forms/urls-form";
 import WorkExperienceForm from "../forms/work-experience-form";
 import EndorsementsForm from "../forms/endorsements-form";
+import { TalentCapabilitiesSection } from "@/components/admin/talent-capabilities-section";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -21,6 +22,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: statuses, error: statusesError } = await supabase.from("talent_statuses").select()
     const { data: workExperiences, error: workExperiencesError } = await supabase.from("work_experiences").select().eq("talent_id", id)
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
+    const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
+    const { data: talentCapabilities, error: talentCapabilitiesError } = await supabase.from("talent_capabilities").select("id, capabilities (id, name)").eq("talent_id", id)
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -42,6 +45,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         linkedin: talent?.linkedin_url,
         github: talent?.github_url,
     }
+    type TalentCapabilityType = { id: string, capabilityId: string, capabilityName: string }
+    const talentCapabilityData: TalentCapabilityType[] = talentCapabilities?.map(({ id, capabilities }) => ({
+        id,
+        capabilityId: capabilities?.id,
+        capabilityName: capabilities.name
+    })) || []
     return (
         <div>
             <div className="mb-5">
@@ -54,6 +63,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <BasicInfoForm values={talent!} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
                 <URLsForm values={urlValues} />
+                <TalentCapabilitiesSection
+                    capabilities={capabilities || []}
+                    talentCapabilities={talentCapabilityData}
+                    talentId={id} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
             </div >
