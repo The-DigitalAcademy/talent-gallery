@@ -1,6 +1,5 @@
 import { createClient } from "@/app/lib/supabase/server";
 
-// Update interface to include the page property
 export interface FilterParams {
   cohort?: string;
   programme?: string;
@@ -11,17 +10,21 @@ export interface FilterParams {
 }
 
 export async function getFilteredTalents(filters: FilterParams) {
-  // 1. Parse and fall back to page 1 safely
   const page = Math.max(1, parseInt(filters.page || "1", 10));
   
-  // 2. Calculate dynamic pagination range indices
-  const itemsPerPage = 9;
+  // Changing this to 12 to match the itemsPerPage math in your main frontend page grid!
+  const itemsPerPage = 12;
   const from = (page - 1) * itemsPerPage;
   const to = from + itemsPerPage - 1;
 
   const supabase = await createClient();
+
+  // 💡 THE JSON FIX: Filter the embedded collection array down to just the requested tag if active
+  const capabilitySelectFilter = filters.capability 
+    ? `(capability:capabilities!inner(id, name))` 
+    : `(capability:capabilities(id, name))`;
   
-  // Using !inner tells Supabase to drop the core talent row if the joined filter doesn't match
+  // 💡 THE INFINITE PAGINATION FIX: Added { count: 'exact' } options block here
   let query = supabase.from("talents").select(`
     id,
     fullname,
@@ -32,17 +35,15 @@ export async function getFilteredTalents(filters: FilterParams) {
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
-    capabilities:talent_capabilities${filters.capability ? '!inner' : ''}(
-      capability:capabilities(id, name)
-    ),
+    capabilities:talent_capabilities${filters.capability ? '!inner' : ''}${capabilitySelectFilter},
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)
     ),
     endorsements(id, endorser_name, message)
-  `);
+  `, { count: 'exact' });
 
-  // EVERY filter now completely ignores uppercase vs lowercase strings
+  // Case-insensitive filtering
   if (filters.cohort) {
     query = query.ilike("cohorts.name", filters.cohort);
   }
@@ -59,15 +60,19 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("talent_statuses.name", filters.status);
   }
 
-  // THE FIX: Use dynamic calculation instead of static (0, 11)
+  // Dynamic range tracking
   query = query.range(from, to);
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) {
-    console.error("Database Query Breakdown: check superbase or SQL syntax", error);
-    return [];
+    console.error("Database Query Breakdown: check Supabase or SQL syntax", error);
+    return { data: [], count: 0 };
   }
 
-  return data || [];
+  // Return both data and count so your frontend knows when to stop paginating
+  return {
+    data: data || [],
+    count: count || 0
+  };
 }
