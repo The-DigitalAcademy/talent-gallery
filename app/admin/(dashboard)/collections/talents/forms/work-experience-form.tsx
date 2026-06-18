@@ -1,7 +1,7 @@
 "use client"
 import { FormState, WorkExperience } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
-import { XIcon } from "lucide-react"
+import { CheckIcon, XIcon } from "lucide-react"
 import { deleteWorkExperience, insertWorkExperience } from "../actions/work-experience-action";
 import { useActionState } from "react";
 import clsx from "clsx";
@@ -24,11 +24,6 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                         action={formAction}
                         errors={state.errors}
                         className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
-                        {state.message && (
-                            <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                                {state.message}
-                            </div>
-                        )}
                         <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
@@ -66,13 +61,31 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
-                        <Button
-                            focusableWhenDisabled
-                            type="submit"
-                            className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
-                        >
-                            Add
-                        </Button>
+                        <div className="flex justify-end items-center gap-4">
+                            {(!isPending && state.success) &&
+                                <div className="text-green-700/75 text-xs flex items-center gap-1">
+                                    <CheckIcon className="w-4" />Saved
+                                </div>
+                            }
+                            {(!isPending && !state.success && state.message) && (
+                                <div className="text-red-700/75 text-xs flex items-center gap-1">
+                                    <XIcon className="w-4" />{state.message}
+                                </div>
+                            )}
+                            <Button
+                                disabled={isPending}
+                                focusableWhenDisabled
+                                type="submit"
+                                className="rounded-xl justify-center border border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-100 shadow-sm cursor-pointer transition items-center data-disabled:animate-pulse data-disabled:cursor-default"
+                            >
+                                {isPending ?
+                                    <span className="w-4 h-4 border-3 border-gray-600 rounded-full inline-block animate-spin border-b-gray-100" ></span>
+                                    :
+                                    "Add"
+                                }
+
+                            </Button>
+                        </div>
                     </Form>
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
                         {workExperiences?.map(work => (
@@ -121,7 +134,7 @@ function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId
                                 disabled={isPending}
                                 focusableWhenDisabled
                                 type="submit"
-                                className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+                                className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-default"
                             >
                                 Delete
                             </Button>}

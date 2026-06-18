@@ -1,7 +1,7 @@
 "use client"
 import { Endorsement, FormState } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
-import { XIcon } from "lucide-react"
+import { CheckIcon, XIcon } from "lucide-react"
 import { useActionState } from "react";
 import clsx from "clsx";
 import { deleteEndorsement, insertEndorsement } from "../actions/endorsements-action";
@@ -24,11 +24,6 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                         action={formAction}
                         errors={state.errors}
                         className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
-                        {state.message && (
-                            <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                                {state.message}
-                            </div>
-                        )}
                         <Field.Root name="name" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
@@ -41,22 +36,40 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                         <Field.Root name="message" className="flex flex-col items-start gap-2 w-full">
                             <textarea
                                 name="message"
-                                rows={3}
+                                rows={5}
                                 required
                                 placeholder="Message"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
-                        <Button
-                            focusableWhenDisabled
-                            type="submit"
-                            className="rounded-lg justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
-                        >
-                            Add
-                        </Button>
+                        <div className="flex justify-end items-center gap-4">
+                            {(!isPending && state.success) &&
+                                <div className="text-green-700/75 text-xs flex items-center gap-1">
+                                    <CheckIcon className="w-4" />Saved
+                                </div>
+                            }
+                            {(!isPending && !state.success && state.message) && (
+                                <div className="text-red-700/75 text-xs flex items-center gap-1">
+                                    <XIcon className="w-4" />{state.message}
+                                </div>
+                            )}
+                            <Button
+                                disabled={isPending}
+                                focusableWhenDisabled
+                                type="submit"
+                                className="rounded-xl justify-center border border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-100 shadow-sm cursor-pointer transition items-center data-disabled:animate-pulse data-disabled:cursor-default"
+                            >
+                                {isPending ?
+                                    <span className="w-4 h-4 border-3 border-gray-600 rounded-full inline-block animate-spin border-b-gray-100" ></span>
+                                    :
+                                    "Add"
+                                }
+
+                            </Button>
+                        </div>
                     </Form>
-                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
+                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
                         {endorsements?.map(item => (
                             <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.endorser_name, talentId: item.talent_id }} /></div>
@@ -101,7 +114,7 @@ function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId
                                 disabled={isPending}
                                 focusableWhenDisabled
                                 type="submit"
-                                className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
+                                className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-default"
                             >
                                 Delete
                             </Button>}

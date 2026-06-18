@@ -17,7 +17,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     return (
         <div className={`${inter.className} h-screen flex overflow-hidden`}>
             <Sidebar user={{ name: userMetadata?.full_name, email: userMetadata?.email, avatarUrl: userMetadata?.avatar_url }} />
-            <main className="px-18 pb-6 pt-12 w-full bg-gray-50/50 flex-1 min-h-0 overflow-y-scroll">
+            <main className="px-18 pb-20 pt-12 w-full bg-gray-50/50 flex-1 min-h-0 overflow-y-scroll">
                 {children}
             </main>
         </div>

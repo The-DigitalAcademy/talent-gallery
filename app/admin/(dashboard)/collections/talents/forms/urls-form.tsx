@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useActionState, useState } from "react";
 import { upsertUrls } from "../actions/urls-action";
 import LinkPreviewCard from "@/components/admin/link-preview-card";
+import { CheckIcon, XIcon } from "lucide-react";
 
 const initialState: FormState = {
     success: false,
@@ -38,11 +39,6 @@ export default function URLsForm({ values }: Props) {
                 action={formAction}
                 errors={state.errors}
             >
-                {state.message && (
-                    <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                        {state.message}
-                    </div>
-                )}
                 <div className="grid grid-cols-2 gap-7 mb-5">
                     <Field.Root name="youtube" className="flex flex-col items-start gap-2 w-full">
                         <Field.Label className="text-xs text-gray-700">
@@ -105,14 +101,31 @@ export default function URLsForm({ values }: Props) {
                         <LinkPreviewCard targetUrl={githubLink} />
                     </Field.Root>
                 </div>
-                <Button
-                    disabled={isPending}
-                    focusableWhenDisabled
-                    type="submit"
-                    className="rounded-xl justify-center border ml-auto border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-200 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-progress"
-                >
-                    Save Changes
-                </Button>
+                <div className="flex justify-end items-center gap-4">
+                    {(!isPending && state.success) &&
+                        <div className="text-green-700/75 text-xs flex items-center gap-1">
+                            <CheckIcon className="w-4" />Saved
+                        </div>
+                    }
+                    {(!isPending && !state.success && state.message) && (
+                        <div className="text-red-700/75 text-xs flex items-center gap-1">
+                            <XIcon className="w-4" />{state.message}
+                        </div>
+                    )}
+                    <Button
+                        disabled={isPending}
+                        focusableWhenDisabled
+                        type="submit"
+                        className="rounded-xl justify-center border border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-100 shadow-sm cursor-pointer transition items-center data-disabled:animate-pulse data-disabled:cursor-default"
+                    >
+                        {isPending ?
+                            <span className="w-4 h-4 border-3 border-gray-600 rounded-full inline-block animate-spin border-b-gray-100" ></span>
+                            :
+                            "Save Changes"
+                        }
+
+                    </Button>
+                </div>
             </Form>
         </div>
     )

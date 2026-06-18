@@ -6,8 +6,8 @@ import EnrolmentForm from "../forms/enrolment-form";
 import URLsForm from "../forms/urls-form";
 import WorkExperienceForm from "../forms/work-experience-form";
 import EndorsementsForm from "../forms/endorsements-form";
-import { TalentCapabilitiesSection } from "@/components/admin/talent-capabilities-section";
 import ProjectsForm from "../forms/projects-form";
+import { TalentCapabilitiesForm } from "../forms/capability-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <BasicInfoForm values={talent!} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
                 <URLsForm values={urlValues} />
-                <TalentCapabilitiesSection
+                <TalentCapabilitiesForm
                     capabilities={capabilities || []}
                     talentCapabilities={talentCapabilityData}
                     talentId={id} />
