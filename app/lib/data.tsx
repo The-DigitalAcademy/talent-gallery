@@ -17,6 +17,7 @@ export async function fetchTalents(filters: TalentFilters = {}) {
             programs${filters.program ? "!inner" : ""} (id, name), 
             cohorts${filters.cohort ? "!inner" : ""} (id, name), 
             talent_statuses${filters.status ? "!inner" : ""} (id, name), 
+            is_published,
             created_at`)
 
     if (fullname)
@@ -31,6 +32,8 @@ export async function fetchTalents(filters: TalentFilters = {}) {
     if (status) {
         query = query.eq('talent_statuses.id', status);
     }
+
+    query = query.order('created_at', { ascending: false })
 
     return await query;
 

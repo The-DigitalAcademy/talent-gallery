@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SquarePenIcon, Trash2Icon } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
+import PublishSwitch from "./_forms/published-status-form";
 
 type TalentColDef = {
     id: string,
@@ -13,6 +14,7 @@ type TalentColDef = {
     programs: { name: string, id: string }[],
     cohorts: { name: string, id: string }[],
     talent_statuses: { name: string, id: string }[],
+    is_published: boolean,
     created_at: string
 }
 export const columns: ColumnDef<TalentColDef>[] = [
@@ -44,6 +46,15 @@ export const columns: ColumnDef<TalentColDef>[] = [
         cell: ({ row }) => {
             const c: { name: string } = row.getValue("talent_statuses")
             return c?.name
+        }
+    },
+    {
+        accessorKey: "is_published",
+        header: "published",
+        cell: ({ row }) => {
+            const c: boolean = row.getValue("is_published");
+            const id: string = row.getValue("id")
+            return <PublishSwitch defaultChecked={c} talentId={id} />
         }
     },
     {
