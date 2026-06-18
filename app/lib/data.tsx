@@ -4,10 +4,11 @@ type TalentFilters = {
     program?: string,
     cohort?: string,
     status?: string,
-    fullname?: string
+    fullname?: string,
+    published?: string
 }
 export async function fetchTalents(filters: TalentFilters = {}) {
-    const { program, cohort, status, fullname } = filters
+    const { program, cohort, status, fullname, published } = filters
     const supabase = await createClient();
 
     let query = supabase.from("talents")
@@ -31,6 +32,9 @@ export async function fetchTalents(filters: TalentFilters = {}) {
     }
     if (status) {
         query = query.eq('talent_statuses.id', status);
+    }
+    if (published) {
+        query = query.eq('is_published', published);
     }
 
     query = query.order('created_at', { ascending: false })

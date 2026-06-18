@@ -8,6 +8,7 @@ export default function CollectionFilter({ title, options, keyName }: { title: s
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const defaultValue = searchParams.get(keyName)
 
     function handleSelect(value: any) {
         const params = new URLSearchParams(searchParams);
@@ -16,7 +17,7 @@ export default function CollectionFilter({ title, options, keyName }: { title: s
     };
     return (
         <div className="flex flex-col items-start gap-1">
-            <Select.Root items={options} onValueChange={(val) => handleSelect(val)}>
+            <Select.Root items={options} defaultValue={defaultValue} onValueChange={(val) => handleSelect(val)}>
                 <Select.Trigger className="border min-w-50 rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
                     <Select.Value
                         className="data-placeholder:text-gray-500"

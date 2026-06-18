@@ -38,6 +38,7 @@ export default async function Page(props: PageProps) {
                 <CollectionFilter title="Program" keyName="program" options={programs?.map(i => ({ label: i.name, value: i.id })) || []} />
                 <CollectionFilter title="Cohort" keyName="cohort" options={cohorts?.map(i => ({ label: i.name, value: i.id })) || []} />
                 <CollectionFilter title="Status" keyName="status" options={statuses?.map(i => ({ label: i.name, value: i.id })) || []} />
+                <CollectionFilter title="Published status" keyName="published" options={[{ label: 'published', value: 'true' }, { label: 'not published', value: 'false' }]} />
             </div>
             <CollectionTable data={data || []} columns={columns} />
         </>
