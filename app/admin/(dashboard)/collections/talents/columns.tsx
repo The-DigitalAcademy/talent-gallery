@@ -35,7 +35,7 @@ export const columns: ColumnDef<TalentColDef>[] = [
         header: "cohort",
         cell: ({ row }) => {
             const c: { name: string } = row.getValue("cohorts")
-            return c.name
+            return c?.name
         }
     },
     {

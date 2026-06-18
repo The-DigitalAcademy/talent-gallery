@@ -11,7 +11,13 @@ export async function fetchTalents(filters: TalentFilters = {}) {
     const supabase = await createClient();
 
     let query = supabase.from("talents")
-        .select("id, fullname, profile_image_url, programs!inner (id, name), cohorts!inner (id, name), talent_statuses!inner (id, name), created_at")
+        .select(
+            `id, fullname, 
+            profile_image_url, 
+            programs${filters.program ? "!inner" : ""} (id, name), 
+            cohorts${filters.cohort ? "!inner" : ""} (id, name), 
+            talent_statuses${filters.status ? "!inner" : ""} (id, name), 
+            created_at`)
 
     if (fullname)
         query = query.ilike('fullname', `%${fullname || ""}%`)
