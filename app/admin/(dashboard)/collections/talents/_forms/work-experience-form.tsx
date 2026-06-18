@@ -88,6 +88,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                         </div>
                     </Form>
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
+                        {!workExperiences.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Work Experience</div>}
                         {workExperiences?.map(work => (
                             <div key={work.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: work.id, name: work.role, talentId: work.talent_id }} /></div>

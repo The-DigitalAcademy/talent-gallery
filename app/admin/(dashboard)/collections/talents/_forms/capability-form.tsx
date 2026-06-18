@@ -67,7 +67,9 @@ export function TalentCapabilitiesForm({ capabilities, talentCapabilities = [], 
                         className="border rounded-full h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 py- pl-10 pr-2 font-normal"
                     />
                 </div>
+                <div className="text-xs text-gray-700 mb-3">Talent Capabilities</div>
                 <div className="flex gap-x-4 gap-y-3 flex-wrap mb-5">
+                    {!talentCapabilities.length && <div className="text-center w-full text-sm text-gray-400">No Capabilities</div>}
                     {talentCapabilities.map(i => <DeleteCapabilityForm key={i.id} talentCapabilityId={i.id} capabilityName={i.capabilityName} talentId={talentId} />)}
                 </div>
                 <div className="text-xs text-gray-700 mb-3">Select a capability</div>

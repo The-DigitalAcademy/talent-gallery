@@ -70,6 +70,7 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                         </div>
                     </Form>
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
+                        {!endorsements.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Endorsements</div>}
                         {endorsements?.map(item => (
                             <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.endorser_name, talentId: item.talent_id }} /></div>
