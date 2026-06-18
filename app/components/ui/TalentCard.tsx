@@ -20,14 +20,17 @@ interface TalentCardProps {
   };
 }
 
-const getBorderAccent = (programName: string | undefined) => {
-  switch (programName?.toLowerCase()) {
-    case 'software development': return 'border-t-4 border-t-orange-500';
-    case 'data science': return 'border-t-4 border-t-amber-500';
-    case 'ux/ui design': return 'border-t-4 border-t-purple-500';
+const getBorderAccent = (status: string | undefined) => {
+  switch (status?.toLowerCase()) {
+    case 'available for wpe': return 'border-t-4 border-t-orange-500';
+    case 'available for hire': return 'border-t-4 border-t-amber-400';
+    case 'in wpe': return 'border-t-4 border-t-purple-500';
+    case 'employed': return 'border-t-4 border-t-teal-400';
     default: return 'border-t-4 border-t-teal-400';
   }
 };
+
+
 
 const getStatusBadgeStyle = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
@@ -40,7 +43,7 @@ const getStatusBadgeStyle = (status: string | undefined) => {
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
-  const topAccent = getBorderAccent(talent.program?.name);
+  const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
 
   return (
