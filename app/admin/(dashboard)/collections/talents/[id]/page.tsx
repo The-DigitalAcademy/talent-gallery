@@ -7,6 +7,7 @@ import URLsForm from "../forms/urls-form";
 import WorkExperienceForm from "../forms/work-experience-form";
 import EndorsementsForm from "../forms/endorsements-form";
 import { TalentCapabilitiesSection } from "@/components/admin/talent-capabilities-section";
+import ProjectsForm from "../forms/projects-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: statuses, error: statusesError } = await supabase.from("talent_statuses").select()
     const { data: workExperiences, error: workExperiencesError } = await supabase.from("work_experiences").select().eq("talent_id", id)
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
+    const { data: projects, error: projectsError } = await supabase.from("projects").select().eq("talent_id", id)
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: talentCapabilities, error: talentCapabilitiesError } = await supabase.from("talent_capabilities").select("id, capabilities (id, name)").eq("talent_id", id)
 
@@ -69,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     talentId={id} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
+                <ProjectsForm talentId={talent?.id} projects={projects || []} />
             </div >
         </div >
     )

@@ -63,6 +63,7 @@ export interface Project {
   name: string;
   description: string;
   created_at: Timestamptz;
+  talent_id: UUID;
 }
 
 export interface TalentCapability {
