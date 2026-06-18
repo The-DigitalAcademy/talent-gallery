@@ -1,13 +1,13 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
-import BasicInfoForm from "../forms/basic-info-form";
-import EnrolmentForm from "../forms/enrolment-form";
-import URLsForm from "../forms/urls-form";
-import WorkExperienceForm from "../forms/work-experience-form";
-import EndorsementsForm from "../forms/endorsements-form";
-import ProjectsForm from "../forms/projects-form";
-import { TalentCapabilitiesForm } from "../forms/capability-form";
+import BasicInfoForm from "../_forms/basic-info-form";
+import EnrolmentForm from "../_forms/enrolment-form";
+import URLsForm from "../_forms/urls-form";
+import WorkExperienceForm from "../_forms/work-experience-form";
+import EndorsementsForm from "../_forms/endorsements-form";
+import ProjectsForm from "../_forms/projects-form";
+import { TalentCapabilitiesForm } from "../_forms/capability-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params

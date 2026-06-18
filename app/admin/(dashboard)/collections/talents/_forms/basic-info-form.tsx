@@ -2,7 +2,7 @@
 import { Button, Field, Form } from "@base-ui/react";
 import { CheckIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { ChangeEvent, useActionState, useState } from "react";
-import { upsertBasicInfo } from "../actions/basic-info-action";
+import { upsertBasicInfo } from "../_actions/basic-info-action";
 import { FormState } from "@/app/lib/definitions";
 
 const initialState: FormState = {

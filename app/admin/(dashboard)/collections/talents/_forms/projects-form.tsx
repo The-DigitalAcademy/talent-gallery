@@ -1,23 +1,23 @@
 "use client"
-import { Endorsement, FormState } from "@/app/lib/definitions"
+import { FormState, Project } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
 import { CheckIcon, XIcon } from "lucide-react"
 import { useActionState } from "react";
 import clsx from "clsx";
-import { deleteEndorsement, insertEndorsement } from "../actions/endorsements-action";
+import { deleteProject, insertProject } from "../_actions/projects-action";
 
 const initialState: FormState = {
     success: false,
     message: '',
 };
 
-export default function EndorsementsForm({ endorsements, talentId }: { endorsements: Endorsement[], talentId: string }) {
-    const createEndorsement = insertEndorsement.bind(null, talentId)
-    const [state, formAction, isPending] = useActionState(createEndorsement, initialState);
+export default function ProjectsForm({ projects, talentId }: { projects: Project[], talentId: string }) {
+    const createProject = insertProject.bind(null, talentId)
+    const [state, formAction, isPending] = useActionState(createProject, initialState);
 
     return (
         <div>
-            <h2 className="mb-2 font-semibold">Endorsements</h2>
+            <h2 className="mb-2 font-semibold">Projects</h2>
             <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
                 <div className="grid grid-cols-3 gap-7">
                     <Form
@@ -28,17 +28,17 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                             <Field.Control
                                 type="text"
                                 required
-                                placeholder="Endorser name & title"
+                                placeholder="Project name"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
-                        <Field.Root name="message" className="flex flex-col items-start gap-2 w-full">
+                        <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
                             <textarea
-                                name="message"
+                                name="description"
                                 rows={5}
                                 required
-                                placeholder="Message"
+                                placeholder="Description"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
@@ -70,11 +70,11 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                         </div>
                     </Form>
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
-                        {endorsements?.map(item => (
+                        {projects?.map(item => (
                             <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative">
-                                <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.endorser_name, talentId: item.talent_id }} /></div>
-                                <p className="text-sm italic text-gray-800 mb-2">"{item.message}"</p>
-                                <p className="text-sm text-gray-500">{item.endorser_name}</p>
+                                <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.name, talentId: item.talent_id }} /></div>
+                                <p className="mb-2 capitalize font-semibold text-base">{item.name}</p>
+                                <p className="text-sm text-gray-500">{item.description}</p>
                             </blockquote>))}
                     </div>
                 </div>
@@ -84,8 +84,8 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
 }
 
 function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId: string } }) {
-    const deleteEndorsementWithId = deleteEndorsement.bind(null, item.id, item.talentId)
-    const [state, formAction, isPending] = useActionState(deleteEndorsementWithId, initialState);
+    const deleteProjectWithId = deleteProject.bind(null, item.id, item.talentId)
+    const [state, formAction, isPending] = useActionState(deleteProjectWithId, initialState);
 
     return (
         <Dialog.Root>
@@ -97,7 +97,7 @@ function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId
                 <Dialog.Viewport>
                     <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 flex flex-col gap-4 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 shadow bg-white border border-gray-300 p-4 rounded-xl transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.9] data-starting-style:opacity-0">
                         <div className='flex justify-between items-center'>
-                            <Dialog.Title className="font-semibold">{isPending ? "Deleting" : "Delete"} endorsement by {item.name}{isPending ? "..." : ""}</Dialog.Title>
+                            <Dialog.Title className="font-semibold">{isPending ? "Deleting" : "Delete"} {item.name}{isPending ? "..." : ""}</Dialog.Title>
                             <Dialog.Close className="text-black" ><XIcon /></Dialog.Close>
                         </div>
                         {(!isPending && !state.success) && <Dialog.Description className="text-sm text-gray-500">This action cannot be undone</Dialog.Description>}

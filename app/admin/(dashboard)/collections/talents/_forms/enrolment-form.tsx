@@ -2,7 +2,7 @@
 import { Cohort, FormState, Location, Program, TalentStatus } from "@/app/lib/definitions"
 import FormSelect from "@/components/admin/form-select"
 import { Button, Field, Form } from "@base-ui/react"
-import { upsertEnrolmentInfo } from "../actions/enrolment-action";
+import { upsertEnrolmentInfo } from "../_actions/enrolment-action";
 import { useActionState } from "react";
 import clsx from "clsx";
 import { CheckIcon, XIcon } from "lucide-react";

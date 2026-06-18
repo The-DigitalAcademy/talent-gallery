@@ -2,7 +2,7 @@
 import { FormState, WorkExperience } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
 import { CheckIcon, XIcon } from "lucide-react"
-import { deleteWorkExperience, insertWorkExperience } from "../actions/work-experience-action";
+import { deleteWorkExperience, insertWorkExperience } from "../_actions/work-experience-action";
 import { useActionState } from "react";
 import clsx from "clsx";
 

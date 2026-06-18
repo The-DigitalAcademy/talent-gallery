@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
-import BasicInfoForm from "../forms/basic-info-form";
+import BasicInfoForm from "../_forms/basic-info-form";
 import EnrolmentFormPlaceholder from "@/components/admin/enrolment-form-placeholder";
 import ProfileLinksFormPlaceholder from "@/components/admin/profile-links-form-placeholder";
 

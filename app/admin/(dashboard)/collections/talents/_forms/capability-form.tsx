@@ -2,7 +2,7 @@
 import { Capability, FormState } from "@/app/lib/definitions"
 import { Button, Form, Input } from "@base-ui/react"
 import { useActionState, useState } from "react";
-import { deleteCapability, insertCapability } from "../actions/capability-action";
+import { deleteCapability, insertCapability } from "../_actions/capability-action";
 import { SearchIcon, XIcon } from "lucide-react";
 
 const initialState: FormState = {

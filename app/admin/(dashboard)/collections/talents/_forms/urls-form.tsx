@@ -3,7 +3,7 @@ import { FormState } from "@/app/lib/definitions";
 import { Button, Field, Form } from "@base-ui/react";
 import clsx from "clsx";
 import { useActionState, useState } from "react";
-import { upsertUrls } from "../actions/urls-action";
+import { upsertUrls } from "../_actions/urls-action";
 import LinkPreviewCard from "@/components/admin/link-preview-card";
 import { CheckIcon, XIcon } from "lucide-react";
 
