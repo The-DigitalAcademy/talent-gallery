@@ -1,5 +1,5 @@
 import { createClient } from "@/app/lib/supabase/server";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../_forms/basic-info-form";
 import EnrolmentForm from "../_forms/enrolment-form";
@@ -9,6 +9,7 @@ import EndorsementsForm from "../_forms/endorsements-form";
 import ProjectsForm from "../_forms/projects-form";
 import { TalentCapabilitiesForm } from "../_forms/capability-form";
 import { PublishedStatusForm } from "../_forms/published-status-form";
+import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -76,6 +77,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
+                <DeleteTalentFormDialog id={talent?.id} name={talent?.fullname}>
+                    <div className="rounded-lg bg-red-600 w-30 hover:bg-red-800 justify-center border border-gray-300 text-base px-5 h-8 flex gap-1 text-white font-semibold shadow-sm cursor-pointer transition items-center">
+                        <Trash2Icon className='size-4' /> Delete
+                    </div>
+                </DeleteTalentFormDialog>
             </div >
         </div >
     )

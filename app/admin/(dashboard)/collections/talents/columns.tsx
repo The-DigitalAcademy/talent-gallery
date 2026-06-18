@@ -6,6 +6,7 @@ import { SquarePenIcon, Trash2Icon } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import PublishSwitch from "./_forms/published-status-form";
+import { DeleteTalentFormDialog } from "./_forms/delete-talent-form";
 
 type TalentColDef = {
     id: string,
@@ -67,7 +68,9 @@ export const columns: ColumnDef<TalentColDef>[] = [
         header: "",
         cell: ({ row }) => (<div className="flex gap-3">
             <Link href={`/admin/collections/talents/${row.getValue("id")}`}><SquarePenIcon className='size-4 hover:text-blue-500' /></Link>
-            <Trash2Icon className='size-4 hover:text-red-500' />
+            <DeleteTalentFormDialog id={row.getValue("id")} name={row.getValue("fullname")}>
+                <Trash2Icon className='size-4 hover:text-red-500' />
+            </DeleteTalentFormDialog>
         </div>)
     }
 ]
