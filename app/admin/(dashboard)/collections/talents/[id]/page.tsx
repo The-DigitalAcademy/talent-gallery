@@ -8,12 +8,13 @@ import WorkExperienceForm from "../_forms/work-experience-form";
 import EndorsementsForm from "../_forms/endorsements-form";
 import ProjectsForm from "../_forms/projects-form";
 import { TalentCapabilitiesForm } from "../_forms/capability-form";
+import { PublishedStatusForm } from "../_forms/published-status-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url")
+        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published")
         .eq("id", id)
         .single()
 
@@ -59,7 +60,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <Link href="/admin/collections/talents" className="flex gap-2 text-gray-500 mb-3 hover:text-gray-800">
                     <ChevronLeftIcon className="w-4" /> <span className="text-base">Talents</span>
                 </Link>
-                <h1 className="text-2xl font-bold mb">{talent?.fullname}</h1>
+                <div className="flex justify-between">
+                    <h1 className="text-2xl font-bold mb">{talent?.fullname}</h1>
+                    <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
+                </div>
             </div>
             <div className="flex w-full flex-col gap-5">
                 <BasicInfoForm values={talent!} />
