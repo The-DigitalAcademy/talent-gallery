@@ -31,11 +31,7 @@ const mainNav = [
     {
         name: "Talent Statuses",
         href: "/admin/collections/talent-statuses"
-    },
-    {
-        name: "Projects",
-        href: "/admin/collections/projects"
-    },
+    }
 ]
 
 export default function Sidebar({ user }: { user: { name: string, email: string, avatarUrl: string } }) {
