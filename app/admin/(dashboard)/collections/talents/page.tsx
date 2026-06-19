@@ -30,7 +30,7 @@ export default async function Page(props: PageProps) {
             <div className="flex justify-between items-start">
                 <CollectionHeader title="Talents" totalEntries={data?.length || 0} />
                 <Link href="/admin/collections/talents/create" className="text-black px-3 text-sm font-medium flex items-center gap-2 rounded-lg cursor-pointer hover:bg-gray-200 shadow h-8 border border-gray-300">
-                    <PlusIcon className='w-4' /> <span>Add Item</span>
+                    <PlusIcon className='w-4' /> <span>Add Talent</span>
                 </Link>
             </div>
             <div className="flex gap-5">

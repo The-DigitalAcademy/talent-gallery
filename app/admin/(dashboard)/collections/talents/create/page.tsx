@@ -1,17 +1,9 @@
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../_forms/basic-info-form";
-import EnrolmentFormPlaceholder from "@/components/admin/enrolment-form-placeholder";
-import ProfileLinksFormPlaceholder from "@/components/admin/profile-links-form-placeholder";
-import ProjectsFormPlaceholder from "@/components/admin/projects-form-placeholder";
-import EndorsementsFormPlaceholder from "@/components/admin/endorsements-form-placeholder";
-import WorkExperienceFormPlaceholder from "@/components/admin/work-experience-form-placeholder";
-import CapabilitiesFormPlaceholder from "@/components/admin/capabilities-form-placeholder";
-import { createClient } from "@/app/lib/supabase/server";
+import { CapabilitiesFormPlaceholder, EndorsementsFormPlaceholder, EnrolmentFormPlaceholder, ProfileLinksFormPlaceholder, ProjectsFormPlaceholder, WorkExperienceFormPlaceholder } from "@/components/admin/form-placeholders";
 
 export default async function Page() {
-    const supabase = await createClient();
-    const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     return (
         <div>
             <div className="mb-5">
@@ -24,7 +16,7 @@ export default async function Page() {
                 <BasicInfoForm />
                 <EnrolmentFormPlaceholder />
                 <ProfileLinksFormPlaceholder />
-                <CapabilitiesFormPlaceholder capabilities={capabilities!} />
+                <CapabilitiesFormPlaceholder />
                 <WorkExperienceFormPlaceholder />
                 <EndorsementsFormPlaceholder />
                 <ProjectsFormPlaceholder />

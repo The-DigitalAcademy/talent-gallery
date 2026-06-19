@@ -20,7 +20,7 @@ export function CreateFormDialog() {
     return (
         <Dialog.Root>
             <Dialog.Trigger className="text-black px-3 text-sm font-medium flex items-center gap-2 rounded-lg cursor-pointer hover:bg-gray-200 shadow h-8 border border-gray-300">
-                <PlusIcon className='w-4' /> <span>Add Item</span>
+                <PlusIcon className='w-4' /> <span>Add Location</span>
             </Dialog.Trigger>
             <Dialog.Portal className="text-black">
                 <Dialog.Backdrop className="fixed inset-0 min-h-dvh backdrop-blur-[2px] " />
