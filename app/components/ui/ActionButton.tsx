@@ -10,7 +10,7 @@ interface ActionButtonProps {
 export function ActionButton({
   label,
   href,
-  color = "bg-blue-900 text-white hover:bg-blue-800",
+  color = "bg-[#01317F] text-white hover:bg-[#01317F]",
   icon,
 }: ActionButtonProps) {
   return (
@@ -19,8 +19,8 @@ export function ActionButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex items-center justify-center gap-2 px-6 py-4 rounded-lg",
-        "font-semibold text-base transition-colors w-full",
+        "flex items-center justify-center gap-2 px-6 py-4 hover:py-2 rounded-lg",
+        "font-semibold text-base hover:text-lg transition-colors w-full",
         color
       )}
     >

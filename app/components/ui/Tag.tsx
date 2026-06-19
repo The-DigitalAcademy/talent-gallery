@@ -3,6 +3,7 @@ import { cn } from "../../lib/utils";
 interface TagProps {
   label: string;
   color?: string;
+  bgColor?: string;
   textSize?: string;
   padding?: string;
   radius?: string;
@@ -10,7 +11,8 @@ interface TagProps {
 
 export function Tag({
   label,
-  color = "bg-blue-900 text-white",
+  color = "bg-[#01317F] text-white",
+  bgColor,
   textSize = "text-sm",
   padding = "px-4 py-2",
   radius = "rounded-sm"
@@ -24,6 +26,7 @@ export function Tag({
         padding,
         radius
       )}
+      style={bgColor ? { backgroundColor: bgColor } : undefined}
     >
       {label}
     </span>

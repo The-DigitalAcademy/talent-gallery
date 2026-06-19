@@ -17,14 +17,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       capability:capabilities(id, name)
     ),
     work_experiences(*),
-    projects:talent_projects(
-      project:projects(
-        id,
-        name,
-        description,
-        capabilities:project_capabilities(
-          capability:capabilities(name)
-        )
+    projects(
+      id,
+      name,
+      description,
+      capabilities:project_capabilities(
+        capability:capabilities(name)
       )
     ),
     endorsements(
@@ -36,7 +34,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   .eq("slug", slug)
   .eq("is_published", true)
   .single();
-    console.log(talent)
 
   if (error) {
     return (
