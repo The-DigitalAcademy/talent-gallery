@@ -8,10 +8,50 @@ import { SkillTag } from "@/app/components/ui/SkillTag";
 import { Tag } from "@/app/components/ui/Tag";
 import { EndorsementCard } from "./EndorsementCard";
 import { ProjectCard } from "./ProjectCard";
-import { TalentProfileInterface } from "./TalentModal";
 import { WorkExperienceCard } from "./WorkExperienceCard";
-import { getYouTubeEmbedUrl } from "@/app/lib/utils";
+import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
 import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon } from "@/app/components/ui/Icons";
+
+export type TalentProfileInterface = {
+  id: string;
+  fullname: string;
+  bio: string | null;
+  profile_image_url: string | null;
+  youtube_url: string | null;
+  github_url: string | null;
+  portfolio_url: string | null;
+  linkedin_url: string | null;
+  slug: string;
+  is_published: boolean;
+  created_at: string;
+  location_id: string;
+  program_id: string;
+  cohort_id: string;
+  talent_status_id: string;
+  location: { city: string; country: string } | null;
+  cohort: { name: string } | null;
+  program: { name: string } | null;
+  talent_status: { name: string } | null;
+  capabilities: { capability: { id: string; name: string } }[];
+  work_experiences: {
+    id: string;
+    role: string;
+    company: string;
+    duration: string;
+    description: string | null;
+  }[];
+  projects: {
+    id: string;
+    name: string;
+    description: string | null;
+    capabilities: { capability: { name: string } }[];
+  }[];
+  endorsements: {
+    id: string;
+    endorser_name: string;
+    message: string;
+  }[];
+};
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
@@ -25,19 +65,25 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   const skills = talent.capabilities.map((c) => c.capability.name);
 
   const projects = talent.projects
-    .filter((tp) => tp.project !== null)
-    .map((tp) => ({
-      title: tp.project!.name,
-      description: tp.project!.description ?? "",
-      contributions: [],
-      technologies: tp.project!.capabilities.map((pc) => pc.capability.name),
-    }));
+  .filter((tp) => tp !== null)
+  .map((tp) => ({
+    title: tp.name,
+    description: tp.description ?? "",
+    contributions: [],
+    capabilities: tp.capabilities.map((pc) => pc.capability.name),
+  }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
 
+  const talent_status_colors = [
+    {status: "available for wpe", color: "#FF7900"},
+    {status: "available for hire", color: "#FFB800"},
+    {status: "in wpe", color: "#C755FF"},
+  ]
+
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm">
+      <div className="max-w-3xl w-full mx-auto bg-white rounded-xl shadow-sm">
 
         {/* Header */}
         <div className="flex items-start justify-between p-6 pb-4">
@@ -49,9 +95,9 @@ export function TalentProfile({ talent }: TalentProfileProps) {
               radius="rounded-full"
             />
             <div>
-              <h1 className="text-2xl font-bold text-blue-900">{talent.fullname}</h1>
-              {talent.program && <p className="text-gray-600">{talent.program.name}</p>}
-              {location && <p className="text-gray-500 text-sm">{location}</p>}
+              <h1 className="text-2xl font-semibold text-[#01317F]">{talent.fullname}</h1>
+              {talent.program && <p className="text-gray-700 mt-1">{talent.program.name}</p>}
+              {location && <p className="text-gray-600 text-sm mt-1">{location}</p>}
             </div>
           </div>
           <a href="/gallery" aria-label="Back to gallery">
@@ -59,7 +105,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           </a>
         </div>
 
-        <hr className="border-gray-200 mx-6" />
+        <hr className="border-gray-200" />
 
         {/* Body */}
         <div className="px-6 py-5 space-y-6">
@@ -67,15 +113,15 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {talent.cohort && <Tag label={talent.cohort.name} />}
-            {talent.program && <Tag label={talent.program.name} color="bg-blue-700 text-white" />}
-            {talent.talent_status && <Tag label={talent.talent_status.name} color="bg-orange-500 text-white" />}
+            {talent.program && <Tag label={talent.program.name} />}
+            {talent.talent_status && <Tag label={talent.talent_status.name} color="text-white"  bgColor={getTalentStatusColor(talent.talent_status.name)} />}
           </div>
 
           {/* About */}
           {talent.bio && (
             <div className="space-y-2">
-              <h3 className="text-blue-900 font-bold text-base">About</h3>
-              <p className="text-gray-700 text-sm leading-relaxed">{talent.bio}</p>
+              <h3 className="text-[#01317F] font-bold text-base">About</h3>
+              <p className="text-gray-700 leading-relaxed">{talent.bio}</p>
             </div>
           )}
 
@@ -148,7 +194,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
                 <ActionButton
                   label="View GitHub"
                   href={talent.github_url}
-                  color="bg-blue-900 text-white hover:bg-blue-800"
+                  color="bg-[#01317F] text-white"
                   icon={<GitHubIcon />}
                 />
               )}
@@ -156,7 +202,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
                 <ActionButton
                   label="View Portfolio"
                   href={talent.portfolio_url}
-                  color="bg-orange-500 text-white hover:bg-orange-600"
+                  color="bg-[#FF7900] text-white"
                   icon={<ExternalLinkIcon />}
                 />
               )}

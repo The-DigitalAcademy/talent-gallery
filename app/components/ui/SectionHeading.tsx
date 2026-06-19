@@ -10,7 +10,7 @@ export function SectionHeading({ title, icon }: SectionHeadingProps) {
   return (
     <div className={cn("flex items-center gap-2")}>
       <span className="text-orange-500 shrink-0">{icon}</span>
-      <h3 className="text-blue-900 font-bold text-lg">{title}</h3>
+      <h3 className="text-[#01317F] font-semibold text-lg">{title}</h3>
     </div>
   );
 }

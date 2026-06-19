@@ -23,9 +23,9 @@ export function WorkExperienceCard({ role, company, duration }: WorkExperienceCa
         />
       </svg>
       <div>
-        <p className="font-bold text-gray-900 text-sm">{role}</p>
-        <p className="text-gray-600 text-sm">{company}</p>
-        <p className="text-gray-500 text-sm">{duration}</p>
+        <p className="font-medium text-gray-900">{role}</p>
+        <p className="text-gray-700">{company}</p>
+        <p className="text-gray-600 text-sm">{duration}</p>
       </div>
     </div>
   );

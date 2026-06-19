@@ -32,7 +32,7 @@ export function ProfileAvatar({
   statusColor
 }: ProfileAvatarProps) {
   const initials = fallback ?? getInitials(name);
-  console.log(radius)
+
   return (
     <div className={cn("relative inline-flex shrink-0", size)}>
       <div
