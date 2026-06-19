@@ -15,6 +15,7 @@ export function getTalentStatusColor(statusName: string): string {
     { status: "available for wpe", color: "#FF7900" },
     { status: "available for hire", color: "#FFB800" },
     { status: "in wpe", color: "#C755FF" },
+    { status: "employed", color: "#2DD4BF" },
   ];
 
   return (

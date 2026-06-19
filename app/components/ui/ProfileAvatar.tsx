@@ -52,7 +52,7 @@ export function ProfileAvatar({
             sizes="112px"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-800 font-semibold select-none text-base">
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[#01317F] font-semibold select-none text-lg">
             {initials}
           </div>
         )}

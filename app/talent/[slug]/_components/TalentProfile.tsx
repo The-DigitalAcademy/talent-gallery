@@ -75,12 +75,6 @@ export function TalentProfile({ talent }: TalentProfileProps) {
 
   const endorsement = talent.endorsements?.[0] ?? null;
 
-  const talent_status_colors = [
-    {status: "available for wpe", color: "#FF7900"},
-    {status: "available for hire", color: "#FFB800"},
-    {status: "in wpe", color: "#C755FF"},
-  ]
-
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-3xl w-full mx-auto bg-white rounded-xl shadow-sm">
