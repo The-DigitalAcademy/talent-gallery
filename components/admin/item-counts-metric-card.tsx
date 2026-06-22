@@ -8,7 +8,7 @@ export default function ItemCountsMetricCard({ items, title, subTitle }: { items
             </div>
             <div className="flex flex-col gap-3 overflow-y-scroll pr-3">
                 {items?.map(({ name, count }) =>
-                    <div style={{ width: `${(count / items[0].count) * 100}%` }}
+                    <div key={name} style={{ width: `${(count / items[0].count) * 100}%` }}
                         className="bg-blue-500/75 h-4 text-white/75 flex justify-between px-3 rounded-lg text-center text-xs">
                         <span>{name}</span>
                         <span> {count}</span>
