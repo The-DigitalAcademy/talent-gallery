@@ -1,6 +1,6 @@
 "use client"
 import { Button, Form, Switch } from "@base-ui/react"
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateIsPublished } from "../_actions/published-status-action";
 import { FormState } from "@/app/lib/definitions";
 import clsx from "clsx";
@@ -40,11 +40,13 @@ export function PublishedStatusForm({ isPublished, talentId }: { isPublished: bo
 }
 
 export default function PublishSwitch({ talentId, defaultChecked }: { talentId: string, defaultChecked: boolean }) {
+    const [checked, setChecked] = useState<boolean>(defaultChecked)
     return (
         <label className="flex items-center gap-2 text-sm font-normal cursor-pointer">
             <Switch.Root
-                defaultChecked={defaultChecked}
+                checked={checked}
                 onCheckedChange={(checked) => {
+                    setChecked(checked)
                     updateIsPublished(talentId, checked)
                 }}
                 className="flex h-5 w-9 shrink-0 border rounded-full border-gray-500 bg-white p-0.5 transition-colors duration-150 ease-[ease] data-checked:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950"
