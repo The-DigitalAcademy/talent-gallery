@@ -63,6 +63,7 @@ export interface Project {
   name: string;
   description: string;
   created_at: Timestamptz;
+  talent_id: UUID;
 }
 
 export interface TalentCapability {
@@ -84,4 +85,20 @@ export interface ProjectCapability {
   project_id: UUID;
   capability_id: UUID;
   created_at: Timestamptz;
+}
+
+export interface WorkExperience {
+  id: UUID;
+  talent_id: UUID;
+  company: string;
+  role: string;
+  duration: string;
+  description: string
+  created_at: Timestamptz;
+}
+
+export type FormState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
 }
