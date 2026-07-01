@@ -11,47 +11,7 @@ import { ProjectCard } from "./ProjectCard";
 import { WorkExperienceCard } from "./WorkExperienceCard";
 import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
 import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon } from "@/app/components/ui/Icons";
-
-export type TalentProfileInterface = {
-  id: string;
-  fullname: string;
-  bio: string | null;
-  profile_image_url: string | null;
-  youtube_url: string | null;
-  github_url: string | null;
-  portfolio_url: string | null;
-  linkedin_url: string | null;
-  slug: string;
-  is_published: boolean;
-  created_at: string;
-  location_id: string;
-  program_id: string;
-  cohort_id: string;
-  talent_status_id: string;
-  location: { city: string; country: string } | null;
-  cohort: { name: string } | null;
-  program: { name: string } | null;
-  talent_status: { name: string } | null;
-  capabilities: { capability: { id: string; name: string } }[];
-  work_experiences: {
-    id: string;
-    role: string;
-    company: string;
-    duration: string;
-    description: string | null;
-  }[];
-  projects: {
-    id: string;
-    name: string;
-    description: string | null;
-    capabilities: { capability: { name: string } }[];
-  }[];
-  endorsements: {
-    id: string;
-    endorser_name: string;
-    message: string;
-  }[];
-};
+import { TalentProfileInterface } from "@/app/interface-types/talent";
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;

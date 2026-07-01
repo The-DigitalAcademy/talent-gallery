@@ -1,9 +1,11 @@
 // app/talents/page.tsx
-import FilterControls from '../components/ui/FilterControls'; 
-import TalentCard from '../components/ui/TalentCard';
+import FilterControls from '../components/ui/FilterControls';
 import { getFilteredTalents, FilterParams } from './actions';
 import Link from "next/link";
 import { createClient } from '../lib/supabase/server'; 
+import { Suspense } from 'react';
+import TalentGridSkeleton from './_components/TalentGridSkeleton';
+import TalentGrid from './_components/TalentGrid';
 
 interface ExtendedFilterParams extends FilterParams {
   page?: string;
@@ -118,17 +120,12 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
 
         {/* Talent Cards Grid Matrix */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {talents.length === 0 ? (
-            <div className="col-span-full bg-white text-center py-16 border rounded-2xl shadow-sm">
-              <p className="text-slate-400 font-medium">No talent profiles found matching your settings.</p>
-            </div>
-          ) : (
-            talents.map((talent) => (
-              <TalentCard key={talent.id} talent={talent} />
-            ))
-          )}
-        </div>
+        <Suspense
+          key={JSON.stringify(filters)}
+          fallback={<TalentGridSkeleton />}
+        >
+          <TalentGrid filters={filters} />
+        </Suspense>
 
         {/*  PAGINATION PANEL */}
         {totalCount > 0 && (

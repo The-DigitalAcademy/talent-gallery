@@ -1,23 +1,10 @@
 'use client';
+import { Talent } from '@/app/interface-types/talent';
 import Link from 'next/link';
+import { ProfileAvatar } from './ProfileAvatar';
 
 interface TalentCardProps {
-  talent: {
-    id: string;
-    fullname: string;
-    bio: string | null;
-    slug: string;
-    profile_image_url: string | null;
-    location: { city: string; country: string } | null;
-    program: { name: string } | null;
-    talent_status: { name: string } | null;
-    capabilities: Array<{
-      capability: {
-        id: string;
-        name: string;
-      };
-    }>;
-  };
+  talent: Talent
 }
 
 const getBorderAccent = (status: string | undefined) => {
@@ -82,10 +69,12 @@ export default function TalentCard({ talent }: TalentCardProps) {
         <div>
           {/* User Block info */}
           <div className="flex items-center gap-4 mb-4">
-            <img 
-              src={talent.profile_image_url || 'https://via.placeholder.com/150'} 
-              alt={talent.fullname}
-              className="w-14 h-14 rounded-full object-cover border bg-slate-50"
+            <ProfileAvatar
+              imageUrl={talent.profile_image_url ?? undefined}
+              name={talent.fullname}
+              ringColor="ring-gray-200"
+              ringWidth="ring-2"
+              textSize='text-sm'
             />
             <div>
               <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-blue-600 transition-colors">
@@ -122,19 +111,19 @@ export default function TalentCard({ talent }: TalentCardProps) {
             {talent.bio}
           </p>
 
-<div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
-  {talent.capabilities?.map((c, index) => {
-    if (!c.capability?.name) return null;
-    return (
-      <span 
-        key={c.capability.id || index} 
-        className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
-      >
-        {c.capability.name}
-      </span>
-    );
-  })}
-</div>
+          <div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
+            {talent.capabilities?.map((capability, index) => {
+              if (!capability.name) return null;
+              return (
+                <span 
+                  key={capability.id || index} 
+                  className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
+                >
+                  {capability.name}
+                </span>
+              );
+            })}
+          </div>
         </div>
       </Link>
 

@@ -1,4 +1,5 @@
 import { createClient } from "@/app/lib/supabase/server";
+import { Talent } from "../interface-types/talent";
 
 export interface FilterParams {
   cohort?: string;
@@ -72,7 +73,7 @@ export async function getFilteredTalents(filters: FilterParams) {
 
   // Return both data and count so your frontend knows when to stop paginating
   return {
-    data: data || [],
-    count: count || 0
+    data: (data ?? []) as unknown as Talent[],
+    count: count ?? 0,
   };
 }

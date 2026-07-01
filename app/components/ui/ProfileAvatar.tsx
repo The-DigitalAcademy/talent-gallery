@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
 
@@ -10,10 +13,12 @@ interface ProfileAvatarProps {
   ringColor?: string;
   ringWidth?: string;
   statusColor?: string;
+  textSize?: string;
 }
 
 function getInitials(name?: string): string {
   if (!name) return "?";
+
   return name
     .split(" ")
     .slice(0, 2)
@@ -29,30 +34,61 @@ export function ProfileAvatar({
   radius = "rounded-full",
   ringColor = "ring-blue-800",
   ringWidth = "ring-2",
-  statusColor
+  statusColor,
+  textSize = "text-lg"
 }: ProfileAvatarProps) {
   const initials = fallback ?? getInitials(name);
+
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  const showImage = imageUrl && !error;
 
   return (
     <div className={cn("relative inline-flex shrink-0", size)}>
       <div
         className={cn(
-          "w-full h-full overflow-hidden bg-gray-100",
+          "relative w-full h-full overflow-hidden bg-gray-100",
           radius,
           ringWidth,
           ringColor
         )}
       >
-        {imageUrl ? (
+        {/* Skeleton */}
+        {showImage && !loaded && (
+          <div
+            className={cn(
+              "absolute inset-0 animate-pulse bg-slate-200",
+              radius
+            )}
+          />
+        )}
+
+        {/* Image */}
+        {showImage ? (
           <Image
             src={imageUrl}
             alt={name ?? "Avatar"}
             fill
-            className={cn("object-cover", radius)}
-            sizes="112px"
+            sizes="56px"
+            placeholder="empty"
+            className={cn(
+              "object-cover transition-opacity duration-300",
+              radius,
+              loaded ? "opacity-100" : "opacity-0"
+            )}
+            onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[#01317F] font-semibold select-none text-lg">
+          <div 
+            className={
+              cn(
+                "w-full h-full flex items-center justify-center bg-gray-100 text-[#01317F] font-semibold select-none",
+                textSize
+              )
+            }
+          >
             {initials}
           </div>
         )}

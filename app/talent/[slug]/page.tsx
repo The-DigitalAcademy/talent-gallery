@@ -42,6 +42,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </main>
     );
   }
-
+  
   return <TalentProfile talent={talent} />;
 }
