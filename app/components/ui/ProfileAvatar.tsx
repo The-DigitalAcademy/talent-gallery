@@ -1,3 +1,5 @@
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
 
@@ -31,6 +33,7 @@ export function ProfileAvatar({
   ringWidth = "ring-2",
   statusColor
 }: ProfileAvatarProps) {
+  const [hasError, setHasError] = useState(false);
   const initials = fallback ?? getInitials(name);
 
   return (
@@ -43,13 +46,14 @@ export function ProfileAvatar({
           ringColor
         )}
       >
-        {imageUrl ? (
+        {imageUrl && !hasError ? (
           <Image
             src={imageUrl}
             alt={name ?? "Avatar"}
             fill
             className={cn("object-cover", radius)}
             sizes="112px"
+            onError={() => setHasError(true)}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[#01317F] font-semibold select-none text-lg">

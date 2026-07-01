@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { ProfileAvatar } from './ProfileAvatar';
 
 interface TalentCardProps {
   talent: {
@@ -82,10 +83,11 @@ export default function TalentCard({ talent }: TalentCardProps) {
         <div>
           {/* User Block info */}
           <div className="flex items-center gap-4 mb-4">
-            <img 
-              src={talent.profile_image_url || 'https://via.placeholder.com/150'} 
-              alt={talent.fullname}
-              className="w-14 h-14 rounded-full object-cover border bg-slate-50"
+            <ProfileAvatar
+              imageUrl={talent.profile_image_url ?? undefined}
+              name={talent.fullname}
+              size="w-14 h-14"
+              ringWidth=""
             />
             <div>
               <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-blue-600 transition-colors">
