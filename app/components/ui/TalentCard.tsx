@@ -1,5 +1,7 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
+import { ShareModal } from './ShareModal';
 
 interface TalentCardProps {
   talent: {
@@ -43,8 +45,36 @@ const getStatusBadgeStyle = (status: string | undefined) => {
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
+
+  const handleShareClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
+    const shareData = {
+      title: `${talent.fullname} - Profile`,
+      url: shareUrl,
+    };
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      setIsShareOpen(true);
+    }
+  };
 
   return (
     <div 
@@ -63,10 +93,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
           ✓
         </button>
         <button 
-          onClick={() => {
-            navigator.clipboard.writeText(`${window.location.origin}/talent/${talent.slug}`);
-            alert('Profile link copied to clipboard!');
-          }} 
+          onClick={handleShareClick}
           className="hover:text-slate-600 transition-colors p-1"
           title="Share Profile"
         >
@@ -144,6 +171,12 @@ export default function TalentCard({ talent }: TalentCardProps) {
          View Full Profile →
        </Link>
       </div>
+
+      <ShareModal 
+        isOpen={isShareOpen} 
+        onClose={() => setIsShareOpen(false)} 
+        talent={talent} 
+      />
     </div>
   );
 }
