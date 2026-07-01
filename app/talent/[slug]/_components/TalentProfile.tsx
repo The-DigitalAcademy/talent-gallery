@@ -125,7 +125,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={handleShareClick}
-              className="flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="flex items-center justify-center w-8 h-8 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
               title="Share Profile"
             >
               <ShareIcon />
