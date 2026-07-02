@@ -1,5 +1,7 @@
 'use client';
+import { trackProfileShared } from '@/app/lib/analytics';
 import Link from 'next/link';
+import { ShareButton } from './ShareButton';
 
 interface TalentCardProps {
   talent: {
@@ -62,19 +64,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
         >
           ✓
         </button>
-        <button 
-          onClick={() => {
-            navigator.clipboard.writeText(`${window.location.origin}/talent/${talent.slug}`);
-            alert('Profile link copied to clipboard!');
-          }} 
-          className="hover:text-slate-600 transition-colors p-1"
-          title="Share Profile"
-        >
-          {/* Clean, recognizable Curved Arrow Share Icon */}
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-          </svg>
-        </button>
+       <ShareButton slug={talent.slug} name={talent.fullname} />
       </div>
 
       {/* CLICKABLE CARD BODY */}

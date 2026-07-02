@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     description: "Discover and connect with our talented learners.",
     url: "https://talent-gallery.vercel.app",
     siteName: "Shaper Talent",
-    locale: "en_US",
+    locale: "en_ZA",
     type: "website",
     images: [
       {
