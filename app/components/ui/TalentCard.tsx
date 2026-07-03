@@ -1,6 +1,8 @@
 'use client';
+import { useState } from 'react';
 import { trackProfileShared } from '@/app/lib/analytics';
 import Link from 'next/link';
+import { ShareModal } from './ShareModal';
 import { ShareButton } from './ShareButton';
 
 interface TalentCardProps {
@@ -45,8 +47,36 @@ const getStatusBadgeStyle = (status: string | undefined) => {
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
+
+  const handleShareClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
+    const shareData = {
+      title: `${talent.fullname} - Profile`,
+      url: shareUrl,
+    };
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      setIsShareOpen(true);
+    }
+  };
 
   return (
     <div 
@@ -63,6 +93,16 @@ export default function TalentCard({ talent }: TalentCardProps) {
           className="hover:text-slate-600 text-sm font-medium transition-colors p-1"
         >
           ✓
+        </button>
+        <button 
+          onClick={handleShareClick}
+          className="hover:text-slate-600 transition-colors p-1"
+          title="Share Profile"
+        >
+          {/* Clean, recognizable Curved Arrow Share Icon */}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+          </svg>
         </button>
        <ShareButton slug={talent.slug} name={talent.fullname} />
       </div>
@@ -134,6 +174,12 @@ export default function TalentCard({ talent }: TalentCardProps) {
          View Full Profile →
        </Link>
       </div>
+
+      <ShareModal 
+        isOpen={isShareOpen} 
+        onClose={() => setIsShareOpen(false)} 
+        talent={talent} 
+      />
     </div>
   );
 }
