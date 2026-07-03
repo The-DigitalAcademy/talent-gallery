@@ -17,14 +17,11 @@ interface ShareModalProps {
 
 export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
-  const [shareUrl, setShareUrl] = useState("");
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setShareUrl(`${window.location.origin}/talent/${talent.slug}`);
-    }
-  }, [talent.slug]);
+  const shareUrl = typeof window !== "undefined"
+    ? `${window.location.origin}/talent/${talent.slug}`
+    : "";
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -113,6 +110,7 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
               type="text"
               readOnly
               value={shareUrl}
+              suppressHydrationWarning
               onClick={(e) => (e.target as HTMLInputElement).select()}
               className="flex-1 border border-slate-200 rounded-lg h-10 px-3 text-xs text-slate-700 bg-slate-50 outline-none select-all"
             />
