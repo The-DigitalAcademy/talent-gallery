@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select("slug, updated_at");
 
   const talentUrls = (talents || []).map((talent) => ({
-    url: `${baseUrl}/talents/${talent.slug}`,
+    url: `${baseUrl}/talent/${talent.slug}`,
     lastModified: new Date(talent.updated_at || Date.now()),
     changeFrequency: "weekly" as const,
     priority: 0.7,
@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/talents`,
+      url: `${baseUrl}/talent`,
       lastModified: new Date(),
       changeFrequency: "daily" as const,
       priority: 0.9,
