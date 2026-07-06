@@ -74,7 +74,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
               name={talent.fullname}
               ringColor="ring-gray-200"
               ringWidth="ring-2"
-              textSize='text-sm'
+              textSize='text-base'
             />
             <div>
               <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-blue-600 transition-colors">
