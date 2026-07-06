@@ -6,7 +6,26 @@ import { createClient } from '../lib/supabase/server';
 import { Suspense } from 'react';
 import TalentGridSkeleton from './_components/TalentGridSkeleton';
 import TalentGrid from './_components/TalentGrid';
+import { Metadata } from 'next';
 
+//  DYNAMIC SEO GENERATOR
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const filters = await searchParams;
+  const currentPage = filters.page || "1";
+  
+  // Customize details dynamically based on active filters
+  const locationSubtext = filters.location ? ` in ${filters.location}` : "";
+  const capabilitySubtext = filters.capability ? ` skilled in ${filters.capability}` : "";
+
+  return {
+    title: `Browse Talent${locationSubtext}${capabilitySubtext} (Page ${currentPage})`,
+    description: `Explore verified specialized professionals${locationSubtext}${capabilitySubtext}. Page ${currentPage} of results.`,
+    alternates: {
+      // Helps search engines avoid duplicate content indexing penalties from pagination parameters
+      canonical: `/talents${filters.page ? `?page=${filters.page}` : ""}`,
+    },
+  };
+}
 interface ExtendedFilterParams extends FilterParams {
   page?: string;
 }
@@ -69,6 +88,8 @@ export default async function Home({ searchParams }: PageProps) {
     return `/talent?${nextParams.toString()}`;
   };
 
+
+  
   return (
        <div className="min-h-screen bg-slate-50/50 pb-12">
 

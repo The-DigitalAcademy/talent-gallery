@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { ActionButton } from "@/app/components/ui/ActionButton";
 import { CloseButton } from "@/app/components/ui/CloseButton";
 import { ProfileAvatar } from "@/app/components/ui/ProfileAvatar";
@@ -10,14 +11,57 @@ import { EndorsementCard } from "./EndorsementCard";
 import { ProjectCard } from "./ProjectCard";
 import { WorkExperienceCard } from "./WorkExperienceCard";
 import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
-import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon } from "@/app/components/ui/Icons";
-import { TalentProfileInterface } from "@/app/interface-types/talent";
+import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon, ShareIcon } from "@/app/components/ui/Icons";
+import { ShareModal } from "@/app/components/ui/ShareModal";
+
+export type TalentProfileInterface = {
+  id: string;
+  fullname: string;
+  bio: string | null;
+  profile_image_url: string | null;
+  youtube_url: string | null;
+  github_url: string | null;
+  portfolio_url: string | null;
+  linkedin_url: string | null;
+  slug: string;
+  is_published: boolean;
+  created_at: string;
+  location_id: string;
+  program_id: string;
+  cohort_id: string;
+  talent_status_id: string;
+  location: { city: string; country: string } | null;
+  cohort: { name: string } | null;
+  program: { name: string } | null;
+  talent_status: { name: string } | null;
+  capabilities: { capability: { id: string; name: string } }[];
+  work_experiences: {
+    id: string;
+    role: string;
+    company: string;
+    duration: string;
+    description: string | null;
+  }[];
+  projects: {
+    id: string;
+    name: string;
+    description: string | null;
+    capabilities: { capability: { name: string } }[];
+  }[];
+  endorsements: {
+    id: string;
+    endorser_name: string;
+    message: string;
+  }[];
+};
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
 }
 
 export function TalentProfile({ talent }: TalentProfileProps) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
+
   const location = talent.location
     ? `${talent.location.city}, ${talent.location.country}`
     : null;
@@ -34,6 +78,30 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
+
+  const handleShareClick = async () => {
+    const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
+    const shareData = {
+      title: `${talent.fullname} - Profile`,
+      url: shareUrl,
+    };
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      setIsShareOpen(true);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -54,9 +122,18 @@ export function TalentProfile({ talent }: TalentProfileProps) {
               {location && <p className="text-gray-600 text-sm mt-1">{location}</p>}
             </div>
           </div>
-          <a href="/talent" aria-label="Back to gallery">
-            <CloseButton onClick={() => {}} />
-          </a>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleShareClick}
+              className="flex items-center justify-center w-8 h-8 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              title="Share Profile"
+            >
+              <ShareIcon />
+            </button>
+            <a href="/talent" aria-label="Back to gallery">
+              <CloseButton onClick={() => {}} />
+            </a>
+          </div>
         </div>
 
         <hr className="border-gray-200" />
@@ -163,6 +240,11 @@ export function TalentProfile({ talent }: TalentProfileProps) {
             </div>
           )}
         </div>
+        <ShareModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          talent={talent}
+        />
       </div>
     </main>
   );
