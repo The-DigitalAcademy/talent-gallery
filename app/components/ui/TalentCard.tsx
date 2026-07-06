@@ -1,5 +1,8 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
+import { ShareModal } from './ShareModal';
+import { ShareButton } from './ShareButton';
 import { ProfileAvatar } from './ProfileAvatar';
 
 interface TalentCardProps {
@@ -31,8 +34,6 @@ const getBorderAccent = (status: string | undefined) => {
   }
 };
 
-
-
 const getStatusBadgeStyle = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
     case 'available for wpe': return 'bg-orange-500 text-white';
@@ -44,15 +45,17 @@ const getStatusBadgeStyle = (status: string | undefined) => {
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
 
   return (
     <div 
-    style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
-    className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}>
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
+      className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}
+    >
       
-      {/* TOP UTILITIES: e.stopPropagation() prevents the card link from firing */}
+      {/* TOP UTILITIES: e.stopPropagation() inside ShareButton preserves separate action clicking */}
       <div 
         className="absolute top-4 right-4 flex items-center gap-3 text-slate-400 z-10"
         onClick={(e) => e.stopPropagation()}
@@ -63,19 +66,13 @@ export default function TalentCard({ talent }: TalentCardProps) {
         >
           ✓
         </button>
-        <button 
-          onClick={() => {
-            navigator.clipboard.writeText(`${window.location.origin}/talent/${talent.slug}`);
-            alert('Profile link copied to clipboard!');
-          }} 
-          className="hover:text-slate-600 transition-colors p-1"
-          title="Share Profile"
-        >
-          {/* Clean, recognizable Curved Arrow Share Icon */}
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-          </svg>
-        </button>
+
+        {/* 💡 MODULAR MERGE: Unified ShareButton component handles GA4 and native/modal routing */}
+        <ShareButton 
+          slug={talent.slug} 
+          name={talent.fullname} 
+          onOpenModal={() => setIsShareOpen(true)} 
+        />
       </div>
 
       {/* CLICKABLE CARD BODY */}
@@ -124,28 +121,36 @@ export default function TalentCard({ talent }: TalentCardProps) {
             {talent.bio}
           </p>
 
-<div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
-  {talent.capabilities?.map((c, index) => {
-    if (!c.capability?.name) return null;
-    return (
-      <span 
-        key={c.capability.id || index} 
-        className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
-      >
-        {c.capability.name}
-      </span>
-    );
-  })}
-</div>
+          {/* Capabilities Grid Array */}
+          <div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
+            {talent.capabilities?.map((c, index) => {
+              if (!c.capability?.name) return null;
+              return (
+                <span 
+                  key={c.capability.id || index} 
+                  className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
+                >
+                  {c.capability.name}
+                </span>
+              );
+            })}
+          </div>
         </div>
       </Link>
 
       {/* Subtle Visual Anchor Bottom Bar */}
       <div className="border-t border-slate-50 bg-slate-50/30 py-3 text-center text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors rounded-b-2xl">
-       <Link href={`/talent/${talent.slug}`} className="text-slate-500 hover:text-blue-800">
-         View Full Profile →
-       </Link>
+        <Link href={`/talent/${talent.slug}`} className="text-slate-500 hover:text-blue-800">
+          View Full Profile →
+        </Link>
       </div>
+
+      {/* Desktop / Fallback Overlay Dialog Box */}
+      <ShareModal 
+        isOpen={isShareOpen} 
+        onClose={() => setIsShareOpen(false)} 
+        talent={talent} 
+      />
     </div>
   );
 }
