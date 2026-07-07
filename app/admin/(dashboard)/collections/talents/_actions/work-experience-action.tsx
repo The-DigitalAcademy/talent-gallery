@@ -40,6 +40,12 @@ export async function insertWorkExperience(talentId: string | null, prevState: F
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
+            fields: {
+                company: formData.get('company'),
+                role: formData.get('role'),
+                duration: formData.get('duration'),
+                description: formData.get('description')
+            }
         };
     }
 

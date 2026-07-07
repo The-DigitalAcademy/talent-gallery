@@ -27,6 +27,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                         <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
+                                defaultValue={state?.fields?.company}
                                 required
                                 placeholder="Company"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
@@ -37,6 +38,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                             <Field.Control
                                 type="text"
                                 required
+                                defaultValue={state?.fields?.role}
                                 placeholder="Role"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -46,6 +48,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                             <Field.Control
                                 type="text"
                                 required
+                                defaultValue={state?.fields?.duration}
                                 placeholder="Duration"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -56,6 +59,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 name="description"
                                 rows={3}
                                 required
+                                defaultValue={state?.fields?.description}
                                 placeholder="Description"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
