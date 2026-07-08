@@ -3,7 +3,8 @@ import { FormState, WorkExperience } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
 import { CheckIcon, XIcon } from "lucide-react"
 import { deleteWorkExperience, insertWorkExperience } from "../_actions/work-experience-action";
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
+import { calculateDuration } from "@/app/lib/utils";
 import clsx from "clsx";
 
 const initialState: FormState = {
@@ -11,75 +12,32 @@ const initialState: FormState = {
     message: '',
 };
 
-function calculateDuration(startVal: string, endVal: string, isCurrent: boolean): string {
-    if (!startVal) return "";
-    if (!isCurrent && !endVal) return "";
-
-    const parseYearMonth = (val: string) => {
-        const [y, m] = val.split("-");
-        return { year: parseInt(y, 10), month: parseInt(m, 10) };
-    };
-
-    const start = parseYearMonth(startVal);
-    let end: { year: number; month: number };
-    let endStr = "Present";
-
-    if (isCurrent) {
-        const now = new Date();
-        end = { year: now.getFullYear(), month: now.getMonth() + 1 };
-    } else {
-        end = parseYearMonth(endVal);
-        const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        endStr = `${monthsList[end.month - 1]} ${end.year}`;
-    }
-
-    const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const startStr = `${monthsList[start.month - 1]} ${start.year}`;
-
-    let totalMonths = (end.year - start.year) * 12 + (end.month - start.month) + 1;
-    if (totalMonths < 1) totalMonths = 1;
-
-    const durationParts: string[] = [];
-    const years = Math.floor(totalMonths / 12);
-    const remainingMonths = totalMonths % 12;
-
-    if (years > 0) {
-        durationParts.push(`${years} yr${years > 1 ? "s" : ""}`);
-    }
-    if (remainingMonths > 0) {
-        durationParts.push(`${remainingMonths} mo${remainingMonths > 1 ? "s" : ""}`);
-    }
-
-    const durationStr = durationParts.join(" ");
-    return `${startStr} - ${endStr} (${durationStr})`;
-}
-
 export default function WorkExperienceForm({ workExperiences, talentId }: { workExperiences: WorkExperience[], talentId: string }) {
     const createWorkExperience = insertWorkExperience.bind(null, talentId)
     const [state, formAction, isPending] = useActionState(createWorkExperience, initialState);
+    const formRef = useRef<HTMLFormElement>(null);
 
-    // Controlled input states to preserve values on validation errors
-    const [company, setCompany] = useState("");
-    const [role, setRole] = useState("");
-    const [description, setDescription] = useState("");
+    // Controlled date/checkbox states for duration calculations
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isCurrent, setIsCurrent] = useState(false);
 
-    // Calculate computed duration dynamically
+    // Calculate computed duration dynamically on the client
     const computedDuration = calculateDuration(startDate, endDate, isCurrent);
 
-    // Reset inputs on successful addition
+    // Reset date states and form inputs on successful submit, or sync states on error
     useEffect(() => {
-        if (!isPending && state.success) {
-            setCompany("");
-            setRole("");
-            setDescription("");
+        if (state.success) {
             setStartDate("");
             setEndDate("");
             setIsCurrent(false);
+            formRef.current?.reset();
+        } else if (state?.fields) {
+            setStartDate(state.fields.start_date || "");
+            setEndDate(state.fields.end_date || "");
+            setIsCurrent(state.fields.is_current || false);
         }
-    }, [state.success, isPending]);
+    }, [state]);
 
     return (
         <div>
@@ -87,6 +45,7 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
             <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
                 <div className="grid grid-cols-3 gap-7">
                     <Form
+                        ref={formRef}
                         action={formAction}
                         errors={state.errors}
                         className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
@@ -95,9 +54,8 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 type="text"
                                 name="company"
                                 required
+                                defaultValue={state?.fields?.company}
                                 placeholder="Company"
-                                value={company}
-                                onChange={(e) => setCompany(e.target.value)}
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
@@ -107,9 +65,8 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 type="text"
                                 name="role"
                                 required
+                                defaultValue={state?.fields?.role}
                                 placeholder="Role"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
@@ -124,9 +81,10 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                             <div className="w-full space-y-2">
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Start Date</label>
+                                        <label className="text-sm font-normal text-gray-700">Start date</label>
                                         <input
                                             type="month"
+                                            name="start_date"
                                             required
                                             value={startDate}
                                             onChange={(e) => setStartDate(e.target.value)}
@@ -135,9 +93,10 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                         />
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">End Date</label>
+                                        <label className="text-sm font-normal text-gray-700">End date</label>
                                         <input
                                             type="month"
+                                            name="end_date"
                                             required={!isCurrent}
                                             disabled={isCurrent}
                                             value={isCurrent ? "" : endDate}
@@ -150,11 +109,12 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer mt-1 font-normal">
                                     <input
                                         type="checkbox"
+                                        name="is_current"
                                         checked={isCurrent}
                                         onChange={(e) => setIsCurrent(e.target.checked)}
                                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                     />
-                                    <span>Currently work here (Ongoing)</span>
+                                    <span>I currently work here (Ongoing)</span>
                                 </label>
                                 {computedDuration && (
                                     <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-100">
@@ -170,9 +130,8 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                                 name="description"
                                 rows={3}
                                 required
+                                defaultValue={state?.fields?.description}
                                 placeholder="Description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
