@@ -3,7 +3,8 @@ import { FormState, WorkExperience } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
 import { CheckIcon, XIcon } from "lucide-react"
 import { deleteWorkExperience, insertWorkExperience } from "../_actions/work-experience-action";
-import { useActionState } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
+import { calculateDuration } from "@/app/lib/utils";
 import clsx from "clsx";
 
 const initialState: FormState = {
@@ -14,6 +15,29 @@ const initialState: FormState = {
 export default function WorkExperienceForm({ workExperiences, talentId }: { workExperiences: WorkExperience[], talentId: string }) {
     const createWorkExperience = insertWorkExperience.bind(null, talentId)
     const [state, formAction, isPending] = useActionState(createWorkExperience, initialState);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    // Controlled date/checkbox states for duration calculations
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [isCurrent, setIsCurrent] = useState(false);
+
+    // Calculate computed duration dynamically on the client
+    const computedDuration = calculateDuration(startDate, endDate, isCurrent);
+
+    // Reset date states and form inputs on successful submit, or sync states on error
+    useEffect(() => {
+        if (state.success) {
+            setStartDate("");
+            setEndDate("");
+            setIsCurrent(false);
+            formRef.current?.reset();
+        } else if (state?.fields) {
+            setStartDate(state.fields.start_date || "");
+            setEndDate(state.fields.end_date || "");
+            setIsCurrent(state.fields.is_current || false);
+        }
+    }, [state]);
 
     return (
         <div>
@@ -21,13 +45,16 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
             <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
                 <div className="grid grid-cols-3 gap-7">
                     <Form
+                        ref={formRef}
                         action={formAction}
                         errors={state.errors}
                         className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
                         <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
+                                name="company"
                                 required
+                                defaultValue={state?.fields?.company}
                                 placeholder="Company"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -36,26 +63,74 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                         <Field.Root name="role" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
+                                name="role"
                                 required
+                                defaultValue={state?.fields?.role}
                                 placeholder="Role"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
+                        
                         <Field.Root name="duration" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
-                                type="text"
-                                required
-                                placeholder="Duration"
-                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                type="hidden"
+                                name="duration"
+                                value={computedDuration}
                             />
+                            <div className="w-full space-y-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-normal text-gray-700">Start date</label>
+                                        <input
+                                            type="month"
+                                            name="start_date"
+                                            required
+                                            value={startDate}
+                                            onChange={(e) => setStartDate(e.target.value)}
+                                            max={isCurrent ? undefined : endDate}
+                                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-normal text-gray-700">End date</label>
+                                        <input
+                                            type="month"
+                                            name="end_date"
+                                            required={!isCurrent}
+                                            disabled={isCurrent}
+                                            value={isCurrent ? "" : endDate}
+                                            onChange={(e) => setEndDate(e.target.value)}
+                                            min={startDate}
+                                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal disabled:bg-gray-100 disabled:text-gray-400"
+                                        />
+                                    </div>
+                                </div>
+                                <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer mt-1 font-normal">
+                                    <input
+                                        type="checkbox"
+                                        name="is_current"
+                                        checked={isCurrent}
+                                        onChange={(e) => setIsCurrent(e.target.checked)}
+                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    />
+                                    <span>I currently work here (Ongoing)</span>
+                                </label>
+                                {computedDuration && (
+                                    <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-100">
+                                        Duration Preview: <span className="font-semibold text-gray-700">{computedDuration}</span>
+                                    </div>
+                                )}
+                            </div>
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
+
                         <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
                             <textarea
                                 name="description"
                                 rows={3}
                                 required
+                                defaultValue={state?.fields?.description}
                                 placeholder="Description"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -92,10 +167,10 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
                         {workExperiences?.map(work => (
                             <div key={work.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: work.id, name: work.role, talentId: work.talent_id }} /></div>
-                                <div className="text-sm text-gray-700">{work.company}</div>
-                                <div className="font-semibold text-base">{work.role}</div>
-                                <div className="flex gap-5 text-xs text-gray-500">{work.duration}</div>
-                                <div className="text-sm text-gray-500">{work.description}</div>
+                                <div className="text-sm text-gray-700 break-words">{work.company}</div>
+                                <div className="font-semibold text-base break-words">{work.role}</div>
+                                <div className="flex gap-5 text-xs text-gray-500 break-words">{work.duration}</div>
+                                <div className="text-sm text-gray-500 break-words">{work.description}</div>
                             </div>))}
                     </div>
                 </div>
