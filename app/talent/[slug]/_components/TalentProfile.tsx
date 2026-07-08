@@ -79,6 +79,8 @@ export function TalentProfile({ talent }: TalentProfileProps) {
 
   const endorsement = talent.endorsements?.[0] ?? null;
 
+  const embedUrl = talent.youtube_url ? getYouTubeEmbedUrl(talent.youtube_url) : null;
+
   const handleShareClick = async () => {
     const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
     const shareData = {
@@ -157,10 +159,10 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           )}
 
           {/* Video */}
-          {talent.youtube_url && (
+          {embedUrl && (
             <div className="rounded-lg overflow-hidden aspect-video">
               <iframe
-                src={getYouTubeEmbedUrl(talent.youtube_url)}
+                src={embedUrl}
                 title="Profile video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
