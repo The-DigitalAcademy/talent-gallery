@@ -1,5 +1,64 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { TalentProfile } from "./_components/TalentProfile";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: talent } = await supabase
+    .from("talents")
+    .select(`
+      fullname,
+      bio,
+      profile_image_url,
+      program:programs(name)
+    `)
+    .eq("slug", slug)
+    .single();
+
+  if (!talent) {
+    return {
+      title: "Talent Profile | Talent Gallery",
+    };
+  }
+
+  const programData = talent.program;
+  const programName = Array.isArray(programData)
+    ? programData[0]?.name
+    : (programData as any)?.name;
+
+  const title = `${talent.fullname} - ${programName || "Talent Profile"} | Talent Gallery`;
+  const description = talent.bio || `View ${talent.fullname}'s professional profile on our Talent Gallery.`;
+  const imageUrl = talent.profile_image_url || "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: imageUrl,
+          alt: `${talent.fullname}'s profile picture`,
+        },
+      ],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -42,6 +101,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </main>
     );
   }
-
+  
   return <TalentProfile talent={talent} />;
 }

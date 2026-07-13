@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { ActionButton } from "@/app/components/ui/ActionButton";
 import { CloseButton } from "@/app/components/ui/CloseButton";
 import { ProfileAvatar } from "@/app/components/ui/ProfileAvatar";
@@ -10,7 +11,8 @@ import { EndorsementCard } from "./EndorsementCard";
 import { ProjectCard } from "./ProjectCard";
 import { WorkExperienceCard } from "./WorkExperienceCard";
 import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
-import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon } from "@/app/components/ui/Icons";
+import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon, ShareIcon } from "@/app/components/ui/Icons";
+import { ShareModal } from "@/app/components/ui/ShareModal";
 
 export type TalentProfileInterface = {
   id: string;
@@ -58,6 +60,8 @@ interface TalentProfileProps {
 }
 
 export function TalentProfile({ talent }: TalentProfileProps) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
+
   const location = talent.location
     ? `${talent.location.city}, ${talent.location.country}`
     : null;
@@ -74,6 +78,32 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
+
+  const embedUrl = talent.youtube_url ? getYouTubeEmbedUrl(talent.youtube_url) : null;
+
+  const handleShareClick = async () => {
+    const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
+    const shareData = {
+      title: `${talent.fullname} - Profile`,
+      url: shareUrl,
+    };
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      setIsShareOpen(true);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -94,9 +124,18 @@ export function TalentProfile({ talent }: TalentProfileProps) {
               {location && <p className="text-gray-600 text-sm mt-1">{location}</p>}
             </div>
           </div>
-          <a href="/talent" aria-label="Back to gallery">
-            <CloseButton onClick={() => {}} />
-          </a>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleShareClick}
+              className="flex items-center justify-center w-8 h-8 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              title="Share Profile"
+            >
+              <ShareIcon />
+            </button>
+            <a href="/talent" aria-label="Back to gallery">
+              <CloseButton onClick={() => {}} />
+            </a>
+          </div>
         </div>
 
         <hr className="border-gray-200" />
@@ -120,10 +159,10 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           )}
 
           {/* Video */}
-          {talent.youtube_url && (
+          {embedUrl && (
             <div className="rounded-lg overflow-hidden aspect-video">
               <iframe
-                src={getYouTubeEmbedUrl(talent.youtube_url)}
+                src={embedUrl}
                 title="Profile video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -203,6 +242,11 @@ export function TalentProfile({ talent }: TalentProfileProps) {
             </div>
           )}
         </div>
+        <ShareModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          talent={talent}
+        />
       </div>
     </main>
   );

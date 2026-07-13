@@ -40,6 +40,15 @@ export async function insertWorkExperience(talentId: string | null, prevState: F
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
+            fields: {
+                company: formData.get('company'),
+                role: formData.get('role'),
+                duration: formData.get('duration'),
+                description: formData.get('description'),
+                start_date: formData.get('start_date'),
+                end_date: formData.get('end_date'),
+                is_current: formData.get('is_current') === 'true' || formData.get('is_current') === 'on'
+            }
         };
     }
 
@@ -61,6 +70,15 @@ export async function insertWorkExperience(talentId: string | null, prevState: F
         return {
             success: false,
             message: 'A database error occurred. Please try again.',
+            fields: {
+                company,
+                role,
+                duration,
+                description,
+                start_date: formData.get('start_date'),
+                end_date: formData.get('end_date'),
+                is_current: formData.get('is_current') === 'true' || formData.get('is_current') === 'on'
+            }
         };
     }
 }
