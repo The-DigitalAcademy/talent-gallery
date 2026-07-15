@@ -6,8 +6,8 @@ import { GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
 import ShortlistTag from "@/app/components/ui/ShortlistTag";
 import { SkillTag } from "@/app/components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
-import { getStatusBadgeStyle, getYouTubeEmbedUrl } from "@/app/lib/utils";
-import { Fragment, useState } from "react";
+import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
+import { useState } from "react";
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
@@ -15,7 +15,7 @@ interface TalentProfileProps {
 
 export function TalentProfile({ talent }: TalentProfileProps) {
   const displayStatus = talent.talent_status?.name;
-  const bgColorEmployement = getStatusBadgeStyle(displayStatus);
+  const bgColorEmployement = getTalentStatusColor(displayStatus!);
 
   const [isShareOpen, setIsShareOpen] = useState(false);
 
@@ -35,6 +35,8 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
+
+  const embedUrl = talent.youtube_url ? getYouTubeEmbedUrl(talent.youtube_url) : null;
 
   const handleShareClick = async () => {
     const shareUrl = `${window.location.origin}/talent/${talent.slug}`;
@@ -62,11 +64,11 @@ export function TalentProfile({ talent }: TalentProfileProps) {
 
   return (
     <div className="bg-[#ffffff] border-x-2 border-white w-full">
-      <EmploymentHr bgColor={bgColorEmployement} height={"h-2"}/>
+      <EmploymentHr bgColor={`bg-[${bgColorEmployement}]`} height={"h-2"}/>
 
       <div className="px-32 w-full">
         <div className="flex justify-between w-full">
-          <EmploymentTag margin={"-mt-[8px]"} textColor={"text-white"} label={displayStatus!} textSize={"text-xl"} padding={"p-4"} bgColor={bgColorEmployement} />
+          <EmploymentTag margin={"-mt-[8px]"} textColor={"text-white"} label={displayStatus!} textSize={"text-xl"} padding={"p-4"} bgColor={`bg-[${bgColorEmployement}]`} />
           <ShortlistTag padding={"pb-0 pt-6 px-3.5"} margin={"-mt-[8px]"} isShortlisted={true}/>
         </div>
         
@@ -91,10 +93,10 @@ export function TalentProfile({ talent }: TalentProfileProps) {
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-6">
               {/* Youtube video */}
-              {talent.youtube_url && (
+              {embedUrl && (
                 <div className="rounded-lg overflow-hidden aspect-video">
                   <iframe
-                    src={getYouTubeEmbedUrl(talent.youtube_url)}
+                    src={embedUrl}
                     title="Profile video"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -132,7 +134,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
             {/* Experience highlights */}
             <div className="">
               <EmploymentHr bgColor={"bg-amber-400"} height={"h-1"} width={"w-[25%]"}/>
-              
+
             </div>
 
             {/* Endorsement */}
