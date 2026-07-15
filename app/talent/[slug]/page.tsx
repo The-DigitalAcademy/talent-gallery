@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   .eq("slug", slug)
   .eq("is_published", true)
   .single();
-
+  
   if (error) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -102,5 +102,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     );
   }
   
-  return <TalentProfile talent={talent} />;
+  return  (
+    <div className="w-screen min-h-screen px-64 py-10 bg-[#f1f1f1]">
+      <TalentProfile talent={talent} />
+    </div>
+  );
 }
