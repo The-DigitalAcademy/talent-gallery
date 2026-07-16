@@ -21,10 +21,10 @@ export default function TrustedBy() {
             
             {/* Heading */}
             <div>
-              <h2 className="text-2xl font-extrabold text-gray-900 uppercase tracking-widest">
+              <h2 className="text-[27px] font-extrabold text-gray-900 uppercase tracking-widest">
                 TRUSTED BY
               </h2>
-              <p className="mt-2 text-[15px] text-gray-500 max-w-2xl leading-relaxed">
+              <p className="mt-2 text-[18px] text-gray-500 max-w-2xl leading-relaxed">
                 Organisations that have hosted WPE learners, partnered on talent initiatives, or
                 hired Shaper candidates.
               </p>
