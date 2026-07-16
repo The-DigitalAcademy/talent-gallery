@@ -55,7 +55,7 @@ export default function HeroSection() {
       </div>
 
       {/* Search Bar — contained, aligned to hero content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 -mb-[38px]">
         <div className="bg-slate-200 border border-slate-300 rounded-xl px-6 py-4 shadow-sm">
           <div className="flex items-center gap-3">
 
