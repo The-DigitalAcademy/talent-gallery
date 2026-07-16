@@ -8,17 +8,15 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center">
             <Image
-              src="https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png"
+              src="/shaper-logo-horizontal.png"
               alt="Shaper Logo"
-              width={36}
+              width={140}
               height={36}
-              className="object-contain"
+              className="h-9 w-auto object-contain"
+              priority
             />
-            <span className="text-[15px] font-semibold text-gray-800 tracking-tight">
-              Shaper
-            </span>
           </Link>
 
           {/* Nav Links */}
