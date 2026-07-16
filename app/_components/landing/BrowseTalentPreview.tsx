@@ -62,17 +62,17 @@ export default function BrowseTalentPreview() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Heading */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 leading-tight uppercase tracking-tight">
+        <div className="text-left mb-10">
+          <h2 className="text-3xl font-bold text-gray-900 leading-tight uppercase tracking-tight">
             BROWSE <span className="text-red-500">TALENT</span>
           </h2>
-          <p className="mt-4 text-[15px] text-gray-500 max-w-md mx-auto leading-relaxed">
+          <p className="mt-2 text-[15px] text-gray-500 max-w-md leading-relaxed">
             Explore candidates at every stage of their professional journey.
           </p>
         </div>
 
         {/* Tab Filters */}
-        <div className="flex justify-center border-b border-gray-200 mb-12">
+        <div className="flex justify-start border-b border-gray-200 mb-12">
           <div className="flex gap-12">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.value;
