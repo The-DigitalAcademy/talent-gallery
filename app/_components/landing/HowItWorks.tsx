@@ -45,10 +45,10 @@ export default function HowItWorks() {
 
   return (
     <section className="bg-white py-20">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
 
         {/* Heading */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 leading-tight">
             Shaper
           </h2>
@@ -61,52 +61,57 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-3 gap-0 items-start relative">
+        {/* Steps — icons row with arrows, then text below */}
+        <div className="grid grid-cols-3 gap-8 items-start">
 
           {steps.map((step, index) => (
-            <div key={step.id} className="relative flex flex-col items-start px-6">
+            <div key={step.id} className="flex flex-col items-center text-center">
 
-              {/* Dotted arrow connector */}
-              {index < steps.length - 1 && (
-                <div className="absolute top-8 left-[calc(50%+40px)] right-[-calc(50%-40px)] w-[calc(100%-80px)] flex items-center pointer-events-none z-0">
-                  <svg
-                    viewBox="0 0 120 24"
-                    className="w-full h-6 text-gray-300"
-                    fill="none"
-                  >
-                    <path
-                      d="M4 12 Q60 2 114 12"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeDasharray="5 4"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M108 8 L114 12 L108 16"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+              {/* Icon + Arrow row */}
+              <div className="flex items-center w-full justify-center mb-8 relative">
+
+                {/* Red Icon Box */}
+                <div className="relative z-10 bg-red-500 rounded-md w-16 h-16 flex-shrink-0 flex items-center justify-center shadow-md">
+                  {step.icon}
                 </div>
-              )}
 
-              {/* Red Icon Box */}
-              <div className="relative z-10 bg-red-500 rounded-md w-16 h-16 flex items-center justify-center mb-6 shadow-md">
-                {step.icon}
+                {/* Dotted arrow — only after step 1 and 2 */}
+                {index < steps.length - 1 && (
+                  <div className="absolute left-[calc(50%+38px)] right-[-50%] flex items-center">
+                    <svg
+                      viewBox="0 0 160 24"
+                      className="w-full h-5 text-gray-300"
+                      fill="none"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M4 12 Q80 2 154 12"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeDasharray="6 4"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M146 7 L154 12 L146 17"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
               </div>
 
               {/* Title */}
-              <h3 className="text-[13px] font-extrabold text-gray-900 uppercase tracking-widest leading-snug mb-3">
+              <h3 className="text-[13px] font-extrabold text-gray-900 uppercase tracking-widest leading-snug mb-4">
                 {step.title.map((line, i) => (
                   <span key={i} className="block">{line}</span>
                 ))}
               </h3>
 
               {/* Description */}
-              <p className="text-[14px] text-gray-500 leading-relaxed">
+              <p className="text-[14px] text-gray-500 leading-relaxed max-w-[220px]">
                 {step.description}
               </p>
 
