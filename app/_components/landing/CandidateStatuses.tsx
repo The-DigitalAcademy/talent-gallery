@@ -32,7 +32,7 @@ export default function CandidateStatuses() {
   ];
 
   return (
-    <section className="bg-white py-20 overflow-x-hidden">
+    <section className="bg-white pt-0 pb-20 overflow-x-hidden">
       {/* Outer container — centered container for the grey box */}
       <div className="max-w-4xl mx-auto px-6 relative">
 
