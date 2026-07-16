@@ -47,7 +47,7 @@ export default function CandidateStatuses() {
         </div>
 
         {/* Two column layout */}
-        <div className="grid grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-[58%_38%] gap-12 items-start">
 
           {/* LEFT: Status list — directly on grey, no card */}
           <div className="flex flex-col gap-6">
@@ -66,19 +66,17 @@ export default function CandidateStatuses() {
           </div>
 
           {/* RIGHT: Single navy card with ALL content inside */}
-          <div className="bg-[#01317F] rounded-2xl shadow-lg overflow-hidden mt-10">
+          <div className="bg-[#01317F] rounded-2xl shadow-lg overflow-hidden mt-[45px]">
 
             {/* Navy top — heading */}
-            <div className="p-10 pb-6">
-              <h3 className="text-white font-extrabold text-[16px] uppercase tracking-wide leading-snug">
-                Designed to support<br />
-                long-term talent<br />
-                connections.
+            <div className="px-8 pt-8 pb-6">
+              <h3 className="text-white font-extrabold text-[15px] uppercase tracking-wide leading-snug">
+                Designed to support long-term talent connections.
               </h3>
             </div>
 
             {/* Light section — body text, inside the same card */}
-            <div className="bg-slate-100 p-10 pt-8">
+            <div className="bg-slate-100 px-8 pt-5 pb-8">
               <p className="text-gray-600 text-[13px] leading-relaxed mb-4">
                 You may express interest in any candidate, regardless of their
                 current status.
