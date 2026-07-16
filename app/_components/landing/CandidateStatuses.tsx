@@ -44,7 +44,7 @@ export default function CandidateStatuses() {
             <h2 className="text-2xl font-extrabold text-gray-900 uppercase tracking-widest">
               Candidate Statuses
             </h2>
-            <p className="mt-3 text-[14px] text-gray-500 max-w-md mx-auto leading-relaxed">
+            <p className="mt-3 text-[15px] text-gray-500 max-w-md mx-auto leading-relaxed">
               Candidate statuses provide a quick view of current availability and
               engagement.
             </p>
@@ -57,11 +57,11 @@ export default function CandidateStatuses() {
               {statuses.map((status) => (
                 <div key={status.label} className="flex items-start gap-4">
                   <span
-                    className={`text-[11px] font-bold px-3 py-2 rounded whitespace-nowrap flex-shrink-0 min-w-[140px] text-center ${status.badge}`}
+                    className={`text-[12px] font-bold px-3 py-2 rounded whitespace-nowrap flex-shrink-0 min-w-[140px] text-center ${status.badge}`}
                   >
                     {status.label}
                   </span>
-                  <p className="text-[12.5px] text-gray-600 leading-relaxed pt-0.5">
+                  <p className="text-[14px] text-gray-600 leading-relaxed pt-0.5">
                     {status.description}
                   </p>
                 </div>
@@ -76,18 +76,18 @@ export default function CandidateStatuses() {
           
           {/* Navy top — heading */}
           <div className="px-8 pt-10 pb-8">
-            <h3 className="text-white font-extrabold text-[15px] uppercase tracking-wide leading-snug">
+            <h3 className="text-white font-extrabold text-[17px] uppercase tracking-wide leading-snug">
               Designed to support long-term talent connections.
             </h3>
           </div>
 
           {/* Light section — body text, inside the same card */}
           <div className="bg-[#EFEFEF] px-8 pt-8 pb-10 flex-1 flex flex-col justify-center border-t border-gray-200">
-            <p className="text-gray-600 text-[13px] leading-relaxed mb-6">
+            <p className="text-gray-600 text-[14px] leading-relaxed mb-6">
               You may express interest in any candidate, regardless of their
               current status.
             </p>
-            <p className="text-gray-600 text-[13px] leading-relaxed">
+            <p className="text-gray-600 text-[14px] leading-relaxed">
               Where immediate engagement is not possible, we keep your
               interest on file and facilitate future opportunities as
               candidates become available or progress in their careers.

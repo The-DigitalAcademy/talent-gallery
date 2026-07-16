@@ -23,19 +23,19 @@ export default function Navbar() {
           <nav className="flex items-center gap-8">
             <Link
               href="/"
-              className="relative text-sm font-semibold text-gray-900 pb-0.5 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"
+              className="relative text-[15px] font-semibold text-gray-900 pb-0.5 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"
             >
               Home
             </Link>
             <Link
               href="#how-it-works"
-              className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               How it Works
             </Link>
             <Link
               href="/talent"
-              className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               Browse Talent
             </Link>

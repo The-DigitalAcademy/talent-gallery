@@ -54,7 +54,7 @@ export default function HowItWorks() {
           <p className="text-4xl font-extrabold text-red-500 uppercase tracking-widest leading-tight">
             TALENT
           </p>
-          <p className="mt-5 text-[17px] text-gray-500 max-w-lg mx-auto leading-relaxed">
+          <p className="mt-5 text-[18px] text-gray-500 max-w-lg mx-auto leading-relaxed">
             Discover emerging talent equipped with practical skills and
             real-world experience.
           </p>
@@ -103,14 +103,14 @@ export default function HowItWorks() {
               </div>
 
               {/* Title */}
-              <h3 className="text-[13px] font-extrabold text-gray-900 uppercase tracking-widest leading-snug mb-4">
+              <h3 className="text-[14px] font-extrabold text-gray-900 uppercase tracking-widest leading-snug mb-4">
                 {step.title.map((line, i) => (
                   <span key={i} className="block">{line}</span>
                 ))}
               </h3>
 
               {/* Description */}
-              <p className="text-[14px] text-gray-500 leading-relaxed max-w-[220px]">
+              <p className="text-[15px] text-gray-500 leading-relaxed max-w-[220px]">
                 {step.description}
               </p>
 

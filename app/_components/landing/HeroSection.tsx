@@ -9,7 +9,7 @@ export default function HeroSection() {
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
-            <h1 className="text-[55px] font-medium text-gray-900 leading-tight tracking-tight uppercase">
+            <h1 className="text-[58px] font-medium text-gray-900 leading-tight tracking-tight uppercase">
               Work-Ready{" "}
               <span className="text-red-500">Talent.</span>
               <br />
@@ -18,7 +18,7 @@ export default function HeroSection() {
               the Future.
             </h1>
 
-            <p className="text-[17px] text-gray-500 leading-relaxed max-w-sm">
+            <p className="text-[18px] text-gray-500 leading-relaxed max-w-sm">
               Browse verified learners, graduates, and candidates who have
               completed practical training and workplace projects through Shaper
               programmes.
@@ -27,13 +27,13 @@ export default function HeroSection() {
             <div className="flex items-center gap-4 mt-2">
               <Link
                 href="/talent"
-                className="bg-[#01317F] text-white text-sm font-semibold px-6 py-3 rounded hover:bg-blue-900 transition-colors"
+                className="bg-[#01317F] text-white text-[15px] font-semibold px-6 py-3 rounded hover:bg-blue-900 transition-colors"
               >
                 Browse Talent
               </Link>
               <Link
                 href="#contact"
-                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-[15px] font-semibold text-gray-700 hover:text-gray-900 transition-colors"
               >
                 Contact Us
               </Link>
@@ -61,10 +61,10 @@ export default function HeroSection() {
 
             {/* Role */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
-              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[15px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select a role</option>
               </select>
             </div>
@@ -72,10 +72,10 @@ export default function HeroSection() {
 
             {/* Location */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
-              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[15px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select a location</option>
               </select>
             </div>
@@ -83,10 +83,10 @@ export default function HeroSection() {
 
             {/* Skills */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
-              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[15px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select skills</option>
               </select>
             </div>
@@ -94,10 +94,10 @@ export default function HeroSection() {
 
             {/* Availability */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                 Availability
               </label>
-              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[15px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select availability</option>
               </select>
             </div>
@@ -105,7 +105,7 @@ export default function HeroSection() {
             {/* Search Button */}
             <Link
               href="/talent"
-              className="bg-[#01317F] text-white text-sm font-bold px-8 py-3 rounded hover:bg-blue-900 transition-colors whitespace-nowrap"
+              className="bg-[#01317F] text-white text-[15px] font-bold px-8 py-3 rounded hover:bg-blue-900 transition-colors whitespace-nowrap"
             >
               Search
             </Link>

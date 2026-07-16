@@ -63,10 +63,10 @@ export default function BrowseTalentPreview() {
 
         {/* Heading */}
         <div className="text-left mb-10">
-          <h2 className="text-3xl font-bold text-gray-900 leading-tight uppercase tracking-tight">
+          <h2 className="text-4xl font-bold text-gray-900 leading-tight uppercase tracking-tight">
             BROWSE <span className="text-red-500">TALENT</span>
           </h2>
-          <p className="mt-2 text-[15px] text-gray-500 max-w-md leading-relaxed">
+          <p className="mt-2 text-[16px] text-gray-500 max-w-md leading-relaxed">
             Explore candidates at every stage of their professional journey.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function BrowseTalentPreview() {
                 <button
                   key={tab.value}
                   onClick={() => handleTabChange(tab.value)}
-                  className={`pb-4 text-xs font-bold tracking-widest transition-all relative whitespace-nowrap ${
+                  className={`pb-4 text-[13px] font-bold tracking-widest transition-all relative whitespace-nowrap ${
                     isActive
                       ? "text-gray-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gray-900"
                       : "text-gray-400 hover:text-gray-700"
@@ -118,7 +118,7 @@ export default function BrowseTalentPreview() {
         <div className="flex justify-center mt-12">
           <Link
             href={getBrowseMoreUrl()}
-            className="bg-[#01317F] text-white text-sm font-bold px-8 py-3.5 rounded hover:bg-blue-900 transition-colors shadow-sm"
+            className="bg-[#01317F] text-white text-[15px] font-bold px-8 py-3.5 rounded hover:bg-blue-900 transition-colors shadow-sm"
           >
             Browse More Talent
           </Link>
