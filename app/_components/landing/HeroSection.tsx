@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="bg-white">
+    <section className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] py-16">
 
@@ -54,9 +54,9 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Search Bar Strip */}
-      <div className="border-t border-gray-100 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+      {/* Search Bar — contained, aligned to hero content */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-10">
+        <div className="bg-slate-200 border border-slate-300 rounded-xl px-6 py-4 shadow-sm">
           <div className="flex items-center gap-3">
 
             {/* Role */}
@@ -64,40 +64,40 @@ export default function HeroSection() {
               <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
-              <select className="text-sm text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select a role</option>
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-200" />
+            <div className="w-px h-8 bg-slate-300" />
 
             {/* Location */}
             <div className="flex flex-col gap-0.5 flex-1">
               <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
-              <select className="text-sm text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select a location</option>
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-200" />
+            <div className="w-px h-8 bg-slate-300" />
 
             {/* Skills */}
             <div className="flex flex-col gap-0.5 flex-1">
               <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
-              <select className="text-sm text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select skills</option>
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-200" />
+            <div className="w-px h-8 bg-slate-300" />
 
             {/* Availability */}
             <div className="flex flex-col gap-0.5 flex-1">
               <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                 Availability
               </label>
-              <select className="text-sm text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-sm text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
                 <option value="">Select availability</option>
               </select>
             </div>
@@ -114,5 +114,6 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
+
   );
 }
