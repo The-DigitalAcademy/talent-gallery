@@ -9,7 +9,7 @@ export default function HeroSection() {
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
-            <h1 className="text-5xl font-extrabold text-gray-900 leading-tight tracking-tight uppercase">
+            <h1 className="text-[55px] font-medium text-gray-900 leading-tight tracking-tight uppercase">
               Work-Ready{" "}
               <span className="text-red-500">Talent.</span>
               <br />
@@ -18,7 +18,7 @@ export default function HeroSection() {
               the Future.
             </h1>
 
-            <p className="text-[15px] text-gray-500 leading-relaxed max-w-sm">
+            <p className="text-[17px] text-gray-500 leading-relaxed max-w-sm">
               Browse verified learners, graduates, and candidates who have
               completed practical training and workplace projects through Shaper
               programmes.
