@@ -5,7 +5,7 @@ export default function HeroSection() {
   return (
     <section className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] py-16">
+        <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
