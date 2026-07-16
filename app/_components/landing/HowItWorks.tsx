@@ -6,10 +6,11 @@ export default function HowItWorks() {
       description:
         "Explore verified candidate profiles, skills, qualifications, certifications, and project experience.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.8} className="w-8 h-8">
-          <rect x="3" y="3" width="14" height="17" rx="2" strokeLinecap="round" />
-          <circle cx="14" cy="14" r="4" />
-          <path d="M17 17l3 3" strokeLinecap="round" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5} className="w-8 h-8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16.5 16.5L19 19" />
+          <path d="M13.5 9H7M10 13H7" />
+          <path d="M20 10.5V6.8c0-.8 0-1.2-.1-1.5a2 2 0 0 0-1.2-1.2C18.4 4 18 4 17.2 4H6.8c-.8 0-1.2 0-1.5.1a2 2 0 0 0-1.2 1.2C4 5.6 4 6 4 6.8v10.4c0 .8 0 1.2.1 1.5a2 2 0 0 0 1.2 1.2c.3.1.7.1 1.5.1h4.7" />
+          <circle cx="14" cy="14" r="3" />
         </svg>
       ),
     },
@@ -19,11 +20,10 @@ export default function HowItWorks() {
       description:
         "Save promising profiles, compare talent, and identify the best fit for your opportunity.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.8} className="w-8 h-8">
-          <rect x="4" y="2" width="14" height="18" rx="2" strokeLinecap="round" />
-          <path d="M8 7h6M8 11h4" strokeLinecap="round" />
-          <circle cx="16" cy="17" r="3" fill="white" stroke="white" />
-          <path d="M16 15.5v3M14.5 17h3" stroke="#ef4444" strokeWidth={1.5} strokeLinecap="round" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5} className="w-8 h-8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M15.5 15.5H19.5M17.5 13.5V17.5" />
+          <path d="M12.5 7.5H6M10 11.5H6M8.5 15.5H6" />
+          <path d="M12.5 19.5H6.5c-.9 0-1.4 0-1.7-.3-.3-.3-.3-.8-.3-1.7v-11c0-.9 0-1.4.3-1.7.3-.3.8-.3 1.7-.3h11c.9 0 1.4 0 1.7.3.3.3.3.8.3 1.7V11" />
         </svg>
       ),
     },
@@ -33,11 +33,10 @@ export default function HowItWorks() {
       description:
         "Share your shortlist with Shaper and we'll facilitate candidate engagement and next steps.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.8} className="w-8 h-8">
-          <rect x="2" y="6" width="20" height="14" rx="2" strokeLinecap="round" />
-          <path d="M2 9l10 6 10-6" strokeLinecap="round" />
-          <circle cx="18" cy="6" r="3" fill="white" />
-          <circle cx="18" cy="6" r="1.5" fill="#ef4444" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5} className="w-8 h-8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 17V7c0-.8 0-1.2.1-1.5a2 2 0 0 1 1.2-1.2C3.6 4 4.1 4 5 4h14c.9 0 1.4 0 1.7.1a2 2 0 0 1 1.2 1.2c.1.3.1.7.1 1.5V17c0 .9 0 1.4-.3 1.7-.3.3-.8.3-1.7.3H4c-.9 0-1.4 0-1.7-.3C2 18.4 2 17.9 2 17z" />
+          <path d="M4 7l8 5 8-5" />
+          <circle cx="19" cy="5" r="2.5" fill="white" stroke="white" strokeWidth={0} />
         </svg>
       ),
     },
