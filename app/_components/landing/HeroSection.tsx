@@ -41,10 +41,10 @@ export default function HeroSection() {
           {/* RIGHT: Hero Image */}
           <div className="relative h-[460px] w-full overflow-hidden rounded-lg">
             <Image
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&grayscale"
+              src="/stock images/hero stock .png"
               alt="Work-ready talent"
               fill
-              className="object-cover object-center grayscale"
+              className="object-cover object-center"
               priority
             />
           </div>

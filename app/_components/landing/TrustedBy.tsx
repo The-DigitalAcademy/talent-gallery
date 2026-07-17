@@ -56,10 +56,10 @@ export default function TrustedBy() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
         <div className="grid grid-cols-[300px_1fr] gap-12 items-center">
           
-          {/* LEFT: Grayscale Portrait */}
-          <div className="relative h-[220px] w-full rounded-lg overflow-hidden grayscale">
+          {/* LEFT: Portrait */}
+          <div className="relative h-[220px] w-full rounded-lg overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80&grayscale"
+              src="/stock images/partners stock.png"
               alt="Partner professional"
               fill
               className="object-cover object-top"
