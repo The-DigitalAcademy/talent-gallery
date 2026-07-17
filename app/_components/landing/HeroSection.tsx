@@ -1,7 +1,45 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function HeroSection() {
+interface LookupItem {
+  id: string | number;
+  name?: string;
+  city?: string;
+}
+
+interface HeroSectionProps {
+  locations?: LookupItem[];
+  programs?: LookupItem[];
+  capabilities?: LookupItem[];
+  statuses?: LookupItem[];
+}
+
+export default function HeroSection({
+  locations = [],
+  programs = [],
+  capabilities = [],
+  statuses = [],
+}: HeroSectionProps) {
+  const router = useRouter();
+  const [role, setRole] = useState("");
+  const [location, setLocation] = useState("");
+  const [skill, setSkill] = useState("");
+  const [availability, setAvailability] = useState("");
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (role) params.set("programme", role);
+    if (location) params.set("location", location);
+    if (skill) params.set("capability", skill);
+    if (availability) params.set("status", availability);
+
+    router.push(`/talent?${params.toString()}`);
+  };
+
   return (
     <section id="home" className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -62,8 +100,17 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
-              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
+              <select 
+                value={role} 
+                onChange={(e) => setRole(e.target.value)}
+                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+              >
                 <option value="">Select a role</option>
+                {programs.map((prog) => (
+                  <option key={prog.id} value={prog.name} className="text-gray-800">
+                    {prog.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="w-px h-8 bg-slate-300" />
@@ -73,8 +120,17 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
-              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
+              <select 
+                value={location} 
+                onChange={(e) => setLocation(e.target.value)}
+                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+              >
                 <option value="">Select a location</option>
+                {locations.map((loc) => (
+                  <option key={loc.id} value={loc.city} className="text-gray-800">
+                    {loc.city}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="w-px h-8 bg-slate-300" />
@@ -84,8 +140,17 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
-              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
+              <select 
+                value={skill} 
+                onChange={(e) => setSkill(e.target.value)}
+                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+              >
                 <option value="">Select skills</option>
+                {capabilities.map((cap) => (
+                  <option key={cap.id} value={cap.name} className="text-gray-800">
+                    {cap.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="w-px h-8 bg-slate-300" />
@@ -95,23 +160,31 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Availability
               </label>
-              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
+              <select 
+                value={availability} 
+                onChange={(e) => setAvailability(e.target.value)}
+                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+              >
                 <option value="">Select availability</option>
+                {statuses.map((stat) => (
+                  <option key={stat.id} value={stat.name} className="text-gray-800">
+                    {stat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Search Button */}
-            <Link
-              href="/talent"
-              className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded hover:bg-blue-900 transition-colors whitespace-nowrap"
+            <button
+              onClick={handleSearch}
+              className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
             >
               Search
-            </Link>
+            </button>
 
           </div>
         </div>
       </div>
     </section>
-
   );
 }
