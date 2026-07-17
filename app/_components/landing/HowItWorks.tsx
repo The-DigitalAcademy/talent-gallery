@@ -43,7 +43,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="bg-white pt-20 pb-8">
+    <section id="how-it-works" className="bg-white pt-20 pb-8">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
 
         {/* Heading */}

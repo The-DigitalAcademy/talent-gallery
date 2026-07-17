@@ -22,19 +22,19 @@ export default function Navbar() {
           {/* Nav Links */}
           <nav className="flex items-center gap-8">
             <Link
-              href="/"
+              href="/#hero"
               className="relative text-[16px] font-semibold text-gray-900 pb-0.5 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"
             >
               Home
             </Link>
             <Link
-              href="#how-it-works"
+              href="/#how-it-works"
               className="text-[16px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               How it Works
             </Link>
             <Link
-              href="/talent"
+              href="/#how-it-works"
               className="text-[16px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               Browse Talent
