@@ -1,6 +1,44 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
+const PARTNERS = [
+  { name: "Lombard", src: "/partners/lombard.png", width: 120, height: 40 },
+  { name: "THESL", src: "/partners/Newest-Thesl-Logo.png", width: 90, height: 35 },
+  { name: "Sanlam", src: "/partners/sanlam-blue-logo.png", width: 120, height: 40 },
+  { name: "Absa", src: "/partners/Absa_Logo.svg.png", width: 45, height: 45 },
+  { name: "MTN", src: "/partners/New-mtn-logo.jpg", width: 50, height: 50 },
+  { name: "Leroy Merlin", src: "/partners/logo-leroy.png", width: 95, height: 40 },
+  { name: "Oliver", src: "/partners/logo-oliver-black.png", width: 95, height: 35 },
+  { name: "AppCentrix", src: "/partners/2024_AppCentrix-Colour-Logo-scaled.png", width: 110, height: 40 },
+  { name: "Bradshaw LeRoux", src: "/partners/Bradshaw-LeRoux-Logo-green-PNGtransparent.png", width: 120, height: 40 },
+  { name: "GSB", src: "/partners/GSB_Fullform Logo_20231109.png", width: 120, height: 40 },
+  { name: "Mondtes", src: "/partners/Mondtes-Logo-New-2025.webp", width: 95, height: 40 },
+  { name: "Retina", src: "/partners/Retina-logo.png", width: 95, height: 40 },
+  { name: "Sun International", src: "/partners/Sun_International_logo.svg.png", width: 110, height: 40 },
+  { name: "Slipstream", src: "/partners/slipstream-logo-colour.png", width: 110, height: 40 },
+];
+
 export default function TrustedBy() {
+  const [startIndex, setStartIndex] = useState(0);
+
+  const handlePrev = () => {
+    setStartIndex((prev) => (prev - 1 + PARTNERS.length) % PARTNERS.length);
+  };
+
+  const handleNext = () => {
+    setStartIndex((prev) => (prev + 1) % PARTNERS.length);
+  };
+
+  // Get 4 visible partners in an infinite wrapping slice
+  const visiblePartners = [
+    PARTNERS[startIndex % PARTNERS.length],
+    PARTNERS[(startIndex + 1) % PARTNERS.length],
+    PARTNERS[(startIndex + 2) % PARTNERS.length],
+    PARTNERS[(startIndex + 3) % PARTNERS.length],
+  ];
+
   return (
     <section className="bg-[#EFEFEF] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
@@ -31,54 +69,36 @@ export default function TrustedBy() {
             </div>
 
             {/* Logo Carousel Card */}
-            <div className="bg-white rounded-xl shadow-sm px-8 py-5 flex items-center justify-between relative border border-gray-100">
+            <div className="bg-white rounded-xl shadow-sm px-4 py-5 flex items-center justify-between relative border border-gray-100 min-h-[90px]">
               
               {/* Left Arrow */}
-              <button className="text-gray-400 hover:text-gray-700 transition-colors text-xs font-bold">
+              <button 
+                onClick={handlePrev}
+                className="text-gray-400 hover:text-gray-700 transition-colors text-lg font-bold px-3 select-none cursor-pointer"
+              >
                 &lt;
               </button>
 
-              {/* LOGO 1: Lombard */}
-              <div className="flex items-center gap-3">
-                {/* Lombard Logo Mark (Grid of Dots) */}
-                <div className="grid grid-cols-4 gap-1 w-7 h-7 flex-shrink-0">
-                  {Array.from({ length: 16 }).map((_, i) => (
-                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#01317F]" />
-                  ))}
-                </div>
-                <span className="text-[13px] font-extrabold tracking-widest text-[#01317F] uppercase font-sans">
-                  Lombard
-                </span>
-              </div>
-
-              {/* LOGO 2: THESL */}
-              <div className="flex flex-col items-center">
-                <span className="text-xl font-bold tracking-widest text-[#2B79A3] font-sans relative">
-                  THESL
-                  <span className="absolute bottom-[-2px] left-[35%] right-[35%] h-[2.5px] bg-lime-500 rounded" />
-                </span>
-              </div>
-
-              {/* LOGO 3: Sanlam */}
-              <div className="flex items-center gap-2">
-                {/* Sanlam Logo Icon */}
-                <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#005B94]" fill="currentColor">
-                  <path d="M12 2L4 10v4l8 8 8-8v-4L12 2zm0 3.5l5.5 5.5H6.5L12 5.5zm0 13L6.5 13h11l-5.5 5.5z" />
-                </svg>
-                <span className="text-lg font-bold text-[#005B94] tracking-tight">
-                  Sanlam
-                </span>
-              </div>
-
-              {/* LOGO 4: ABSA */}
-              <div className="flex items-center">
-                <div className="bg-[#C00] text-white rounded-full w-9 h-9 flex items-center justify-center font-bold text-xs uppercase tracking-tighter">
-                  absa
-                </div>
+              {/* Rendered Partner Logos */}
+              <div className="flex items-center justify-around flex-1 gap-6 px-4">
+                {visiblePartners.map((partner) => (
+                  <div key={partner.name} className="relative h-12 flex items-center justify-center flex-1 max-w-[130px]">
+                    <Image
+                      src={partner.src}
+                      alt={`${partner.name} Logo`}
+                      width={partner.width}
+                      height={partner.height}
+                      className="max-h-11 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                ))}
               </div>
 
               {/* Right Arrow */}
-              <button className="text-gray-400 hover:text-gray-700 transition-colors text-xs font-bold">
+              <button 
+                onClick={handleNext}
+                className="text-gray-400 hover:text-gray-700 transition-colors text-lg font-bold px-3 select-none cursor-pointer"
+              >
                 &gt;
               </button>
 

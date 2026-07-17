@@ -5,11 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Navbar() {
-  const [activeSection, setActiveSection] = useState("hero");
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
-      const hero = document.getElementById("hero");
+      const home = document.getElementById("home");
       const howItWorks = document.getElementById("how-it-works");
       const browseTalent = document.getElementById("browse-talent");
 
@@ -21,7 +21,7 @@ export default function Navbar() {
       } else if (howItWorks && scrollPos >= howItWorks.offsetTop) {
         setActiveSection("how-it-works");
       } else {
-        setActiveSection("hero");
+        setActiveSection("home");
       }
     };
 
@@ -38,7 +38,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/#hero" className="flex items-center">
+          <Link href="/#home" className="flex items-center">
             <Image
               src="/shaper-logo-horizontal.png"
               alt="Shaper Logo"
@@ -52,9 +52,9 @@ export default function Navbar() {
           {/* Nav Links */}
           <nav className="flex items-center gap-8">
             <Link
-              href="/#hero"
+              href="/#home"
               className={`relative text-[16px] pb-0.5 transition-all ${
-                activeSection === "hero"
+                activeSection === "home"
                   ? "font-semibold text-gray-900 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"
                   : "font-medium text-gray-500 hover:text-gray-900"
               }`}

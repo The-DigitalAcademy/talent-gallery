@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="bg-slate-50">
+    <section id="home" className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
 
