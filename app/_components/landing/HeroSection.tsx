@@ -62,7 +62,7 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
-              <select className="text-[18px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
                 <option value="">Select a role</option>
               </select>
             </div>
@@ -73,7 +73,7 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
-              <select className="text-[18px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
                 <option value="">Select a location</option>
               </select>
             </div>
@@ -84,7 +84,7 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
-              <select className="text-[18px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
                 <option value="">Select skills</option>
               </select>
             </div>
@@ -95,7 +95,7 @@ export default function HeroSection() {
               <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
                 Availability
               </label>
-              <select className="text-[18px] text-gray-500 border-0 outline-none bg-transparent cursor-pointer font-medium">
+              <select className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal">
                 <option value="">Select availability</option>
               </select>
             </div>
