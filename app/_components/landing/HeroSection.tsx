@@ -11,14 +11,12 @@ export default function HeroSection() {
           <div className="flex flex-col gap-6">
             <h1 className="text-[43px] font-medium text-gray-900 leading-tight tracking-tight uppercase">
               Work-Ready{" "}
-              <span className="text-red-500">Talent.</span>
+              <span className="text-red-500">Talent.</span> Ready
               <br />
-              Ready to Shape
-              <br />
-              the Future.
+              to Shape the Future.
             </h1>
 
-            <p className="text-[21px] text-gray-500 leading-relaxed max-w-sm">
+            <p className="text-[21px] text-gray-500 leading-relaxed max-w-lg">
               Browse verified learners, graduates, and candidates who have
               completed practical training and workplace projects through Shaper
               programmes.

@@ -1,17 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 export const metadata: Metadata = {
   title: {
     default: "Talent Directory | Shaper",
@@ -21,9 +11,8 @@ export const metadata: Metadata = {
   keywords: ["Talent Directory", "Creative Specialists", "AI Engineering", "Portfolio Showcase"],
   authors: [{ name: "Shaper" }],
   creator: "Shaper",
-  metadataBase: new URL("https://talent-gallery.vercel.app"), // TODO Replace with  production domain 
+  metadataBase: new URL("https://talent-gallery.vercel.app"),
   
-  // Open Graph (Facebook / LinkedIn Previews)
   openGraph: {
     title: "Talent Directory | Shaper",
     description: "Discover and connect with our talented learners.",
@@ -33,7 +22,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/shaper_logo.png", // Shaper thumbnail
+        url: "/shaper_logo.png",
         width: 1200,
         height: 630,
         alt: "Shaper Talent Showcase",
@@ -41,7 +30,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  // Twitter Cards
   twitter: {
     card: "summary_large_image",
     title: "Talent Directory | Shaper",
@@ -49,7 +37,6 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
 
-  // Search Engine Robots Instructions
   robots: {
     index: true,
     follow: true,
@@ -59,7 +46,6 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
-     
     },
   },
 };
@@ -72,8 +58,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
+      className="h-full antialiased scroll-smooth"
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />
         {children}
