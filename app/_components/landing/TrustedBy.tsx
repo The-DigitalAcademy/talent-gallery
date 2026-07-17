@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const PARTNERS = [
@@ -22,6 +22,18 @@ const PARTNERS = [
 
 export default function TrustedBy() {
   const [startIndex, setStartIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-play sliding effect: triggers every 2.5 seconds for a dynamic flow
+  useEffect(() => {
+    if (isHovered) return;
+
+    const timer = setInterval(() => {
+      setStartIndex((prev) => (prev + 1) % PARTNERS.length);
+    }, 2500);
+
+    return () => clearInterval(timer);
+  }, [isHovered]);
 
   const handlePrev = () => {
     setStartIndex((prev) => (prev - 1 + PARTNERS.length) % PARTNERS.length);
@@ -69,7 +81,11 @@ export default function TrustedBy() {
             </div>
 
             {/* Logo Carousel Card */}
-            <div className="bg-white rounded-xl shadow-sm px-4 py-5 flex items-center justify-between relative border border-gray-100 min-h-[90px]">
+            <div 
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              className="bg-white rounded-xl shadow-sm px-4 py-5 flex items-center justify-between relative border border-gray-100 min-h-[90px]"
+            >
               
               {/* Left Arrow */}
               <button 
