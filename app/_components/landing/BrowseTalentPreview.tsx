@@ -58,7 +58,7 @@ export default function BrowseTalentPreview() {
   const showSkeleton = initialLoading || isPending;
 
   return (
-    <section className="bg-slate-50 py-20">
+    <section id="browse-talent" className="bg-slate-50 py-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Heading */}
