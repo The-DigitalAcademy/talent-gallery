@@ -53,7 +53,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
               </Avatar.Fallback>
             </Avatar.Root>
             <div>
-              <h3 className="uppercase text-lg md:text-xl leading-tight group-hover:text-blue-600 transition-colors mb-1">
+              <h3 className="uppercase tracking-wide text-lg md:text-xl leading-tight group-hover:text-blue-600 transition-colors mb-1">
                 <span className='font-bold'>{talent.fullname.split(" ")[0]}</span>
                 <span> {talent.fullname.split(" ")[talent.fullname.split.length - 1][0]}.</span>
               </h3>
