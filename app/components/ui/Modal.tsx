@@ -10,7 +10,13 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!dialogRef.current?.open) {
-        dialogRef.current?.showModal();
+            dialogRef.current?.showModal();
+            // Reset scroll position after autofocus has done its thing
+            requestAnimationFrame(() => {
+                if (dialogRef.current) {
+                    dialogRef.current.scrollTop = 0;
+                }
+            });
         }
     }, []);
 
@@ -19,11 +25,9 @@ export function Modal({ children }: { children: React.ReactNode }) {
     }
 
     function onDialogClick(e: React.MouseEvent<HTMLDialogElement>) {
-        console.log("target", e.target)
-        console.log("current target", e.currentTarget)
         if (e.target === dialogRef.current) {
             onDismiss();
-        } 
+        }
     }
 
     return createPortal(

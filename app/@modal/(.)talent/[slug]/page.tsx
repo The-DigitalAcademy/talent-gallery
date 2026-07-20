@@ -48,5 +48,11 @@ export default async function PhotoModal({
         );
     }
 
-  return <Modal><TalentProfile talent={talent} /></Modal>;
+  return (
+    <Modal>
+      {/* <div className="bg-blue-500 mx-44"> */}
+        <TalentProfile talent={talent} />
+      {/* </div> */}
+    </Modal>
+  )
 }

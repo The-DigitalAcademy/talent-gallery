@@ -4,21 +4,24 @@
   isolation: isolate;
 }
 
-.body {
-  position: relative;
-}
-
 .modal::backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
 .modal {
-  height: auto;
-  max-height: 900px;
   border: none;
-  border-radius: 12px;
-  background-color: white;
-  padding: 20px;
-  margin: auto;
-  display: flex;
+  border-radius: 8px;
+  width: fit-content;
+  max-width: 1172px;
+  max-height: calc(100vh - 4rem); 
+  margin: auto;              
+  overflow-y: auto;              
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lexend Deca", sans-serif;
 }

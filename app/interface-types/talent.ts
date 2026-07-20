@@ -68,7 +68,7 @@ export interface TalentProfileInterface {
   slug: string;
   is_published: boolean;
   created_at: string;
-
+  capabilities_summary: string;
   location_id: string;
   program_id: string;
   cohort_id: string;
