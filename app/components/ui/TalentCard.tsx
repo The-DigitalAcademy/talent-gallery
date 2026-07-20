@@ -1,142 +1,89 @@
-'use client';
 import { Talent } from '@/app/interface-types/talent';
-import { useState } from 'react';
 import Link from 'next/link';
-import { ShareModal } from './ShareModal';
-import { ShareButton } from './ShareButton';
-import { ProfileAvatar } from './ProfileAvatar';
+import { MapPinIcon, Maximize2Icon, PlusIcon } from 'lucide-react';
+import { Avatar, Button } from '@base-ui/react';
 
 interface TalentCardProps {
   talent: Talent
 }
 
-const getBorderAccent = (status: string | undefined) => {
+const getStatusColorClassName = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
-    case 'available for wpe': return 'border-t-4 border-t-orange-500';
-    case 'available for hire': return 'border-t-4 border-t-amber-400';
-    case 'in wpe': return 'border-t-4 border-t-purple-500';
-    case 'employed': return 'border-t-4 border-t-teal-400';
-    default: return 'border-t-4 border-t-teal-400';
-  }
-};
-
-const getStatusBadgeStyle = (status: string | undefined) => {
-  switch (status?.toLowerCase()) {
-    case 'available for wpe': return 'bg-orange-500 text-white';
-    case 'available for hire': return 'bg-amber-400 text-white';
-    case 'in wpe': return 'bg-purple-500 text-white';
-    case 'employed': return 'bg-teal-400 text-white';
-    default: return 'bg-slate-500 text-white';
+    case 'available for wpe': return 'orange-500';
+    case 'available for hire': return 'amber-400';
+    case 'in wpe': return 'purple-500';
+    case 'employed': return 'teal-400';
+    default: return 'teal-400';
   }
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
+  const colorClassName = getStatusColorClassName(displayStatus?.toLowerCase())
 
   return (
-    <div 
+    <div
       style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
-      className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}
+      className={`bg-white rounded-[3px] flex flex-col pt-10 justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200`}
     >
-      
-      {/* TOP UTILITIES: e.stopPropagation() inside ShareButton preserves separate action clicking */}
-      <div 
-        className="absolute top-4 right-4 flex items-center gap-3 text-slate-400 z-10"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button 
-          onClick={() => alert('Marked/Verified')} 
-          className="hover:text-slate-600 text-sm font-medium transition-colors p-1"
-        >
-          ✓
-        </button>
-
-        {/* 💡 MODULAR MERGE: Unified ShareButton component handles GA4 and native/modal routing */}
-        <ShareButton 
-          slug={talent.slug} 
-          name={talent.fullname} 
-          onOpenModal={() => setIsShareOpen(true)} 
-        />
+      {/* TOP UTILITIES */}
+      <div className={`h-10 absolute w-full top-0 left-0`}>
+        <div className={`h-1 bg-${colorClassName}`}></div>
+        <div className='flex justify-between px-3 md:px-6  h-9'>
+          <div className={`h-full text-white text-xs font-bold rounded-b bg-${colorClassName} flex justify-center items-center w-1/2`}>{displayStatus}</div>
+          <Button className="bg-gray-100 h-10 w-8 flex rounded-b -m-1 items-end justify-center pb-2"><PlusIcon className='size-4' /></Button>
+        </div>
       </div>
 
       {/* CLICKABLE CARD BODY */}
-      <Link href={`/talent/${talent.slug}`} className="p-6 block flex-1 group select-none">
-        <div>
+      <Link href={`/talent/${talent.slug}`} className="px-3 md:px-6 pb-3 md:pb-6 mt-6 block group select-none flex flex-col h-full">
+        <div className='flex flex-col gap-5 flex-1 mb-6'>
           {/* User Block info */}
-          <div className="flex items-center gap-4 mb-4">
-            <ProfileAvatar
-              imageUrl={talent.profile_image_url ?? undefined}
-              name={talent.fullname}
-              ringColor="ring-gray-200"
-              ringWidth="ring-2"
-              textSize='text-base'
-            />
+          <div className="flex items-center gap-4">
+            <Avatar.Root className="inline-flex size-20 items-center justify-center overflow-hidden rounded-full bg-gray-100 align-middle text-base leading-none font-normal text-neutral-950 select-none">
+              <Avatar.Image
+                src={talent.profile_image_url || undefined}
+                className="size-full object-cover" />
+              <Avatar.Fallback>
+                {talent.fullname
+                  .split(" ")
+                  .slice(0, 2)
+                  .map((word) => word[0]?.toUpperCase() ?? "")
+                  .join("")}
+              </Avatar.Fallback>
+            </Avatar.Root>
             <div>
-              <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-blue-600 transition-colors">
-                {talent.fullname}
+              <h3 className="uppercase text-lg md:text-xl leading-tight group-hover:text-blue-600 transition-colors mb-1">
+                <span className='font-bold'>{talent.fullname.split(" ")[0]}</span>
+                <span> {talent.fullname.split(" ")[talent.fullname.split.length - 1][0]}.</span>
               </h3>
-              <p className="text-sm text-slate-500 font-medium mt-0.5">
-                {talent.program?.name || 'Talent Profile'}
-              </p>
+              <p className="text-base mb-0.5"> {talent.role?.name} </p>
+              <div className="text-xs md:text-sm text-gray-400 flex items-center gap-1">
+                <MapPinIcon className='opacity-70 size-4' />
+                {talent.location?.city}, {talent.location?.country}
+              </div>
             </div>
           </div>
 
-          {/* Location Element */}
-          <div className="text-xs text-slate-400 font-medium flex items-center gap-1 mb-4">
-            <span className="text-sm opacity-70">📍</span> 
-            {talent.location ? `${talent.location.city}, ${talent.location.country}` : 'Remote'}
-          </div>
-
-          {/* Program and Status Pill Row */}
-          <div className="flex flex-wrap gap-2 text-[11px] font-bold tracking-wide mb-4">
-            {talent.program && (
-              <span className="bg-blue-900 text-white px-2.5 py-1 rounded">
-                {talent.program.name}
-              </span>
-            )}
-            {displayStatus && (
-              <span className={`px-2.5 py-1 rounded ${getStatusBadgeStyle(displayStatus)}`}>
-                {displayStatus}
-              </span>
-            )}
-          </div>
-
-          {/* Clamped Bio Paragraph */}
-          <p className="text-sm text-slate-600 font-normal leading-relaxed line-clamp-4 mb-5">
-            {talent.bio}
-          </p>
-
-          <div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
+          <div className="flex text-sm flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
             {talent.capabilities?.map((capability, index) => {
-              if (!capability.name) return null;
               return (
-                <span 
-                  key={capability.id || index} 
-                  className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
+                <span
+                  key={capability.id}
+                  className="bg-gray-100 py-0.5 px-1 inline-block whitespace-nowrap"
                 >
                   {capability.name}
                 </span>
               );
             })}
           </div>
+          {/* Clamped Bio Paragraph */}
+          <p className="text-sm text-slate-600 font-normal leading-relaxed line-clamp-4">
+            {talent.bio}
+          </p>
         </div>
+        <Maximize2Icon className='text-gray-200 ml-auto' />
       </Link>
-
-      {/* Subtle Visual Anchor Bottom Bar */}
-      <div className="border-t border-slate-50 bg-slate-50/30 py-3 text-center text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors rounded-b-2xl">
-        <Link href={`/talent/${talent.slug}`} className="text-slate-500 hover:text-blue-800">
-          View Full Profile →
-        </Link>
-      </div>
-
-      {/* Desktop / Fallback Overlay Dialog Box */}
-      <ShareModal 
-        isOpen={isShareOpen} 
-        onClose={() => setIsShareOpen(false)} 
-        talent={talent} 
-      />
     </div>
   );
 }

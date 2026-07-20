@@ -7,12 +7,12 @@ export interface FilterParams {
   capability?: string;
   status?: string;
   location?: string;
-  page?: string; 
+  page?: string;
 }
 
 export async function getFilteredTalents(filters: FilterParams) {
   const page = Math.max(1, parseInt(filters.page || "1", 10));
-  
+
   // Changing this to 12 to match the itemsPerPage math in your main frontend page grid!
   const itemsPerPage = 12;
   const from = (page - 1) * itemsPerPage;
@@ -21,10 +21,10 @@ export async function getFilteredTalents(filters: FilterParams) {
   const supabase = await createClient();
 
   // 💡 THE JSON FIX: Filter the embedded collection array down to just the requested tag if active
-  const capabilitySelectFilter = filters.capability 
-    ? `(capability:capabilities!inner(id, name))` 
+  const capabilitySelectFilter = filters.capability
+    ? `(capability:capabilities!inner(id, name))`
     : `(capability:capabilities(id, name))`;
-  
+
   // 💡 THE INFINITE PAGINATION FIX: Added { count: 'exact' } options block here
   let query = supabase.from("talents").select(`
     id,
@@ -32,11 +32,12 @@ export async function getFilteredTalents(filters: FilterParams) {
     bio,
     slug,
     profile_image_url,
+    role:roles (id, name, description),
     location:locations${filters.location ? '!inner' : ''}(city, country),
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
-    capabilities:talent_capabilities${filters.capability ? '!inner' : ''}${capabilitySelectFilter},
+    capabilities${filters.capability ? '!inner' : ''}(id, name),
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)

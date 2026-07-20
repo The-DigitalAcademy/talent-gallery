@@ -1,3 +1,5 @@
+import TalentGridSkeleton from "./_components/TalentGridSkeleton";
+
 export default function Loading() {
   return (
     <div className="min-h-screen bg-slate-50/50 pb-12 animate-pulse">
@@ -38,11 +40,7 @@ export default function Loading() {
         <div className="h-4 w-56 rounded bg-slate-200" />
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <TalentCardSkeleton key={i} />
-          ))}
-        </div>
+        <TalentGridSkeleton />
 
         {/* Pagination */}
         <div className="flex justify-center gap-4 pt-8">
@@ -50,71 +48,6 @@ export default function Loading() {
           <div className="h-10 w-32 rounded-xl bg-slate-200" />
           <div className="h-10 w-36 rounded-xl bg-slate-200" />
         </div>
-      </div>
-    </div>
-  );
-}
-
-function TalentCardSkeleton() {
-  return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden relative">
-      {/* top accent */}
-      <div className="h-1 bg-slate-200" />
-
-      {/* utility icons */}
-      <div className="absolute top-4 right-4 flex gap-3">
-        <div className="h-4 w-4 rounded bg-slate-200" />
-        <div className="h-4 w-4 rounded bg-slate-200" />
-      </div>
-
-      <div className="p-6">
-        {/* Profile */}
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-full bg-slate-200" />
-
-          <div className="space-y-2 flex-1">
-            <div className="h-5 w-40 rounded bg-slate-200" />
-            <div className="h-4 w-32 rounded bg-slate-200" />
-          </div>
-        </div>
-
-        {/* Location */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="h-3 w-3 rounded-full bg-slate-200" />
-          <div className="h-3 w-36 rounded bg-slate-200" />
-        </div>
-
-        {/* Pills */}
-        <div className="flex gap-2 mb-4">
-          <div className="h-7 w-36 rounded bg-slate-200" />
-          <div className="h-7 w-24 rounded bg-slate-200" />
-        </div>
-
-        {/* Bio */}
-        <div className="space-y-2 mb-5">
-          <div className="h-4 w-full rounded bg-slate-200" />
-          <div className="h-4 w-full rounded bg-slate-200" />
-          <div className="h-4 w-5/6 rounded bg-slate-200" />
-          <div className="h-4 w-2/3 rounded bg-slate-200" />
-        </div>
-
-        {/* Capabilities */}
-        <div className="flex flex-wrap gap-2">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-6 rounded-md bg-slate-200"
-              style={{
-                width: `${60 + (i % 4) * 18}px`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="border-t border-slate-100 bg-slate-50/30 py-3 flex justify-center">
-        <div className="h-4 w-32 rounded bg-slate-200" />
       </div>
     </div>
   );
