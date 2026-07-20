@@ -48,12 +48,17 @@ export interface Project {
   name: string;
   description: string | null;
   capabilities: ProjectCapability[];
+  project_url: string
 };
 
 export interface Endorsement {
   id: string;
   endorser_name: string;
   message: string;
+};
+
+export interface Role {
+  name: string;
 };
 
 export interface TalentProfileInterface {
@@ -83,4 +88,5 @@ export interface TalentProfileInterface {
   work_experiences: WorkExperience[];
   projects: Project[];
   endorsements: Endorsement[];
+  role: Role;
 };

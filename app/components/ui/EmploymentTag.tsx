@@ -6,12 +6,12 @@ interface EmploymentStatusProps {
   textSize: String;
   textColor: String;
   padding: string;
-  margin: String;
+  margin?: String;
 }
 
 export default function EmploymentTag({ padding, label, textSize, textColor, bgColor, margin}: EmploymentStatusProps) {
     return(
-        <div className={cn("w-fit rounded-b font-bold", textSize, textColor, bgColor, padding, margin)}>
+        <div className={cn("rounded-b font-bold", textSize, textColor, bgColor, padding, margin)}>
             {label}
         </div>
     )

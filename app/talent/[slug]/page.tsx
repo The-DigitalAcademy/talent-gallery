@@ -1,6 +1,7 @@
 import { createClient } from "@/app/lib/supabase/server";
-import { TalentProfile } from "./_components/TalentProfile";
 import { Metadata } from "next";
+import ProfileClient from "./_components/ProfileClient";
+import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
 
 export async function generateMetadata({
   params,
@@ -62,38 +63,9 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = await createClient();
 
-  const { data: talent, error } = await supabase
-  .from("talents")
-  .select(`
-    *,
-    location:locations(city, country),
-    cohort:cohorts(name),
-    program:programs(name),
-    talent_status:talent_statuses(name),
-    capabilities:talent_capabilities(
-      capability:capabilities(id, name)
-    ),
-    work_experiences(*),
-    projects(
-      id,
-      name,
-      description,
-      capabilities:project_capabilities(
-        capability:capabilities(name)
-      )
-    ),
-    endorsements(
-      id,
-      endorser_name,
-      message
-    )
-  `)
-  .eq("slug", slug)
-  .eq("is_published", true)
-  .single();
-    console.log(talent)
+  const { data: talent, error } = await getTalentBySlug(slug);
+
   if (error) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -101,10 +73,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </main>
     );
   }
-  
+
   return  (
-    <div className="w-screen min-h-screen px-64 py-10 bg-[#f1f1f1]">
-      <TalentProfile talent={talent} />
+    <div className="w-screen h-screen pt-8 sm:px-14 xl:px-0 sm:py-6 lg:py-10 bg-[#f1f1f1] overflow-hidden flex justify-center">
+      <ProfileClient talent={talent}/>
     </div>
   );
 }

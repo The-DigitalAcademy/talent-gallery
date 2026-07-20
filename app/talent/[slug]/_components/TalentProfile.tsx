@@ -4,23 +4,31 @@ import EmploymentHr from "@/app/components/ui/EmploymentHr";
 import EmploymentTag from "@/app/components/ui/EmploymentTag";
 import EndorsementCard from "@/app/components/ui/EndorsementCard";
 import ExperienceCard from "@/app/components/ui/ExperienceCard";
-import { GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
+import { Back, GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
 import { ShareModal } from "@/app/components/ui/ShareModal";
 import ShortlistTag from "@/app/components/ui/ShortlistTag";
 import { SkillTag } from "@/app/components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
 import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, restOfWords } from "@/app/lib/utils";
+import { useShortlistHydrated } from "@/app/store/useHasHydrated";
+import { useShortlistStore } from "@/app/store/useShortlistStore";
+import Link from "next/link";
 import { useState } from "react";
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
+  onClose: () => void;
 }
 
-export function TalentProfile({ talent }: TalentProfileProps) {
+export function TalentProfile({ talent, onClose }: TalentProfileProps) {
   const displayStatus = talent.talent_status?.name;
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
-
+console.log(talent.role)
   const [isShareOpen, setIsShareOpen] = useState(false);
+
+  const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
+  const toggleShortlist = useShortlistStore((s) => s.toggle);
+  const hasHydrated = useShortlistHydrated();
 
   const location = talent.location
     ? `${talent.location.city}, ${talent.location.country}`
@@ -31,10 +39,12 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   const projects = talent.projects
   .filter((tp) => tp !== null)
   .map((tp) => ({
+    id: tp.id,
     title: tp.name,
     description: tp.description ?? "",
     contributions: [],
     capabilities: tp.capabilities.map((pc) => pc.capability.name),
+    project_url: tp.project_url
   }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
@@ -66,24 +76,36 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   };
 
   return (
-    <div className="bg-[#ffffff] w-full rounded-lg">
-      <EmploymentHr bgColor={bgColorEmployement} height={"h-2"}/>
+    <div className="relative bg-[#ffffff] w-full h-full rounded-lg overflow-auto">
+      <div
+        onClick={onClose}
+        className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full sm:bg-[#f8f8f8] sm:shadow-md sm:hover:bg-[#efefef] active:scale-95 transition left-0 sm:left-1/2 sm:-translate-x-1/2 top-1 sm:top-12 cursor-pointer"
+      >
+        <Back/>
+        <p className="text-sm sm:text-base">Browse talents</p>
+      </div>
+      <EmploymentHr bgColor={bgColorEmployement} height={"h-1 sm:h-2 fixed z-30"} width={"w-screen sm:w-293"}/>
 
-      <div className="px-32 w-full">
-        <div className="flex justify-between w-full">
+      <div className="px-4 sm:px-10 xl:px-32 w-screen sm:w-293 relative">
+        <div className="flex justify-between w-[calc(100vw-32px)] sm:w-230 fixed z-40">
           {displayStatus ?
-            <EmploymentTag margin={"-mt-[8px]"} textColor={"text-white"} label={displayStatus!} textSize={"text-xl"} padding={"p-4"} bgColor={bgColorEmployement} /> :
+            <EmploymentTag textColor={"text-white"} label={displayStatus!} textSize={"text-base sm:text-xl"} padding={"p-2 sm:p-4"} bgColor={bgColorEmployement} /> :
             <div/>
           }
-          <ShortlistTag padding={"pb-0 pt-6 px-3.5"} margin={"-mt-[8px]"} isShortlisted={true}/>
+          <div className="cursor-pointer" onClick={() => toggleShortlist(talent.id)}>
+            <ShortlistTag 
+              padding={"pt-4 sm:pb-0 sm:pt-6 px-2 sm:px-3.5"}
+              isShortlisted={hasHydrated && isShortlisted}
+            />
+          </div>
         </div>
         
-        <div className="flex flex-col py-14 gap-6">
+        <div className="flex flex-col pb-8 pt-16 sm:pb-14 sm:pt-28 gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="flex gap-2">
-                <h1 className="font-black text-4xl">{firstWord(talent?.fullname)}</h1>
-                <h1 className="text-4xl">{restOfWords(talent?.fullname)}</h1>
+                <h1 className="font-black text-2xl sm:text-4xl">{firstWord(talent?.fullname)}</h1>
+                <h1 className="text-2xl sm:text-4xl">{restOfWords(talent?.fullname)}</h1>
               </div>
               <div className="flex gap-2">
                 <GitHubIcon/>
@@ -92,13 +114,13 @@ export function TalentProfile({ talent }: TalentProfileProps) {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between">
-              <h3 className="text-xl">Full-Stack Developer</h3> 
+            <div className="flex flex-col sm:flex-row justify-between gap-2">
+              <h3 className="text-lg sm:text-xl">{talent.role?.name}</h3> 
 
               {location &&
-                <div className="flex gap-1">
+                <div className="flex gap-1 items-center">
                   <Location/>
-                  <p className="text-[#C1C1C1] text-lg">{location}</p>
+                  <p className="text-[#C1C1C1] text-base sm:text-lg">{location}</p>
                 </div>
               }
             </div>
@@ -121,17 +143,17 @@ export function TalentProfile({ talent }: TalentProfileProps) {
 
               {/* Bio */}
               {talent.bio && (
-                <p className="text-base">{talent.bio}</p>
+                <p className="text-sm sm:text-base">{talent.bio}</p>
               )}
             </div>
 
             {/* Core Skills */}
             {(skills.length > 0 || talent.capabilities_summary) &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[18%]"}/>
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
                 <div className="flex flex-col gap-2">
-                  <h2 className="font-semibold text-2xl">CORE SKILLS</h2>
+                  <h2 className="font-semibold text-xl sm:text-2xl">CORE SKILLS</h2>
 
                   {/* Skill tags */}
                   {skills.length > 0 && (
@@ -146,37 +168,39 @@ export function TalentProfile({ talent }: TalentProfileProps) {
                 </div>
 
                 {/* Description */}
-                <p className="text-base">{talent.capabilities_summary}</p>
+                <p className="text-sm sm:text-base">{talent.capabilities_summary}</p>
               </div>
             }
 
             {/* Experience highlights */}
             {(talent.work_experiences[0] || projects.length > 0) &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[18%]"}/>
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
                 <div className="flex flex-col gap-4">
-                  <h2 className="font-semibold text-2xl">EXPERIENCE HIGHLIGHTS</h2>
+                  <h2 className="font-semibold text-xl sm:text-2xl">EXPERIENCE HIGHLIGHTS</h2>
 
                   {/* Work experience */}
                   {talent.work_experiences[0] &&
                     <ExperienceCard 
                       title={talent.work_experiences[0]?.role} subTitle={talent.work_experiences[0]?.company} description={talent.work_experiences[0]?.description!} 
-                      bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-base"} subTitleStyle={"text-base"} descriptionStyle={"text-base"} padding={"py-4 px-8"} 
+                      bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"} 
                       externalLink={false}
                     />
                   }
 
                   {/* Projects */}
                   {projects.length > 0 &&
-                    <div className="grid grid-cols-2 gap-4">
-                      {projects.map((project, key) => (                    
-                        <ExperienceCard 
-                          key={key}
-                          title={project.title} subTitle={"Project"} description={project.description} 
-                          bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-base"} subTitleStyle={"text-base"} descriptionStyle={"text-base"} padding={"py-4 px-8"} 
-                          externalLink={true}
-                        />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {projects.map((project) => (   
+                        <Link href={project.project_url ? project.project_url : ""} key={project.id}>            
+                          <ExperienceCard
+                            key={project.id}
+                            title={project.title} subTitle={"Project"} description={project.description} 
+                            bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"} 
+                            externalLink={true}
+                          />
+                        </Link>     
                       ))}
                     </div>
                   }
@@ -187,11 +211,11 @@ export function TalentProfile({ talent }: TalentProfileProps) {
             {/* Endorsement */}
             {endorsement &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[18%]"}/>
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
                 <div className="flex flex-col gap-4">
-                  <h2 className="font-semibold text-2xl">ENDORSEMENT</h2>
+                  <h2 className="font-semibold text-xl sm:text-2xl">ENDORSEMENT</h2>
                   <EndorsementCard endorser={endorsement?.endorser_name} description={endorsement?.message} 
-                    bgColor={"bg-[#f8f8f8]"} endoserStyle={"text-base"} descriptionStyle={"py-4 text-base italic"} padding={"p-4"}
+                    bgColor={"bg-[#f8f8f8]"} endoserStyle={"text-sm sm:text-base"} descriptionStyle={"py-2 sm:py-4 text-sm sm:text-base italic"} padding={"p-4"}
                   />
                 </div>
               </div>
