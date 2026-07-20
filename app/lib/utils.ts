@@ -137,3 +137,4 @@ export function restOfWords(str: string) {
   const firstSpaceIndex = trimmed.search(/\s/);
   return firstSpaceIndex === -1 ? '' : trimmed.slice(firstSpaceIndex + 1).trim();
 }
+

@@ -1,25 +1,38 @@
 'use client';
 
-import { type ElementRef, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
+import { setToastPortalTarget } from '@/app/lib/toast/toastPortalTarget';
 
 export function Modal({ children, isOpen }: { children: React.ReactNode; isOpen: boolean }) {
     const router = useRouter();
-    const dialogRef = useRef<ElementRef<'dialog'>>(null);
+    const dialogRef = useRef<HTMLDialogElement>(null);
 
+    // Opens the dialog once on mount — unaffected by Strict Mode remounts
+    // since showModal() is idempotent-guarded and never explicitly closed here
     useEffect(() => {
         if (!dialogRef.current?.open) {
             dialogRef.current?.showModal();
-            // Reset scroll position after autofocus has done its thing
             requestAnimationFrame(() => {
                 if (dialogRef.current) {
                     dialogRef.current.scrollTop = 0;
                 }
             });
         }
+    }, []);
 
-        if(!isOpen) {
+    // Registers/clears the toast portal target — symmetric mount/cleanup,
+    // independent of dialog.open state so Strict Mode double-invocation
+    // can't leave this stuck at null
+    useEffect(() => {
+        setToastPortalTarget(dialogRef.current);
+        return () => setToastPortalTarget(null);
+    }, []);
+
+    // Handles external isOpen changes (e.g. route-driven close)
+    useEffect(() => {
+        if (!isOpen) {
             onDismiss();
         }
     }, [isOpen]);

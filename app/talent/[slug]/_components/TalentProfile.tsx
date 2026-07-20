@@ -14,6 +14,7 @@ import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
@@ -23,7 +24,7 @@ interface TalentProfileProps {
 export function TalentProfile({ talent, onClose }: TalentProfileProps) {
   const displayStatus = talent.talent_status?.name;
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
-console.log(talent.role)
+
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
@@ -75,6 +76,19 @@ console.log(talent.role)
     }
   };
 
+  const handleShortlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    toggleShortlist(talent.id)
+
+    if (hasHydrated && isShortlisted) {
+      toast(`Removed ${talent.fullname ?? 'talent'} from shortlist`);
+    } else {
+      toast.success(`Added ${talent.fullname ?? 'talent'} to shortlist`);
+    }
+  };
+
   return (
     <div className="relative bg-[#ffffff] w-full h-full rounded-lg overflow-auto">
       <div
@@ -92,7 +106,7 @@ console.log(talent.role)
             <EmploymentTag textColor={"text-white"} label={displayStatus!} textSize={"text-base sm:text-xl"} padding={"p-2 sm:p-4"} bgColor={bgColorEmployement} /> :
             <div/>
           }
-          <div className="cursor-pointer" onClick={() => toggleShortlist(talent.id)}>
+          <div className="cursor-pointer" onClick={handleShortlistToggle}>
             <ShortlistTag 
               padding={"pt-4 sm:pb-0 sm:pt-6 px-2 sm:px-3.5"}
               isShortlisted={hasHydrated && isShortlisted}
