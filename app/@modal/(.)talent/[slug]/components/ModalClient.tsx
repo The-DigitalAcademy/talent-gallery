@@ -15,7 +15,7 @@ export default function ModalClient({ talent }: ModalClientProps) {
 
     return (
         <Modal isOpen={isOpen}>
-            <TalentProfile talent={talent} onClose={close}/>
+            <TalentProfile talent={talent} onClose={close} isModal={true}/>
         </Modal>
     )
 }

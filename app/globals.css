@@ -27,7 +27,8 @@
 
 @media (min-width: 640px) {
   .modal::backdrop {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
   }
 
   .modal {
@@ -38,7 +39,8 @@
     max-height: calc(100vh - 5rem); 
     bottom: 2rem;
     margin: auto;              
-    overflow-y: auto;              
+    overflow-y: auto;
+    align-items: center;              
   }
 }
 

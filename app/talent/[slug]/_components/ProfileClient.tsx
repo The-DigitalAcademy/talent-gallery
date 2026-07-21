@@ -12,7 +12,7 @@ export default function ProfileClient({talent} : ProfileClientProps) {
 
     return (
         <div className="w-screen sm:w-293">
-            <TalentProfile talent={talent} onClose={close}/>
+            <TalentProfile talent={talent} onClose={close} isModal={false}/>
         </div>
     )
 }

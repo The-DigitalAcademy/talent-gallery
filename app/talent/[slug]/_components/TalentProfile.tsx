@@ -4,7 +4,7 @@ import EmploymentHr from "@/app/components/ui/EmploymentHr";
 import EmploymentTag from "@/app/components/ui/EmploymentTag";
 import EndorsementCard from "@/app/components/ui/EndorsementCard";
 import ExperienceCard from "@/app/components/ui/ExperienceCard";
-import { Back, GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
+import { Back, Cross, GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
 import { ShareModal } from "@/app/components/ui/ShareModal";
 import ShortlistTag from "@/app/components/ui/ShortlistTag";
 import { SkillTag } from "@/app/components/ui/SkillTag";
@@ -19,9 +19,10 @@ import { toast } from "sonner";
 interface TalentProfileProps {
   talent: TalentProfileInterface;
   onClose: () => void;
+  isModal: boolean
 }
 
-export function TalentProfile({ talent, onClose }: TalentProfileProps) {
+export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) {
   const displayStatus = talent.talent_status?.name;
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
 
@@ -91,14 +92,29 @@ export function TalentProfile({ talent, onClose }: TalentProfileProps) {
 
   return (
     <div className="relative bg-[#ffffff] w-full h-full rounded-lg overflow-auto">
-      <div
-        onClick={onClose}
-        className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full sm:bg-[#f8f8f8] sm:shadow-md sm:hover:bg-[#efefef] active:scale-95 transition left-0 sm:left-1/2 sm:-translate-x-1/2 top-1 sm:top-12 cursor-pointer"
-      >
-        <Back/>
-        <p className="text-sm sm:text-base">Browse talents</p>
-      </div>
-      <EmploymentHr bgColor={bgColorEmployement} height={"h-1 sm:h-2 fixed z-30"} width={"w-screen sm:w-293"}/>
+      {!isModal ?
+        <div
+          onClick={onClose}
+          className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
+        >
+          <Back/>
+          <p className="text-sm sm:text-base">Browse talents</p>
+        </div> :
+        <div onClick={onClose} className="hidden fixed sm:block z-50 right-6 top-6 cursor-pointer">
+          <Cross/>
+        </div>
+      }
+
+      {isModal &&
+        <div
+          onClick={onClose}
+          className="fixed sm:hidden z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
+        >
+          <Back/>
+          <p className="text-sm sm:text-base">Browse talents</p>
+        </div> 
+      }
+      <EmploymentHr bgColor={bgColorEmployement} height="h-1 sm:h-2 fixed z-30" width="w-screen sm:w-293"/>
 
       <div className="px-4 sm:px-10 xl:px-32 w-screen sm:w-293 relative">
         <div className="flex justify-between w-[calc(100vw-32px)] sm:w-230 fixed z-40">
@@ -122,8 +138,10 @@ export function TalentProfile({ talent, onClose }: TalentProfileProps) {
                 <h1 className="text-2xl sm:text-4xl">{restOfWords(talent?.fullname)}</h1>
               </div>
               <div className="flex gap-2">
-                <GitHubIcon/>
-                <div onClick={handleShareClick}>
+                <Link href={talent.github_url || ""} className="cursor-pointer">
+                  <GitHubIcon/>
+                </Link>
+                <div onClick={handleShareClick} className="cursor-pointer">
                   <ShareIcon/>
                 </div>
               </div>
