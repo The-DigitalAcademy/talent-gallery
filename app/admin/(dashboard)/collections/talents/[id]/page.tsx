@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published")
+        .select("id, fullname, bio, profile_image_url, role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published")
         .eq("id", id)
         .single()
 
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: projects, error: projectsError } = await supabase.from("projects").select().eq("talent_id", id)
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: _talentCapabilities, error: talentCapabilitiesError } = await supabase.from("talent_capabilities").select("id, capabilities (id, name)").eq("talent_id", id)
+    const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -63,13 +64,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
             </div>
             <div className="flex w-full flex-col gap-5">
-                <BasicInfoForm values={talent!} />
+                <BasicInfoForm values={talent!} roles={roles || []} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
                 <URLsForm values={urlValues} />
-                <TalentCapabilitiesForm
+                {/* <TalentCapabilitiesForm
                     capabilities={capabilities || []}
                     talentCapabilities={talentCapabilities.map(({ id, capabilities }) => ({ id, capabilityId: capabilities?.id, capabilityName: capabilities.name }))}
-                    talentId={id} />
+                    talentId={id} /> */}
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
