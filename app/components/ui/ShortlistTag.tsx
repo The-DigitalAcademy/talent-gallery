@@ -9,7 +9,7 @@ interface ShortlistTagProps {
 
 export default function ShortlistTag({ padding, margin, isShortlisted = false}: ShortlistTagProps) {
     return(
-        <div className={cn("w-fit rounded-b font-bold h-full", padding, margin, isShortlisted ? "bg-[#ff1600]" : "bg-[#f1f1f1]")}>
+        <div className={cn("w-fit rounded-b-[3px] font-bold h-full", padding, margin, isShortlisted ? "bg-[#ff1600]" : "bg-[#f1f1f1]")}>
             {isShortlisted ? <CheckIcon/> : <Plus/>}
         </div>
     )

@@ -11,7 +11,7 @@ interface EmploymentStatusProps {
 
 export default function EmploymentTag({ padding, label, textSize, textColor, bgColor, margin}: EmploymentStatusProps) {
     return(
-        <div className={cn("rounded-b font-bold", textSize, textColor, bgColor, padding, margin)}>
+        <div className={cn("rounded-b-[3px] font-bold", textSize, textColor, bgColor, padding, margin)}>
             {label}
         </div>
     )

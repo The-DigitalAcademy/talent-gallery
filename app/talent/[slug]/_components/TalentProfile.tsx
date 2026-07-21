@@ -91,11 +91,11 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   };
 
   return (
-    <div className="relative bg-[#ffffff] w-full h-full rounded-lg overflow-auto">
+    <div className="relative bg-[#ffffff] w-full h-full rounded-[3px] overflow-auto">
       {!isModal ?
         <div
           onClick={onClose}
-          className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
+          className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
         >
           <Back/>
           <p className="text-sm sm:text-base">Browse talents</p>
@@ -108,7 +108,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
       {isModal &&
         <div
           onClick={onClose}
-          className="fixed sm:hidden z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center rounded-b-full active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
+          className="fixed sm:hidden z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
         >
           <Back/>
           <p className="text-sm sm:text-base">Browse talents</p>
@@ -162,7 +162,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             <div className="flex flex-col gap-6">
               {/* Youtube video */}
               {embedUrl && (
-                <div className="rounded-lg overflow-hidden aspect-video">
+                <div className="rounded-[3px] overflow-hidden aspect-video">
                   <iframe
                     src={embedUrl}
                     title="Profile video"

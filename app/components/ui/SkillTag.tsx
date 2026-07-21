@@ -10,7 +10,7 @@ export function SkillTag({ label, bgColor = "bg-white" }: SkillTagProps) {
     <span
       className={cn(
         "inline-flex items-center px-3 py-1 text-sm sm:text-base",
-        "rounded-sm text-gray-700", 
+        "rounded-[3px] text-gray-700", 
         bgColor
       )}
     >

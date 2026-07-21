@@ -8,6 +8,6 @@ interface EmploymentStatusProps {
 
 export default function EmploymentHr({ bgColor, height, width = "w-full" }: EmploymentStatusProps) {
     return(
-        <div className={cn("rounded-lg", bgColor, height, width)}/>
+        <div className={cn("rounded-[3px]", bgColor, height, width)}/>
     )
 }

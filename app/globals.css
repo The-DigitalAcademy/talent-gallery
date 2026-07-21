@@ -33,7 +33,7 @@
 
   .modal {
     border: none;
-    border-radius: 8px;
+    border-radius: 3px;
     width: fit-content;
     max-width: 1172px;
     max-height: calc(100vh - 5rem); 
