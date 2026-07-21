@@ -87,15 +87,18 @@ export default function TrustedBy() {
             <div 
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-white rounded-xl shadow-md px-4 py-4 flex items-center justify-between relative border border-gray-100 min-h-[90px] md:-ml-28 z-20"
+              className="bg-white rounded-xl px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-28 z-20"
             >
               
-              {/* Left Arrow */}
+              {/* Left Arrow (Chevron Caret Icon) */}
               <button 
                 onClick={handlePrev}
-                className="text-gray-400 hover:text-gray-700 transition-colors text-lg font-bold px-3 select-none cursor-pointer"
+                aria-label="Previous partners"
+                className="text-gray-400 hover:text-gray-700 transition-colors p-2 select-none cursor-pointer flex items-center justify-center"
               >
-                &lt;
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
               </button>
 
               {/* Rendered Partner Logos */}
@@ -113,12 +116,15 @@ export default function TrustedBy() {
                 ))}
               </div>
 
-              {/* Right Arrow */}
+              {/* Right Arrow (Chevron Caret Icon) */}
               <button 
                 onClick={handleNext}
-                className="text-gray-400 hover:text-gray-700 transition-colors text-lg font-bold px-3 select-none cursor-pointer"
+                aria-label="Next partners"
+                className="text-gray-400 hover:text-gray-700 transition-colors p-2 select-none cursor-pointer flex items-center justify-center"
               >
-                &gt;
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
               </button>
 
             </div>

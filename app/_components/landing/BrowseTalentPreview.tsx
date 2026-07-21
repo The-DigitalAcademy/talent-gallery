@@ -102,7 +102,7 @@ export default function BrowseTalentPreview() {
               ))}
             </div>
           ) : talents.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-slate-100 rounded-2xl shadow-sm text-gray-500 font-medium">
+            <div className="text-center py-20 bg-white border border-slate-100 rounded-2xl text-gray-500 font-medium">
               No talent profiles found matching this status.
             </div>
           ) : (
@@ -118,7 +118,7 @@ export default function BrowseTalentPreview() {
         <div className="flex justify-center mt-12">
           <Link
             href={getBrowseMoreUrl()}
-            className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3.5 rounded hover:bg-blue-900 transition-colors shadow-sm"
+            className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3.5 rounded hover:bg-blue-900 transition-colors"
           >
             Browse More Talent
           </Link>

@@ -33,35 +33,35 @@ export default function CandidateStatuses() {
 
   return (
     <section className="bg-white pt-0 pb-20 overflow-x-hidden">
-      {/* Outer container — centered container for the grey box */}
-      <div className="max-w-4xl mx-auto px-6 relative">
+      {/* Outer container — expanded to max-w-6xl to match page layout */}
+      <div className="max-w-6xl mx-auto px-6 relative">
 
-        {/* Grey Box — centered on the page (w-full inside max-w-4xl mx-auto) */}
+        {/* Grey Box — spacious container with right margin for overlapping Navy Card */}
         <div className="bg-[#EFEFEF] rounded-2xl pt-12 pb-14 min-h-[520px] w-full">
           
           {/* Heading — centered inside the grey box */}
-          <div className="text-center mb-10 px-10">
-            <h2 className="text-[24px] font-bold text-gray-900 uppercase tracking-wider">
+          <div className="text-center mb-10 px-6 max-w-2xl mx-auto">
+            <h2 className="text-[26px] font-bold text-gray-900 uppercase tracking-wider">
               Candidate Statuses
             </h2>
-            <p className="mt-3 text-[17px] text-gray-500 max-w-md mx-auto leading-relaxed">
+            <p className="mt-3 text-[17px] text-gray-600 leading-relaxed">
               Candidate statuses provide a quick view of current availability and
               engagement.
             </p>
           </div>
 
-          {/* Content Area — padded to keep list on the left and avoid overlap with navy card */}
-          <div className="pl-10 pr-[280px]">
+          {/* Content Area — ample horizontal space for status list */}
+          <div className="pl-6 md:pl-16 pr-6 lg:pr-[380px]">
             {/* Status List */}
             <div className="flex flex-col gap-5">
               {statuses.map((status) => (
-                <div key={status.label} className="flex items-start gap-4">
+                <div key={status.label} className="flex flex-col sm:flex-row items-start gap-4">
                   <span
-                    className={`text-[14px] font-semibold px-3 py-2 rounded whitespace-nowrap flex-shrink-0 min-w-[140px] text-center ${status.badge}`}
+                    className={`text-[14px] font-semibold px-4 py-2.5 rounded whitespace-nowrap flex-shrink-0 min-w-[160px] text-center ${status.badge}`}
                   >
                     {status.label}
                   </span>
-                  <p className="text-[16px] text-gray-600 leading-relaxed pt-0.5">
+                  <p className="text-[16px] text-gray-700 leading-relaxed pt-1 flex-1">
                     {status.description}
                   </p>
                 </div>
@@ -71,8 +71,8 @@ export default function CandidateStatuses() {
 
         </div>
 
-        {/* Navy Card — absolutely positioned to overlap the right edge and hang off by 80px */}
-        <div className="absolute right-[-80px] top-[140px] w-[350px] bg-[#01317F] rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between min-h-[420px] z-10">
+        {/* Navy Card — positioned down and to the right, overlapping the right side */}
+        <div className="hidden lg:flex absolute right-[-30px] top-[150px] w-[350px] bg-[#01317F] rounded-2xl overflow-hidden flex-col justify-between min-h-[440px] z-10">
           
           {/* Navy top — heading */}
           <div className="px-8 pt-10 pb-8">
@@ -82,12 +82,12 @@ export default function CandidateStatuses() {
           </div>
 
           {/* Light section — body text, inside the same card */}
-          <div className="bg-[#EFEFEF] px-8 pt-8 pb-10 flex-1 flex flex-col justify-center border-t border-gray-200">
-            <p className="text-gray-600 text-[17px] leading-relaxed mb-6">
+          <div className="bg-[#D8D8D8] px-8 pt-8 pb-10 flex-1 flex flex-col justify-center border-t border-gray-300/60">
+            <p className="text-gray-600 text-[16px] leading-relaxed mb-6">
               You may express interest in any candidate, regardless of their
               current status.
             </p>
-            <p className="text-gray-600 text-[17px] leading-relaxed">
+            <p className="text-gray-600 text-[16px] leading-relaxed">
               Where immediate engagement is not possible, we keep your
               interest on file and facilitate future opportunities as
               candidates become available or progress in their careers.

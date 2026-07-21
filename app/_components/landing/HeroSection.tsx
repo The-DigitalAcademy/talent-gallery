@@ -92,7 +92,7 @@ export default function HeroSection({
 
       {/* Search Bar — contained, aligned to hero content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 -mb-[38px]">
-        <div className="bg-[#E1E1E1] rounded-xl px-6 py-4 shadow-sm border border-gray-300/60">
+        <div className="bg-[#E1E1E1] rounded-xl px-6 py-4 border border-gray-300/60">
           <div className="flex items-center gap-3">
 
             {/* Role */}

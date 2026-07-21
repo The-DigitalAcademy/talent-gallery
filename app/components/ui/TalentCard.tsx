@@ -38,7 +38,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
   return (
     <div 
       style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
-      className={`bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:shadow-md hover:border-slate-200 ${topAccent}`}
+      className={`bg-white rounded-2xl border border-slate-200 flex flex-col justify-between overflow-hidden relative transition-all duration-200 hover:border-slate-300 ${topAccent}`}
     >
       
       {/* TOP UTILITIES: e.stopPropagation() inside ShareButton preserves separate action clicking */}

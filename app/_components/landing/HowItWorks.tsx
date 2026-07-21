@@ -70,34 +70,60 @@ export default function HowItWorks() {
               <div className="flex items-center w-full justify-center mb-8 relative">
 
                 {/* Red Icon Box */}
-                <div className="relative z-10 bg-red-500 rounded-md w-16 h-16 flex-shrink-0 flex items-center justify-center shadow-md">
+                <div className="relative z-10 bg-red-500 rounded-md w-16 h-16 flex-shrink-0 flex items-center justify-center">
                   {step.icon}
                 </div>
 
-                {/* Dotted arrow — only after step 1 and 2 */}
+                {/* Dotted arrow — alternating upward and downward arcs */}
                 {index < steps.length - 1 && (
-                  <div className="absolute left-[calc(50%+38px)] right-[-50%] flex items-center">
-                    <svg
-                      viewBox="0 0 160 24"
-                      className="w-full h-5 text-gray-300"
-                      fill="none"
-                      preserveAspectRatio="none"
-                    >
-                      <path
-                        d="M4 12 Q80 2 154 12"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeDasharray="6 4"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M146 7 L154 12 L146 17"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                  <div className="absolute left-[calc(50%+36px)] right-[-50%+36px] w-[calc(100%-72px)] flex items-center pointer-events-none">
+                    {index === 0 ? (
+                      /* Arrow 1: Upward Arc from top-right of Step 1 to top-left of Step 2 */
+                      <svg
+                        viewBox="0 0 160 32"
+                        className="w-full h-10 text-gray-300 -mt-6"
+                        fill="none"
+                        preserveAspectRatio="none"
+                      >
+                        <path
+                          d="M 4 24 Q 80 0 154 20"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeDasharray="5 4"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M 146 14 L 154 20 L 148 24"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      /* Arrow 2: Downward Arc from bottom-right of Step 2 to bottom-left of Step 3 */
+                      <svg
+                        viewBox="0 0 160 32"
+                        className="w-full h-10 text-gray-300 mt-6"
+                        fill="none"
+                        preserveAspectRatio="none"
+                      >
+                        <path
+                          d="M 4 8 Q 80 32 154 12"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeDasharray="5 4"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M 148 7 L 154 12 L 146 17"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
                   </div>
                 )}
               </div>
