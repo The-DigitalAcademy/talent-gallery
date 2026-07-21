@@ -67,7 +67,6 @@ export interface Project {
 }
 
 export interface TalentCapability {
-  id: UUID;
   talent_id: UUID;
   capability_id: UUID;
   created_at: Timestamptz;

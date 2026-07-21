@@ -27,8 +27,8 @@ export function AddCapabilityForm({ capability, talentId }: { capability: Capabi
     )
 }
 
-export function DeleteCapabilityForm({ talentCapabilityId, capabilityName, talentId }: { talentCapabilityId: string, capabilityName: string, talentId: string }) {
-    const addCapability = deleteCapability.bind(null, talentCapabilityId, talentId)
+export function DeleteCapabilityForm({ capabilityId, capabilityName, talentId }: { capabilityId: string, capabilityName: string, talentId: string }) {
+    const addCapability = deleteCapability.bind(null, capabilityId, talentId)
     const [state, formAction, isPending] = useActionState(addCapability, initialState);
 
     return (
@@ -47,7 +47,7 @@ export function DeleteCapabilityForm({ talentCapabilityId, capabilityName, talen
 
 type Props = {
     capabilities: Capability[],
-    talentCapabilities: { id: string, capabilityId: string, capabilityName: string }[],
+    talentCapabilities: { id: string, name: string }[],
     talentId: string
 }
 export function TalentCapabilitiesForm({ capabilities, talentCapabilities = [], talentId }: Props) {
@@ -70,12 +70,12 @@ export function TalentCapabilitiesForm({ capabilities, talentCapabilities = [], 
                 <div className="text-xs text-gray-700 mb-3">Talent Capabilities</div>
                 <div className="flex gap-x-4 gap-y-3 flex-wrap mb-5">
                     {!talentCapabilities.length && <div className="text-center w-full text-sm text-gray-400">No Capabilities</div>}
-                    {talentCapabilities.map(i => <DeleteCapabilityForm key={i.id} talentCapabilityId={i.id} capabilityName={i.capabilityName} talentId={talentId} />)}
+                    {talentCapabilities.map(i => <DeleteCapabilityForm key={i.id} capabilityId={i.id} capabilityName={i.name} talentId={talentId} />)}
                 </div>
                 <div className="text-xs text-gray-700 mb-3">Select a capability</div>
                 <div className="flex gap-x-4 gap-y-3 flex-wrap h-fit overflow-y-scroll py-1">
                     {capabilities
-                        .filter(i => !talentCapabilities.map(i => i.capabilityId).includes(i.id)) // exclude capabilities already selected
+                        .filter(i => !talentCapabilities.map(i => i.id).includes(i.id)) // exclude capabilities already selected
                         .filter(i => i.name.toLowerCase().includes(searchTerm.toLowerCase())) // search term filter functionality
                         .map(i => <AddCapabilityForm key={i.id} capability={i} talentId={talentId} />)}
                 </div>
