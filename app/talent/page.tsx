@@ -7,6 +7,11 @@ import { Suspense } from 'react';
 import TalentGridSkeleton from './_components/TalentGridSkeleton';
 import TalentGrid from './_components/TalentGrid';
 import { Metadata } from 'next';
+import { Montserrat } from 'next/font/google';
+import { ChevronLeftIcon, ChevronRightIcon, ClipboardIcon, ClipboardListIcon } from 'lucide-react';
+import { clsx } from 'clsx';
+
+const montserrat = Montserrat({ subsets: ["latin"] })
 
 //  DYNAMIC SEO GENERATOR
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
@@ -63,14 +68,16 @@ export default async function Home({ searchParams }: PageProps) {
     { data: locations },
     { data: programs },
     { data: statuses },
-    { data: capabilities }
+    { data: capabilities },
+    { data: roles }
   ] = await Promise.all([
     getFilteredTalents(filters),
     supabase.from("cohorts").select("id, name"),
     supabase.from("locations").select("id, city"),
     supabase.from("programs").select("id, name"),
     supabase.from("talent_statuses").select("id, name"),
-    supabase.from("capabilities").select("id, name")
+    supabase.from("capabilities").select("id, name"),
+    supabase.from("roles").select("id, name")
   ]);
 
   // 💡 Safely pull data and count keys out of your response
@@ -92,35 +99,12 @@ export default async function Home({ searchParams }: PageProps) {
 
 
   return (
-    <div className="min-h-screen bg-gray-200/50 pb-12">
+    <div className={`${montserrat.className} min-h-screen bg-neutral-100 pb-12`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
 
-      {/* GLOBAL BRAND NAVBAR */}
-      <header className="bg-white border-b border-slate-100 py-6 px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="max-w-7xl mx-auto -mt-4 ">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <img
-                src="https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png"
-                alt="Logo"
-                className="h-12 w-auto max-w-none object-contain -ml-2 -mr-3 pt-[5px]"
-              />
-            </div>
-            <span className="text-3xl font-bold tracking-tight text-blue-900 font-sans leading-none pt-[10px]">
-              Talent
-            </span>
-          </div>
-          <p className="text-[13px] text-slate-500 font-medium ">
-            Discover and connect with our talented learners
-          </p>
-        </div>
-      </header>
-
-      {/* MAIN CONTAINER LAYOUT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-
-        {/* FILTER BOX CONTAINER */}
-        <div className="bg-white p-6 rounded-[3px] border border-slate-100 space-y-4">
+        <div className="bg-white p-5 rounded-[3px]">
           <FilterControls
+            roles={roles || []}
             locations={locations || []}
             programs={programs || []}
             cohorts={cohorts || []}
@@ -144,33 +128,40 @@ export default async function Home({ searchParams }: PageProps) {
 
         {/*  PAGINATION PANEL */}
         {totalCount > 0 && (
-          <div className="flex items-center justify-center gap-4 pt-8">
+          <div className="flex items-center justify-center gap-1 pt-8">
             {currentPage > 1 && (
               <Link
                 href={buildPaginationUrl(currentPage - 1)}
-                className="bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-slate-50 shadow-sm transition-colors"
+                className="bg-white px-4 h-9 flex items-center justify-center rounded-[3px]"
               >
-                ← Previous Page
+                <ChevronLeftIcon className='size-5' /> Previous
               </Link>
             )}
-
-            <span className="text-sm font-semibold text-slate-500 bg-slate-100/80 px-3 py-1.5 rounded-lg">
-              Page {currentPage} of {totalPages}
-            </span>
+            <div className='flex gap-1'>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+                <Link
+                  key={pageNum}
+                  href={buildPaginationUrl(pageNum)}
+                  className={clsx('rounded flex items-center justify-center size-9', { "bg-gray-900 text-white": pageNum == currentPage }, { "bg-white": pageNum != currentPage })}>
+                  {pageNum}
+                </Link>
+              ))}
+            </div>
 
             {/*  THE KILL SWITCH: Disappears if you hit the final mathematically determined chunk */}
             {currentPage < totalPages && (
               <Link
                 href={buildPaginationUrl(currentPage + 1)}
-                className="bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm hover:bg-slate-50 shadow-sm transition-colors"
+                className="bg-white px-4 h-9 flex items-center justify-center rounded-[3px]"
               >
-                Next Page →
+                Next <ChevronRightIcon className='size-5' />
               </Link>
             )}
           </div>
         )}
 
       </div>
+      <button className='inline sticky bottom-10 left-[90vw] text-white bg-red-600 rounded p-3 m-4'><ClipboardListIcon className='size-8' /></button>
     </div>
   );
 }
