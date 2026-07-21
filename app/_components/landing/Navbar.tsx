@@ -3,22 +3,29 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const home = document.getElementById("home");
-      const howItWorks = document.getElementById("how-it-works");
-      const browseTalent = document.getElementById("browse-talent");
+    if (pathname.startsWith("/talent")) {
+      setActiveSection("browse-talent");
+      return;
+    }
 
-      // Offset by navbar height (approx 80px) to trigger tab switch accurately
+    if (pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const handleScroll = () => {
+      const howItWorks = document.getElementById("how-it-works");
+
       const scrollPos = window.scrollY + 120;
 
-      if (browseTalent && scrollPos >= browseTalent.offsetTop) {
-        setActiveSection("browse-talent");
-      } else if (howItWorks && scrollPos >= howItWorks.offsetTop) {
+      if (howItWorks && scrollPos >= howItWorks.offsetTop) {
         setActiveSection("how-it-works");
       } else {
         setActiveSection("home");
@@ -26,19 +33,18 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Call handler once to set initial active tab on page mount
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-[#F1F1F1] border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/#home" className="flex items-center">
+          <Link href="/" className="flex items-center">
             <Image
               src="/shaper-logo-horizontal.png"
               alt="Shaper Logo"
@@ -52,7 +58,7 @@ export default function Navbar() {
           {/* Nav Links */}
           <nav className="flex items-center gap-8">
             <Link
-              href="/#home"
+              href="/"
               className={`relative text-[16px] pb-0.5 transition-all ${
                 activeSection === "home"
                   ? "font-semibold text-gray-900 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"
@@ -72,7 +78,7 @@ export default function Navbar() {
               How it Works
             </Link>
             <Link
-              href="/#browse-talent"
+              href="/talent"
               className={`relative text-[16px] pb-0.5 transition-all ${
                 activeSection === "browse-talent"
                   ? "font-semibold text-gray-900 after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-red-500"

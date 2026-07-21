@@ -52,39 +52,42 @@ export default function TrustedBy() {
   ];
 
   return (
-    <section className="bg-[#EFEFEF] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-[300px_1fr] gap-12 items-center">
+    <section className="bg-white py-16 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        
+        {/* Grey outer card matching Candidate Status box style */}
+        <div className="bg-[#EFEFEF] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[300px_1fr] items-stretch relative min-h-[300px]">
           
-          {/* LEFT: Portrait */}
-          <div className="relative h-[220px] w-full rounded-lg overflow-hidden">
+          {/* LEFT: Portrait Image spanning full height */}
+          <div className="relative w-full h-full min-h-[280px]">
             <Image
               src="/stock images/partners stock.png"
               alt="Partner professional"
               fill
               className="object-cover object-top"
+              priority
             />
           </div>
 
-          {/* RIGHT: Text content & Logo Carousel Card */}
-          <div className="flex flex-col gap-6">
+          {/* RIGHT: Text content & Overlay Logo Carousel */}
+          <div className="p-8 md:py-10 md:pr-10 md:pl-8 flex flex-col justify-center gap-6 relative z-10">
             
-            {/* Heading */}
+            {/* Heading & Subtitle */}
             <div>
-              <h2 className="text-[27px] font-extrabold text-gray-900 uppercase tracking-widest">
+              <h2 className="text-[24px] font-bold text-gray-900 uppercase tracking-wider">
                 TRUSTED BY
               </h2>
-              <p className="mt-2 text-[18px] text-gray-500 max-w-2xl leading-relaxed">
+              <p className="mt-2 text-[17px] text-gray-500 max-w-xl leading-relaxed">
                 Organisations that have hosted WPE learners, partnered on talent initiatives, or
                 hired Shaper candidates.
               </p>
             </div>
 
-            {/* Logo Carousel Card */}
+            {/* Logo Carousel Card — overlaps onto the image on the left */}
             <div 
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-white rounded-xl shadow-sm px-4 py-5 flex items-center justify-between relative border border-gray-100 min-h-[90px]"
+              className="bg-white rounded-xl shadow-md px-4 py-4 flex items-center justify-between relative border border-gray-100 min-h-[90px] md:-ml-28 z-20"
             >
               
               {/* Left Arrow */}
@@ -123,6 +126,7 @@ export default function TrustedBy() {
           </div>
 
         </div>
+
       </div>
     </section>
   );

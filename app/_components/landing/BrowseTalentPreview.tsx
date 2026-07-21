@@ -63,10 +63,10 @@ export default function BrowseTalentPreview() {
 
         {/* Heading */}
         <div className="text-left mb-10">
-          <h2 className="text-[43px] font-bold text-gray-900 leading-tight uppercase tracking-tight">
-            BROWSE <span className="text-red-500">TALENT</span>
+          <h2 className="text-[34px] font-medium text-gray-900 leading-tight uppercase tracking-wider">
+            BROWSE <span className="text-red-500 font-semibold">TALENT</span>
           </h2>
-          <p className="mt-2 text-[19px] text-gray-500 max-w-md leading-relaxed">
+          <p className="mt-2 text-[18px] text-gray-500 max-w-md leading-relaxed">
             Explore candidates at every stage of their professional journey.
           </p>
         </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import PublicLayout from "./_components/PublicLayout";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -70,7 +71,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />
-        {children}
+        <PublicLayout>{children}</PublicLayout>
       </body>
     </html>
   );

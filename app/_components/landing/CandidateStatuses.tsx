@@ -41,10 +41,10 @@ export default function CandidateStatuses() {
           
           {/* Heading — centered inside the grey box */}
           <div className="text-center mb-10 px-10">
-            <h2 className="text-[27px] font-extrabold text-gray-900 uppercase tracking-widest">
+            <h2 className="text-[24px] font-bold text-gray-900 uppercase tracking-wider">
               Candidate Statuses
             </h2>
-            <p className="mt-3 text-[18px] text-gray-500 max-w-md mx-auto leading-relaxed">
+            <p className="mt-3 text-[17px] text-gray-500 max-w-md mx-auto leading-relaxed">
               Candidate statuses provide a quick view of current availability and
               engagement.
             </p>
@@ -57,11 +57,11 @@ export default function CandidateStatuses() {
               {statuses.map((status) => (
                 <div key={status.label} className="flex items-start gap-4">
                   <span
-                    className={`text-[15px] font-bold px-3 py-2 rounded whitespace-nowrap flex-shrink-0 min-w-[140px] text-center ${status.badge}`}
+                    className={`text-[14px] font-semibold px-3 py-2 rounded whitespace-nowrap flex-shrink-0 min-w-[140px] text-center ${status.badge}`}
                   >
                     {status.label}
                   </span>
-                  <p className="text-[17px] text-gray-600 leading-relaxed pt-0.5">
+                  <p className="text-[16px] text-gray-600 leading-relaxed pt-0.5">
                     {status.description}
                   </p>
                 </div>
@@ -76,7 +76,7 @@ export default function CandidateStatuses() {
           
           {/* Navy top — heading */}
           <div className="px-8 pt-10 pb-8">
-            <h3 className="text-white font-extrabold text-[20px] uppercase tracking-wide leading-snug">
+            <h3 className="text-white font-medium text-[18px] uppercase tracking-wide leading-snug">
               Designed to support long-term talent connections.
             </h3>
           </div>

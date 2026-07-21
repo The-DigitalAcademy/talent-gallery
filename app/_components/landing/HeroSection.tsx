@@ -41,7 +41,7 @@ export default function HeroSection({
   };
 
   return (
-    <section id="home" className="bg-slate-50">
+    <section id="home" className="bg-[#F1F1F1]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
 
@@ -92,18 +92,20 @@ export default function HeroSection({
 
       {/* Search Bar — contained, aligned to hero content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 -mb-[38px]">
-        <div className="bg-slate-200 border border-slate-300 rounded-xl px-6 py-4 shadow-sm">
+        <div className="bg-[#E1E1E1] rounded-xl px-6 py-4 shadow-sm border border-gray-300/60">
           <div className="flex items-center gap-3">
 
             {/* Role */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
               <select 
                 value={role} 
                 onChange={(e) => setRole(e.target.value)}
-                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+                className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${
+                  role ? "text-gray-900" : "text-gray-600"
+                }`}
               >
                 <option value="">Select a role</option>
                 {programs.map((prog) => (
@@ -113,17 +115,19 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-slate-300" />
+            <div className="w-px h-8 bg-gray-400" />
 
             {/* Location */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
               <select 
                 value={location} 
                 onChange={(e) => setLocation(e.target.value)}
-                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+                className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${
+                  location ? "text-gray-900" : "text-gray-600"
+                }`}
               >
                 <option value="">Select a location</option>
                 {locations.map((loc) => (
@@ -133,17 +137,19 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-slate-300" />
+            <div className="w-px h-8 bg-gray-400" />
 
             {/* Skills */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
               <select 
                 value={skill} 
                 onChange={(e) => setSkill(e.target.value)}
-                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+                className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${
+                  skill ? "text-gray-900" : "text-gray-600"
+                }`}
               >
                 <option value="">Select skills</option>
                 {capabilities.map((cap) => (
@@ -153,17 +159,19 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-slate-300" />
+            <div className="w-px h-8 bg-gray-400" />
 
             {/* Availability */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[14px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Availability
               </label>
               <select 
                 value={availability} 
                 onChange={(e) => setAvailability(e.target.value)}
-                className="text-[18px] text-gray-400 border-0 outline-none bg-transparent cursor-pointer font-normal"
+                className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${
+                  availability ? "text-gray-900" : "text-gray-600"
+                }`}
               >
                 <option value="">Select availability</option>
                 {statuses.map((stat) => (
