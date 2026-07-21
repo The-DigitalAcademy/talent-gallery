@@ -31,6 +31,10 @@ const mainNav = [
     {
         name: "Talent Statuses",
         href: "/admin/collections/talent-statuses"
+    },
+    {
+        name: "Roles",
+        href: "/admin/collections/roles"
     }
 ]
 

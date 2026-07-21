@@ -31,6 +31,12 @@ export interface Program {
   created_at: Timestamptz;
 }
 
+export interface Role {
+  id: UUID;
+  name: string;
+  created_at: Timestamptz;
+}
+
 export interface Cohort {
   id: UUID;
   name: string;
