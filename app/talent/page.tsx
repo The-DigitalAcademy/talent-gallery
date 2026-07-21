@@ -53,7 +53,6 @@ interface ConfirmedTalentSchema {
 }
 
 export default async function Home({ searchParams }: PageProps) {
-  await new Promise((resolve) => setTimeout(resolve, 5000))
   const supabase = await createClient();
 
   const filters = await searchParams;
