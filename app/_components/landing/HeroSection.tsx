@@ -41,9 +41,48 @@ export default function HeroSection({
   };
 
   return (
-    <section id="home" className="bg-[#F1F1F1]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
+    <section id="home" className="bg-[#F1F1F1] relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* MOBILE HERO (< md): Full-bleed Dark Photo Overlay Banner starting right where Nav ends with zero margins */}
+        <div className="block md:hidden relative w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] -mx-4 sm:-mx-6 overflow-hidden text-center text-white py-20 px-6 mb-8">
+          <Image
+            src="/stock images/hero stock .png"
+            alt="Work-ready talent"
+            fill
+            className="object-cover object-center brightness-[0.4]"
+            priority
+          />
+          <div className="relative z-10 flex flex-col items-center gap-4 max-w-sm mx-auto">
+            <h1 className="text-2xl sm:text-3xl font-bold leading-snug tracking-wide uppercase">
+              Work-Ready <span className="text-red-500">Talent.</span> Ready to Shape the Future.
+            </h1>
+            <p className="text-sm text-gray-200 leading-relaxed">
+              Browse verified learners, graduates, and candidates who have
+              completed practical training and workplace projects through Shaper
+              programmes.
+            </p>
+
+            {/* Equal Height & Equal Width Single-Line Buttons */}
+            <div className="flex items-center justify-center gap-3 mt-4 w-full">
+              <Link
+                href="/talent"
+                className="h-12 flex-1 max-w-[160px] inline-flex items-center justify-center bg-red-600 text-white text-sm font-bold rounded-[3px] hover:bg-red-700 transition-colors whitespace-nowrap px-3"
+              >
+                Browse Talent
+              </Link>
+              <Link
+                href="#contact"
+                className="h-12 flex-1 max-w-[160px] inline-flex items-center justify-center border border-white text-white text-sm font-bold rounded-[3px] hover:bg-white/10 transition-colors whitespace-nowrap px-3"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* DESKTOP HERO (>= md): Exact original 2-column layout preserved */}
+        <div className="hidden md:grid md:grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
@@ -63,7 +102,7 @@ export default function HeroSection({
             <div className="flex items-center gap-4 mt-2">
               <Link
                 href="/talent"
-                className="bg-[#01317F] text-white text-[18px] font-semibold px-6 py-3 rounded hover:bg-blue-900 transition-colors"
+                className="bg-[#01317F] text-white text-[18px] font-semibold px-6 py-3 rounded-[3px] hover:bg-blue-900 transition-colors"
               >
                 Browse Talent
               </Link>
@@ -90,14 +129,15 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* Search Bar — contained, aligned to hero content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 -mb-[38px]">
-        <div className="bg-[#E1E1E1] rounded-xl px-6 py-4 border border-gray-300/60">
-          <div className="flex items-center gap-3">
+      {/* Search Bar — hidden on mobile, visible on desktop (perfectly centered on transition line) */}
+      <div className="hidden md:block absolute bottom-0 left-0 right-0 z-10 translate-y-1/2">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="bg-[#E1E1E1] rounded-[3px] px-4 sm:px-6 py-4 border border-gray-300/60">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-3">
 
             {/* Role */}
             <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+              <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Role
               </label>
               <select 
@@ -115,11 +155,11 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-400" />
+            <div className="hidden md:block w-px h-8 bg-gray-400" />
 
             {/* Location */}
-            <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+            <div className="flex flex-col gap-0.5 flex-1 border-t md:border-t-0 border-gray-300/70 pt-2 md:pt-0">
+              <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Location
               </label>
               <select 
@@ -137,11 +177,11 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-400" />
+            <div className="hidden md:block w-px h-8 bg-gray-400" />
 
             {/* Skills */}
-            <div className="flex flex-col gap-0.5 flex-1">
-              <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+            <div className="flex flex-col gap-0.5 flex-1 border-t md:border-t-0 border-gray-300/70 pt-2 md:pt-0">
+              <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
                 Skills
               </label>
               <select 
@@ -159,7 +199,7 @@ export default function HeroSection({
                 ))}
               </select>
             </div>
-            <div className="w-px h-8 bg-gray-400" />
+            <div className="hidden md:block w-px h-8 bg-gray-400" />
 
             {/* Availability */}
             <div className="flex flex-col gap-0.5 flex-1">
@@ -185,11 +225,12 @@ export default function HeroSection({
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
+              className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded-[3px] hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
             >
               Search
             </button>
 
+            </div>
           </div>
         </div>
       </div>

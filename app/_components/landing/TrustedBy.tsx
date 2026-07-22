@@ -101,16 +101,21 @@ export default function TrustedBy() {
                 </svg>
               </button>
 
-              {/* Rendered Partner Logos */}
-              <div className="flex items-center justify-around flex-1 gap-6 px-4">
-                {visiblePartners.map((partner) => (
-                  <div key={partner.name} className="relative h-12 flex items-center justify-center flex-1 max-w-[130px]">
+              {/* Rendered Partner Logos — 2 visible on mobile (larger & prominent), 3 on sm, 4 on md+ */}
+              <div className="flex items-center justify-around flex-1 gap-4 sm:gap-6 px-2 sm:px-4">
+                {visiblePartners.map((partner, index) => (
+                  <div
+                    key={partner.name}
+                    className={`relative h-14 sm:h-12 items-center justify-center flex-1 max-w-[160px] sm:max-w-[130px] ${
+                      index >= 2 ? (index === 2 ? "hidden sm:flex" : "hidden md:flex") : "flex"
+                    }`}
+                  >
                     <Image
                       src={partner.src}
                       alt={`${partner.name} Logo`}
                       width={partner.width}
                       height={partner.height}
-                      className="max-h-11 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                      className="max-h-12 sm:max-h-11 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
                     />
                   </div>
                 ))}

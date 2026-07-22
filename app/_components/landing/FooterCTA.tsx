@@ -13,7 +13,7 @@ export default function FooterCTA() {
         
         {/* LEFT: Red Info Block */}
         <div className="md:pr-12">
-          <h2 className="text-[26px] sm:text-[30px] md:text-[32px] uppercase tracking-wider leading-tight">
+          <h2 className="text-[19px] sm:text-[24px] md:text-[32px] uppercase tracking-wider leading-snug sm:leading-tight">
             <span className="text-black font-normal">READY TO EXPLORE </span>
             <span className="text-white font-bold">TALENT?</span>
           </h2>

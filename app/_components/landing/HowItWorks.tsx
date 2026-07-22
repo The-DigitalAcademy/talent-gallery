@@ -60,70 +60,44 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps — icons row with arrows, then text below */}
-        <div className="grid grid-cols-3 gap-8 items-start">
+        {/* Steps — Vertical stack on mobile with dashed connector line; 3 columns on desktop */}
+        <div className="flex flex-col md:grid md:grid-cols-3 gap-10 md:gap-8 items-center md:items-start">
 
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center text-center">
+            <div key={step.id} className="flex flex-col items-center text-center w-full">
 
-              {/* Icon + Arrow row */}
-              <div className="flex items-center w-full justify-center mb-8 relative">
+              {/* Icon + Arrow container */}
+              <div className="flex items-center w-full justify-center mb-6 md:mb-8 relative">
 
                 {/* Red Icon Box */}
-                <div className="relative z-10 bg-red-500 rounded-md w-16 h-16 flex-shrink-0 flex items-center justify-center">
+                <div className="relative z-10 bg-red-600 rounded-xl w-16 h-16 flex-shrink-0 flex items-center justify-center text-white">
                   {step.icon}
                 </div>
 
-                {/* Dotted arrow — alternating upward and downward arcs */}
+                {/* DESKTOP Dotted arrow — straight horizontal arrow */}
                 {index < steps.length - 1 && (
-                  <div className="absolute left-[calc(50%+36px)] right-[-50%+36px] w-[calc(100%-72px)] flex items-center pointer-events-none">
-                    {index === 0 ? (
-                      /* Arrow 1: Upward Arc from top-right of Step 1 to top-left of Step 2 */
-                      <svg
-                        viewBox="0 0 160 32"
-                        className="w-full h-10 text-gray-300 -mt-6"
-                        fill="none"
-                        preserveAspectRatio="none"
-                      >
-                        <path
-                          d="M 4 24 Q 80 0 154 20"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeDasharray="5 4"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d="M 146 14 L 154 20 L 148 24"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    ) : (
-                      /* Arrow 2: Downward Arc from bottom-right of Step 2 to bottom-left of Step 3 */
-                      <svg
-                        viewBox="0 0 160 32"
-                        className="w-full h-10 text-gray-300 mt-6"
-                        fill="none"
-                        preserveAspectRatio="none"
-                      >
-                        <path
-                          d="M 4 8 Q 80 32 154 12"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeDasharray="5 4"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d="M 148 7 L 154 12 L 146 17"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
+                  <div className="hidden md:flex absolute left-[calc(50%+36px)] right-[-50%+36px] w-[calc(100%-72px)] items-center pointer-events-none">
+                    <svg
+                      viewBox="0 0 160 24"
+                      className="w-full h-5 text-gray-300"
+                      fill="none"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M 32 12 L 142 12"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeDasharray="5 4"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M 146 7 L 154 12 L 146 17"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </div>
                 )}
               </div>
@@ -131,14 +105,21 @@ export default function HowItWorks() {
               {/* Title */}
               <h3 className="text-[16px] font-bold text-gray-900 uppercase tracking-wider leading-snug mb-3">
                 {step.title.map((line, i) => (
-                  <span key={i} className="block">{line}</span>
+                  <span key={i} className="inline md:block">{line} </span>
                 ))}
               </h3>
 
               {/* Description */}
-              <p className="text-[18px] text-gray-500 leading-relaxed max-w-[260px]">
+              <p className="text-[16px] md:text-[18px] text-gray-500 leading-relaxed max-w-[280px]">
                 {step.description}
               </p>
+
+              {/* MOBILE Vertical Red Dashed Line between steps */}
+              {index < steps.length - 1 && (
+                <div className="block md:hidden my-6">
+                  <div className="w-[1.5px] h-14 border-r-2 border-dashed border-red-300" />
+                </div>
+              )}
 
             </div>
           ))}

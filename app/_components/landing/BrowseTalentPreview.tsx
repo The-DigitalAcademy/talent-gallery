@@ -61,26 +61,26 @@ export default function BrowseTalentPreview() {
     <section id="browse-talent" className="bg-slate-50 py-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        {/* Heading */}
-        <div className="text-left mb-10">
-          <h2 className="text-[34px] font-medium text-gray-900 leading-tight uppercase tracking-wider">
+        {/* Heading — centered on mobile, left-aligned on desktop */}
+        <div className="text-center md:text-left mb-10">
+          <h2 className="text-[28px] sm:text-[34px] font-medium text-gray-900 leading-tight uppercase tracking-wider">
             BROWSE <span className="text-red-500 font-semibold">TALENT</span>
           </h2>
-          <p className="mt-2 text-[18px] text-gray-500 max-w-md leading-relaxed">
+          <p className="mt-2 text-[16px] sm:text-[18px] text-gray-500 max-w-md mx-auto md:mx-0 leading-relaxed">
             Explore candidates at every stage of their professional journey.
           </p>
         </div>
 
-        {/* Tab Filters */}
-        <div className="flex justify-start border-b border-gray-200 mb-12">
-          <div className="flex gap-12">
+        {/* Tab Filters — horizontally scrollable on mobile */}
+        <div className="flex justify-start border-b border-gray-200 mb-12 overflow-x-auto scrollbar-none">
+          <div className="flex gap-6 sm:gap-12 min-w-max">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.value;
               return (
                 <button
                   key={tab.value}
                   onClick={() => handleTabChange(tab.value)}
-                  className={`pb-4 text-[16px] font-bold tracking-widest transition-all relative whitespace-nowrap ${
+                  className={`pb-4 text-[14px] sm:text-[16px] font-bold tracking-wider sm:tracking-widest transition-all relative whitespace-nowrap ${
                     isActive
                       ? "text-gray-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gray-900"
                       : "text-gray-400 hover:text-gray-700"
@@ -118,7 +118,7 @@ export default function BrowseTalentPreview() {
         <div className="flex justify-center mt-12">
           <Link
             href={getBrowseMoreUrl()}
-            className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3.5 rounded hover:bg-blue-900 transition-colors"
+            className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3.5 rounded-[3px] hover:bg-blue-900 transition-colors"
           >
             Browse More Talent
           </Link>
