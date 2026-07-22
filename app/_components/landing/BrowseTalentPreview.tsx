@@ -58,8 +58,8 @@ export default function BrowseTalentPreview() {
   const showSkeleton = initialLoading || isPending;
 
   return (
-    <section id="browse-talent" className="bg-slate-50 py-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="browse-talent" className="bg-slate-50 py-3 md:py-20">
+      <div className="max-w-[1360px] mx-auto px-6 lg:px-6">
 
         {/* Heading — centered on mobile, left-aligned on desktop */}
         <div className="text-center md:text-left mb-10">
@@ -102,7 +102,7 @@ export default function BrowseTalentPreview() {
               ))}
             </div>
           ) : talents.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-slate-100 rounded-2xl text-gray-500 font-medium">
+            <div className="text-center py-20 bg-white border border-slate-100 rounded-[3px] text-gray-500 font-medium">
               No talent profiles found matching this status.
             </div>
           ) : (

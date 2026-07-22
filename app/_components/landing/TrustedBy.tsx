@@ -52,11 +52,11 @@ export default function TrustedBy() {
   ];
 
   return (
-    <section className="bg-white py-16 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section className="bg-white py-16 overflow-hidden w-full">
+      <div className="w-full">
         
-        {/* Grey outer card matching Candidate Status box style */}
-        <div className="bg-[#EFEFEF] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[300px_1fr] items-stretch relative min-h-[300px]">
+        {/* Grey outer card matching Candidate Status box style — full width and border-radius reset */}
+        <div className="bg-[#EFEFEF] rounded-[3px] overflow-hidden grid grid-cols-1 md:grid-cols-[580px_1fr] items-stretch relative min-h-[300px] md:min-h-[380px] w-full">
           
           {/* LEFT: Portrait Image spanning full height */}
           <div className="relative w-full h-full min-h-[280px]">
@@ -70,7 +70,7 @@ export default function TrustedBy() {
           </div>
 
           {/* RIGHT: Text content & Overlay Logo Carousel */}
-          <div className="p-8 md:py-10 md:pr-10 md:pl-8 flex flex-col justify-center gap-6 relative z-10">
+          <div className="p-8 md:py-12 md:pr-16 md:pl-12 flex flex-col justify-center gap-6 relative z-10">
             
             {/* Heading & Subtitle */}
             <div>
@@ -83,11 +83,11 @@ export default function TrustedBy() {
               </p>
             </div>
 
-            {/* Logo Carousel Card — overlaps onto the image on the left */}
+            {/* Logo Carousel Card — overlaps onto the image on the left on desktop */}
             <div 
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-white rounded-xl px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-28 z-20"
+              className="bg-white rounded-[3px] px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-48 md:max-w-[920px] z-20"
             >
               
               {/* Left Arrow (Chevron Caret Icon) */}

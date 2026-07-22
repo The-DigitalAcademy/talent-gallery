@@ -43,8 +43,8 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="bg-white pt-20 pb-8">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="how-it-works" className="bg-white pt-3 md:pt-20 pb-8">
+      <div className="max-w-[1360px] mx-auto px-6 lg:px-6">
 
         {/* Heading */}
         <div className="text-center mb-16">
@@ -70,7 +70,7 @@ export default function HowItWorks() {
               <div className="flex items-center w-full justify-center mb-6 md:mb-8 relative">
 
                 {/* Red Icon Box */}
-                <div className="relative z-10 bg-red-600 rounded-xl w-16 h-16 flex-shrink-0 flex items-center justify-center text-white">
+                <div className="relative z-10 bg-red-600 rounded-[3px] w-16 h-16 flex-shrink-0 flex items-center justify-center text-white">
                   {step.icon}
                 </div>
 

@@ -34,10 +34,10 @@ export default function CandidateStatuses() {
   return (
     <section className="bg-white pt-0 pb-20 overflow-x-hidden">
       {/* Outer container — expanded to max-w-6xl to match page layout */}
-      <div className="max-w-6xl mx-auto px-6 relative">
+      <div className="max-w-[1360px] mx-auto px-6 lg:px-6 relative">
 
         {/* Grey Box — spacious container with right margin for overlapping Navy Card */}
-        <div className="bg-[#EFEFEF] rounded-2xl pt-12 pb-0 lg:pb-14 min-h-[520px] w-full overflow-hidden flex flex-col justify-between">
+        <div className="bg-[#EFEFEF] rounded-[3px] pt-12 pb-0 lg:pb-14 min-h-[520px] w-full overflow-hidden flex flex-col justify-between">
           
           <div>
             {/* Heading — centered inside the grey box */}
@@ -72,7 +72,7 @@ export default function CandidateStatuses() {
           </div>
 
           {/* MOBILE Navy Card — sits flush at the bottom of main card on < lg screens */}
-          <div className="block lg:hidden mt-8 bg-[#01317F] rounded-b-2xl p-6 sm:p-8 text-white">
+          <div className="block lg:hidden mt-8 bg-[#01317F] rounded-b-[3px] p-6 sm:p-8 text-white">
             <h3 className="font-bold text-[16px] sm:text-[18px] uppercase tracking-wide leading-snug mb-3">
               Designed to support long-term talent connections.
             </h3>
@@ -84,11 +84,11 @@ export default function CandidateStatuses() {
         </div>
 
         {/* Navy Card — positioned down and to the right, overlapping the right side */}
-        <div className="hidden lg:flex absolute right-[-30px] top-[150px] w-[350px] bg-[#01317F] rounded-2xl overflow-hidden flex-col justify-between min-h-[440px] z-10">
+        <div className="hidden lg:flex absolute right-[-30px] top-[150px] w-[350px] bg-[#01317F] rounded-[3px] overflow-hidden flex-col justify-between min-h-[440px] z-10">
           
           {/* Navy top — heading */}
-          <div className="px-8 pt-10 pb-8">
-            <h3 className="text-white font-medium text-[18px] uppercase tracking-wide leading-snug">
+          <div className="px-6 pt-10 pb-8">
+            <h3 className="text-white font-bold text-[16px] uppercase tracking-wider leading-snug">
               Designed to support long-term talent connections.
             </h3>
           </div>

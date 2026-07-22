@@ -9,7 +9,7 @@ export default function FooterCTA() {
       </div>
 
       {/* Content Container aligned to max-w-7xl */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-[60%_40%] py-12 md:py-14 items-center gap-8 md:gap-0">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-[60%_40%] py-3 md:py-14 items-center gap-8 md:gap-0">
         
         {/* LEFT: Red Info Block */}
         <div className="md:pr-12">
@@ -25,7 +25,7 @@ export default function FooterCTA() {
 
         {/* RIGHT: Navy Contact Block */}
         <div className="flex flex-col items-center md:items-center justify-center">
-          <div className="flex flex-col gap-4 items-start">
+          <div className="flex flex-col gap-2 md:gap-4 items-start">
             
             {/* Email */}
             <div className="flex items-center gap-3.5">

@@ -42,7 +42,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-[#F1F1F1] border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-[1360px] mx-auto px-6 lg:px-6">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo + Hamburger (Mobile Left) */}
