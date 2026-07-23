@@ -15,7 +15,9 @@ export default function ModalClient({ talent }: ModalClientProps) {
 
     return (
         <Modal isOpen={isOpen}>
-            <TalentProfile talent={talent} onClose={close} isModal={true}/>
+            <div className="w-full h-full overflow-auto overflow-x-hidden">
+                <TalentProfile talent={talent} onClose={close} isModal={true}/>
+            </div>
         </Modal>
     )
 }

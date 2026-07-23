@@ -15,7 +15,7 @@ export default function ProfileClient({talent} : ProfileClientProps) {
         <div className="w-screen md:w-3xl lg:w-240 xl:w-293">
             <div 
                 onClick={close}
-                className="py-2 sm:py-4 flex gap-2 items-center active:scale-95 transition left-0  md:left-56 cursor-pointer"
+                className="py-4 flex gap-2 items-center active:scale-95 transition left-0  md:left-56 cursor-pointer"
             >
                 <Back/>
                 <p className="text-sm md:text-base">Browse talents</p>

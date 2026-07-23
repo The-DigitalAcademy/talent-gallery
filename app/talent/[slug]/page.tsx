@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   return  (
-    <div className="fixed w-screen h-screen md:px-14 xl:px-0 md:pb-20 md:pt-0 lg:pb-20 lg:pt-0 bg-[#f1f1f1] overflow-hidden flex justify-center">
+    <div className="w-screen min-h-screen md:px-14 xl:px-0 md:pb-10 md:pt-0 lg:pt-0 bg-[#f1f1f1] overflow-hidden flex justify-center">
       <ProfileClient talent={talent}/>
     </div>
   );

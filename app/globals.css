@@ -37,6 +37,8 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   box-sizing: border-box;
   overflow-y: auto;
+  background-color: white; 
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -54,7 +56,9 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 2rem;
     margin: auto;              
     overflow-y: auto;
-    align-items: center;              
+    align-items: center; 
+    background-color: white;           
+    overflow: hidden;
   }
 }
 

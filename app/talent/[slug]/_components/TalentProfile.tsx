@@ -13,7 +13,7 @@ import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, restOfWords } from 
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface TalentProfileProps {
@@ -27,6 +27,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
 
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [position, setPosition] = useState("sticky");
 
   const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
   const toggleShortlist = useShortlistStore((s) => s.toggle);
@@ -90,8 +91,12 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
     }
   };
 
+  useEffect(() => {
+    isModal ? setPosition("fixed") : setPosition("sticky")
+  }, [isModal])
+
   return (
-    <div className="relative bg-[#ffffff] w-full h-full rounded-[3px] overflow-auto overflow-x-hidden">
+    <div className="relative bg-[#ffffff] w-full h-fit rounded-[3px]">
       {isModal &&
         <Fragment>
           <div onClick={onClose} className="hidden fixed md:block z-50 right-6 top-6 cursor-pointer">
@@ -106,10 +111,10 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
           </div> 
         </Fragment>
       }
-      <EmploymentHr bgColor={bgColorEmployement} height="h-1 sm:h-2 fixed z-30" width="w-screen md:w-3xl lg:w-240 xl:w-293"/>
+      <EmploymentHr bgColor={bgColorEmployement} position={position} height="h-1 sm:h-2 z-30" width="w-screen md:w-3xl lg:w-240 xl:w-293"/>
 
       <div className="px-4 sm:px-10 md:px-16 lg:px-24 xl:px-32 w-screen md:w-3xl lg:w-240 xl:w-293 relative">
-        <div className="flex justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-80px)] md:w-160 lg:w-3xl xl:w-229 fixed z-40">
+        <div className={`flex justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-80px)] md:w-160 lg:w-3xl xl:w-229 z-40 ${position}`}>
           {displayStatus ?
             <EmploymentTag textColor={"text-white"} label={displayStatus!} textSize={"text-base sm:text-xl"} padding={"p-2 sm:p-4"} bgColor={bgColorEmployement} /> :
             <div/>
