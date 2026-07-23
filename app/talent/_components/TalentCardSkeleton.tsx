@@ -1,6 +1,6 @@
 export default function TalentCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden animate-pulse">
+    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden animate-pulse">
 
       <div className="h-1 bg-slate-200" />
 

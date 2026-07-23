@@ -18,7 +18,7 @@ export default function Loading() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Filter Panel */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-5">
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 space-y-5">
           <div className="flex items-center gap-2">
             <div className="h-5 w-5 rounded bg-slate-200" />
             <div className="h-5 w-28 rounded bg-slate-200" />
@@ -57,7 +57,7 @@ export default function Loading() {
 
 function TalentCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden relative">
+    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden relative">
       {/* top accent */}
       <div className="h-1 bg-slate-200" />
 
