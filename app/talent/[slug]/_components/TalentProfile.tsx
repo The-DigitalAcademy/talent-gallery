@@ -107,7 +107,7 @@ export function TalentProfile({ talent }: TalentProfileProps) {
 
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl w-full mx-auto bg-white rounded-xl shadow-sm">
+      <div className="max-w-3xl w-full mx-auto bg-white rounded-xl">
 
         {/* Header */}
         <div className="flex items-start justify-between p-6 pb-4">
