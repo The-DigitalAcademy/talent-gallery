@@ -12,14 +12,20 @@ export function Modal({ children, isOpen }: { children: React.ReactNode; isOpen:
     // Opens the dialog once on mount — unaffected by Strict Mode remounts
     // since showModal() is idempotent-guarded and never explicitly closed here
     useEffect(() => {
-        if (!dialogRef.current?.open) {
-            dialogRef.current?.showModal();
+        const dialog = dialogRef.current;
+        
+        if (!dialog?.open) {
+            dialog?.showModal();
             requestAnimationFrame(() => {
-                if (dialogRef.current) {
-                    dialogRef.current.scrollTop = 0;
+                if (dialog) {
+                    dialog.scrollTop = 0;
                 }
             });
         }
+
+        return () => {
+            dialog?.close();
+        };
     }, []);
 
     // Registers/clears the toast portal target — symmetric mount/cleanup,
