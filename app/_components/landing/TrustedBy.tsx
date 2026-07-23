@@ -4,20 +4,20 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const PARTNERS = [
-  { name: "Lombard", src: "/partners/lombard.png", width: 120, height: 40 },
-  { name: "THESL", src: "/partners/Newest-Thesl-Logo.png", width: 90, height: 35 },
-  { name: "Sanlam", src: "/partners/sanlam-blue-logo.png", width: 120, height: 40 },
-  { name: "Absa", src: "/partners/Absa_Logo.svg.png", width: 45, height: 45 },
-  { name: "MTN", src: "/partners/New-mtn-logo.jpg", width: 50, height: 50 },
-  { name: "Leroy Merlin", src: "/partners/logo-leroy.png", width: 95, height: 40 },
-  { name: "Oliver", src: "/partners/logo-oliver-black.png", width: 95, height: 35 },
-  { name: "AppCentrix", src: "/partners/2024_AppCentrix-Colour-Logo-scaled.png", width: 110, height: 40 },
-  { name: "Bradshaw LeRoux", src: "/partners/Bradshaw-LeRoux-Logo-green-PNGtransparent.png", width: 120, height: 40 },
-  { name: "GSB", src: "/partners/GSB_Fullform Logo_20231109.png", width: 120, height: 40 },
-  { name: "Mondtes", src: "/partners/Mondtes-Logo-New-2025.webp", width: 95, height: 40 },
-  { name: "Retina", src: "/partners/Retina-logo.png", width: 95, height: 40 },
-  { name: "Sun International", src: "/partners/Sun_International_logo.svg.png", width: 110, height: 40 },
-  { name: "Slipstream", src: "/partners/slipstream-logo-colour.png", width: 110, height: 40 },
+  { name: "Lombard", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/lombard.png", width: 120, height: 40 },
+  { name: "THESL", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/thesl.png", width: 90, height: 35 },
+  { name: "Sanlam", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/sanlam.png", width: 120, height: 40 },
+  { name: "Absa", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/absa.png", width: 45, height: 45 },
+  { name: "MTN", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/mtn.jpg", width: 50, height: 50 },
+  { name: "Leroy Merlin", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/leroy-merlin.png", width: 95, height: 40 },
+  { name: "Oliver", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/oliver.png", width: 95, height: 35 },
+  { name: "AppCentrix", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/appcentrix.png", width: 110, height: 40 },
+  { name: "Bradshaw LeRoux", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/bradshaw-leroux.png", width: 120, height: 40 },
+  { name: "GSB", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/gsb.png", width: 120, height: 40 },
+  { name: "Mondtes", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/mondtes.webp", width: 95, height: 40 },
+  { name: "Philippi Village", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/philippi-village.png", width: 95, height: 40 },
+  { name: "Sun International", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/sun-international.png", width: 110, height: 40 },
+  { name: "Slipstream", src: "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/partners/slipstream.png", width: 110, height: 40 },
 ];
 
 export default function TrustedBy() {
