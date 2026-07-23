@@ -2,6 +2,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { Metadata } from "next";
 import ProfileClient from "./_components/ProfileClient";
 import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
+import { Back } from "@/app/components/ui/Icons";
 
 export async function generateMetadata({
   params,
@@ -75,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   return  (
-    <div className="w-screen h-screen pt-8 sm:px-14 xl:px-0 sm:py-6 lg:pb-10 lg:pt-14 bg-[#f1f1f1] overflow-hidden flex justify-center">
+    <div className="fixed w-screen h-screen md:px-14 xl:px-0 md:pb-20 md:pt-0 lg:pb-20 lg:pt-0 bg-[#f1f1f1] overflow-hidden flex justify-center">
       <ProfileClient talent={talent}/>
     </div>
   );

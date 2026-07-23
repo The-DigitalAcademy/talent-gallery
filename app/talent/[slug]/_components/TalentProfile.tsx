@@ -13,7 +13,7 @@ import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, restOfWords } from 
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { toast } from "sonner";
 
 interface TalentProfileProps {
@@ -91,33 +91,25 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   };
 
   return (
-    <div className="relative bg-[#ffffff] w-full h-full rounded-[3px] overflow-auto">
-      {!isModal ?
-        <div
-          onClick={onClose}
-          className="fixed z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
-        >
-          <Back/>
-          <p className="text-sm sm:text-base">Browse talents</p>
-        </div> :
-        <div onClick={onClose} className="hidden fixed sm:block z-50 right-6 top-6 cursor-pointer">
-          <Cross/>
-        </div>
-      }
-
+    <div className="relative bg-[#ffffff] w-full h-full rounded-[3px] overflow-auto overflow-x-hidden">
       {isModal &&
-        <div
-          onClick={onClose}
-          className="fixed sm:hidden z-50 px-4 sm:px-6 py-1 sm:py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 sm:left-56 cursor-pointer"
-        >
-          <Back/>
-          <p className="text-sm sm:text-base">Browse talents</p>
-        </div> 
+        <Fragment>
+          <div onClick={onClose} className="hidden fixed md:block z-50 right-6 top-6 cursor-pointer">
+            <Cross/>
+          </div>
+          <div
+            onClick={onClose}
+            className="fixed md:hidden z-50 py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 md:left-56 cursor-pointer"
+          >
+            <Back/>
+            <p className="text-sm sm:text-base">Browse talents</p>
+          </div> 
+        </Fragment>
       }
-      <EmploymentHr bgColor={bgColorEmployement} height="h-1 sm:h-2 fixed z-30" width="w-screen sm:w-293"/>
+      <EmploymentHr bgColor={bgColorEmployement} height="h-1 sm:h-2 fixed z-30" width="w-screen md:w-3xl lg:w-240 xl:w-293"/>
 
-      <div className="px-4 sm:px-10 xl:px-32 w-screen sm:w-293 relative">
-        <div className="flex justify-between w-[calc(100vw-32px)] sm:w-230 fixed z-40">
+      <div className="px-4 sm:px-10 md:px-16 lg:px-24 xl:px-32 w-screen md:w-3xl lg:w-240 xl:w-293 relative">
+        <div className="flex justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-80px)] md:w-160 lg:w-3xl xl:w-229 fixed z-40">
           {displayStatus ?
             <EmploymentTag textColor={"text-white"} label={displayStatus!} textSize={"text-base sm:text-xl"} padding={"p-2 sm:p-4"} bgColor={bgColorEmployement} /> :
             <div/>

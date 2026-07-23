@@ -11,20 +11,18 @@ export function Modal({ children, isOpen }: { children: React.ReactNode; isOpen:
 
     // Opens the dialog once on mount — unaffected by Strict Mode remounts
     // since showModal() is idempotent-guarded and never explicitly closed here
-    useEffect(() => {
-        const dialog = dialogRef.current;
-        
-        if (!dialog?.open) {
-            dialog?.showModal();
+    useEffect(() => {  
+        if (!dialogRef.current?.open) {
+            dialogRef.current?.showModal();
             requestAnimationFrame(() => {
-                if (dialog) {
-                    dialog.scrollTop = 0;
+                if (dialogRef.current) {
+                    dialogRef.current.scrollTop = 0;
                 }
             });
         }
 
         return () => {
-            dialog?.close();
+            dialogRef.current?.close();
         };
     }, []);
 
