@@ -11,21 +11,21 @@ export default async function LandingPage() {
   // Fetch unique dynamic items from the database in parallel
   const [
     { data: locations },
-    { data: programs },
+    { data: roles },
     { data: capabilities },
     { data: statuses },
   ] = await Promise.all([
     supabase.from("locations").select("id, city"),
-    supabase.from("programs").select("id, name"),
+    supabase.from("roles").select("id, name"),
     supabase.from("capabilities").select("id, name"),
     supabase.from("talent_statuses").select("id, name"),
   ]);
 
   return (
     <>
-      <HeroSection 
+      <HeroSection
         locations={locations || []}
-        programs={programs || []}
+        roles={roles || []}
         capabilities={capabilities || []}
         statuses={statuses || []}
       />
