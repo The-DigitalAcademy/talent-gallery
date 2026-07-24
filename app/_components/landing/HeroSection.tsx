@@ -42,7 +42,7 @@ export default function HeroSection({
 
   return (
     <section id="home" className="bg-[#F1F1F1] relative">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6">
         
         {/* MOBILE HERO (< md): Full-bleed Dark Photo Overlay Banner starting right where Nav ends with zero margins */}
         <div className="block md:hidden relative w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] -mx-4 sm:-mx-6 overflow-hidden text-center text-white py-20 px-6 mb-8">
@@ -131,7 +131,7 @@ export default function HeroSection({
 
       {/* Search Bar — hidden on mobile, visible on desktop (perfectly centered on transition line) */}
       <div className="hidden md:block absolute bottom-0 left-0 right-0 z-10 translate-y-1/2">
-        <div className="max-w-[1360px] mx-auto px-6 lg:px-6">
+        <div className="max-w-6xl mx-auto px-6 lg:px-6">
           <div className="bg-[#E1E1E1] rounded-[3px] px-4 sm:px-6 py-4 border border-gray-300/60">
             <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-3">
 
