@@ -10,6 +10,7 @@ export interface FilterParams {
   status?: string;
   location?: string;
   page?: string;
+  role?: string;
 }
 
 export async function getFilteredTalents(filters: FilterParams) {
@@ -34,7 +35,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     bio,
     slug,
     profile_image_url,
-    role:roles (id, name, description),
+    role:roles${filters.role ? '!inner' : ''} (name),
     location:locations${filters.location ? '!inner' : ''}(city, country),
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
@@ -50,6 +51,9 @@ export async function getFilteredTalents(filters: FilterParams) {
   // Case-insensitive filtering
   if (filters.cohort) {
     query = query.ilike("cohorts.name", filters.cohort);
+  }
+  if (filters.role) {
+    query = query.ilike("roles.name", filters.role);
   }
   if (filters.programme) {
     query = query.ilike("programs.name", filters.programme);

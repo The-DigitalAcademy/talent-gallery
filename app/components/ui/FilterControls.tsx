@@ -27,7 +27,7 @@ export default function FilterControls({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-4">
-      <FilterItem label="Role" keyName="roles" options={roles.map(({ id, name }) => ({ id, value: name }))} />
+      <FilterItem label="Role" keyName="role" options={roles.map(({ id, name }) => ({ id, value: name }))} />
       <FilterItem keyName="location" options={locations.map(({ id, city }) => ({ id, value: city }))} />
       <FilterItem label="Skills" keyName="capability" options={capabilities.map(({ id, name }) => ({ id, value: name }))} />
       <FilterItem label="Availablity" keyName="status" options={statuses.map(({ id, name }) => ({ id, value: name }))} />

@@ -7,7 +7,7 @@ export default function Loading() {
         {/* Filter Panel */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-4 bg-white p-5 rounded-[3px]">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div className="flex flex-col space-y-1 border-r border-neutral-400 px-5 py-3.5 last:border-r-0">
+            <div key={i} className="flex flex-col space-y-1 border-r border-neutral-400 px-5 py-3.5 last:border-r-0">
               <div className="h-5 w-20 bg-slate-200 mb-1"></div>
               <div className="h-4 w-30 bg-slate-200"></div>
             </div>
