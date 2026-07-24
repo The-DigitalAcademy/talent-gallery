@@ -40,7 +40,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
-    capabilities${filters.capability ? '!inner' : ''}(id, name),
+    capabilities${filters.capability ? '!inner' : ''}(name),
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)
@@ -62,7 +62,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("locations.city", filters.location);
   }
   if (filters.capability) {
-    query = query.ilike("talent_capabilities.capabilities.name", filters.capability);
+    query = query.ilike("capabilities.name", filters.capability);
   }
   if (filters.status) {
     query = query.ilike("talent_statuses.name", filters.status);

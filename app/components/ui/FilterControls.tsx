@@ -71,7 +71,7 @@ function FilterSelect({ keyName, options = [] }: { keyName: string, options?: { 
 
 function FilterItem({ label, keyName, options = [] }: { label?: string, keyName: string, options?: { id: string | number, value: string | undefined }[] }) {
   return (
-    <div className="flex flex-col space-y-1 md:border-r border-neutral-400 px-5 py-3.5 last:border-r-0">
+    <div className="flex flex-col space-y-1 md:border-r border-neutral-400 px-4 py-3 last:border-r-0">
       <label className="font-bold tracking-tight capitalize" htmlFor={keyName}>{label || keyName}</label>
       <FilterSelect keyName={keyName} options={options} />
     </div>
