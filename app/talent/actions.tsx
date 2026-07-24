@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "@/app/lib/supabase/server";
 import { Talent } from "../interface-types/talent";
 

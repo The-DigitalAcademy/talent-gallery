@@ -13,7 +13,7 @@ export default async function TalentGrid({
 
   if (!talents.length) {
     return (
-      <div className="col-span-full bg-white text-center py-16 border rounded-2xl shadow-sm">
+      <div className="col-span-full bg-white text-center py-16 border rounded-2xl">
         No talent found.
       </div>
     );

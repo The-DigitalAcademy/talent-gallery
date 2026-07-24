@@ -74,7 +74,7 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-2xl max-w-sm w-full p-6 relative shadow-xl border border-slate-100 flex flex-col gap-4 animate-scale-up"
+        className="bg-white rounded-2xl max-w-sm w-full p-6 relative border border-slate-200 flex flex-col gap-4 animate-scale-up"
       >
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -116,7 +116,7 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
             />
             <button
               onClick={handleCopy}
-              className={`h-10 px-4 rounded-lg flex items-center justify-center gap-1.5 font-bold text-xs text-white shadow-sm cursor-pointer transition-all duration-150 shrink-0 ${
+              className={`h-10 px-4 rounded-lg flex items-center justify-center gap-1.5 font-bold text-xs text-white cursor-pointer transition-all duration-150 shrink-0 ${
                 copied ? "bg-green-600 hover:bg-green-700" : "bg-[#FF7900] hover:bg-[#E06A00]"
               }`}
             >
@@ -138,7 +138,7 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
         {/* Email share option */}
         <button
           onClick={handleEmailShare}
-          className="h-10 rounded-lg flex items-center justify-center gap-2 font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors shadow-sm"
+          className="h-10 rounded-lg flex items-center justify-center gap-2 font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors"
         >
           <MailIcon />
           <span>Share via Email</span>
