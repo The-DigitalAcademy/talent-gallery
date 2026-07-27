@@ -92,7 +92,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   };
 
   useEffect(() => {
-    isModal ? setPosition("fixed") : setPosition("sticky")
+    isModal ? setPosition("fixed") : setPosition("sticky -mt-2")
   }, [isModal])
 
   return (

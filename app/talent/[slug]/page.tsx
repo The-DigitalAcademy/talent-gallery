@@ -2,7 +2,6 @@ import { createClient } from "@/app/lib/supabase/server";
 import { Metadata } from "next";
 import ProfileClient from "./_components/ProfileClient";
 import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
-import { Back } from "@/app/components/ui/Icons";
 
 export async function generateMetadata({
   params,
