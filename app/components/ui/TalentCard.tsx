@@ -74,7 +74,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
             {talent.capabilities?.map((capability, index) => {
               return (
                 <li
-                  key={capability.id}
+                  key={`${index}-${capability.id}`}
                   className="bg-neutral-200/50 px-1 inline-block whitespace-nowrap"
                 >
                   {capability.name}
