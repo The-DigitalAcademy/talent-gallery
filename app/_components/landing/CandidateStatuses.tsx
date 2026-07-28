@@ -33,8 +33,8 @@ export default function CandidateStatuses() {
 
   return (
     <section className="bg-white pt-0 pb-20 overflow-x-hidden">
-      {/* Outer container — expanded to max-w-6xl to match page layout */}
-      <div className="max-w-[1360px] mx-auto px-6 lg:px-6 relative">
+      {/* Outer container — expanded to max-w-7xl to match page layout */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-6 relative">
 
         {/* Grey Box — spacious container with right margin for overlapping Navy Card */}
         <div className="bg-[#EFEFEF] rounded-[3px] pt-12 pb-0 lg:pb-14 min-h-[520px] w-full overflow-hidden flex flex-col justify-between">

@@ -59,7 +59,7 @@ export default function BrowseTalentPreview() {
 
   return (
     <section id="browse-talent" className="bg-slate-50 py-3 md:py-20">
-      <div className="max-w-[1360px] mx-auto px-6 lg:px-6">
+      <div className="max-w-7xl mx-auto px-6 lg:px-6">
 
         {/* Heading — centered on mobile, left-aligned on desktop */}
         <div className="text-center md:text-left mb-10">

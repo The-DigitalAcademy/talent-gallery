@@ -11,6 +11,11 @@ export interface Location {
 export interface NamedEntity {
   name: string;
 }
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+}
 
 export interface Talent {
   id: string;
@@ -18,6 +23,7 @@ export interface Talent {
   bio: string | null;
   slug: string;
   profile_image_url: string | null;
+  role: Role | null
 
   location: Location | null;
   cohort: NamedEntity | null;
