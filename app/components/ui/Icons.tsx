@@ -64,7 +64,7 @@ export function CopyIcon() {
   );
 }
 
-export function CheckIcon({size = "w-4 h-4 sm:w-6 sm:h-6"}: {size: string | undefined}) {
+export function CheckIcon({size = "w-4 h-4 sm:w-6 sm:h-6"}: {size?: string | undefined}) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className={cn(size)} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white">
       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -72,7 +72,7 @@ export function CheckIcon({size = "w-4 h-4 sm:w-6 sm:h-6"}: {size: string | unde
   );
 }
 
-export function Plus({size = "w-4 h-4 sm:w-7 sm:h-7"}: {size: string | undefined}) {
+export function Plus({size = "w-4 h-4 sm:w-7 sm:h-7"}: {size?: string | undefined}) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(size)} ><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> 
       <path d="M6 12H18M12 6V18" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g>
