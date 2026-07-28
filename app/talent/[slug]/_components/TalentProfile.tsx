@@ -130,9 +130,9 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
         <div className="flex flex-col pb-8 pt-16 sm:pb-14 sm:pt-28 gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-2 uppercase">
                 <h1 className="font-bold text-2xl sm:text-4xl">{firstWord(talent?.fullname)}</h1>
-                <h1 className="text-2xl sm:text-4xl font-light">{firstLetter(talent?.fullname)}.</h1>
+                <h1 className="text-2xl sm:text-4xl font-thin">{firstLetter(talent?.fullname)}.</h1>
               </div>
               <div className="flex gap-2">
                 <Link href={talent.github_url || ""} className="cursor-pointer">
@@ -144,7 +144,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
               </div>
             </div>
             <div className="flex flex-col sm:flex-row justify-between gap-2">
-              <h3 className="text-lg sm:text-xl">{talent.role?.name}</h3> 
+              <h3 className="text-lg sm:text-xl font-thin">{talent.role?.name}</h3> 
 
               {location &&
                 <div className="flex gap-1 items-center">

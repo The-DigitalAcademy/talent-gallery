@@ -1,3 +1,5 @@
+"use client"
+
 import { Talent } from '@/app/interface-types/talent';
 import Link from 'next/link';
 import { MapPinIcon, Maximize2Icon, PlusIcon } from 'lucide-react';
