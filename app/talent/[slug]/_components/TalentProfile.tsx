@@ -9,7 +9,7 @@ import { ShareModal } from "@/app/components/ui/ShareModal";
 import ShortlistTag from "@/app/components/ui/ShortlistTag";
 import { SkillTag } from "@/app/components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
-import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, restOfWords } from "@/app/lib/utils";
+import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter } from "@/app/lib/utils";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
@@ -132,7 +132,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             <div className="flex justify-between">
               <div className="flex gap-2">
                 <h1 className="font-black text-2xl sm:text-4xl">{firstWord(talent?.fullname)}</h1>
-                <h1 className="text-2xl sm:text-4xl">{restOfWords(talent?.fullname)}</h1>
+                <h1 className="text-2xl sm:text-4xl font-thin">{firstLetter(talent?.fullname)}.</h1>
               </div>
               <div className="flex gap-2">
                 <Link href={talent.github_url || ""} className="cursor-pointer">

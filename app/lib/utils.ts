@@ -132,9 +132,7 @@ export function firstWord(str: string) {
   return str.trim().split(/\s+/)[0];
 }
 
-export function restOfWords(str: string) {
-  const trimmed = str.trim();
-  const firstSpaceIndex = trimmed.search(/\s/);
-  return firstSpaceIndex === -1 ? '' : trimmed.slice(firstSpaceIndex + 1).trim();
+export function firstLetter(str: string) {
+  return str.split(" ")[str.split.length - 1][0];
 }
 
