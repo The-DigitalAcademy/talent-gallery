@@ -126,34 +126,57 @@ export default async function Home({ searchParams }: PageProps) {
         </Suspense>
 
         {/*  PAGINATION PANEL */}
-        {totalCount > 0 && (
+        {(
           <div className="flex items-center justify-center gap-1 pt-8">
             {currentPage > 1 && (
               <Link
                 href={buildPaginationUrl(currentPage - 1)}
-                className="bg-white px-4 h-9 flex items-center justify-center rounded-[3px]"
+                className="bg-white px-1 md:px-4 text-sm md:text-base h-8 md:h-9 flex items-center justify-center rounded-[3px]"
               >
-                <ChevronLeftIcon className='size-5' /> Previous
+                <ChevronLeftIcon className='size-4 md:size-5' /> <span className='hidden md:block'>Previous</span>
               </Link>
             )}
             <div className='flex gap-1'>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-                <Link
-                  key={pageNum}
-                  href={buildPaginationUrl(pageNum)}
-                  className={clsx('rounded flex items-center justify-center size-9', { "bg-gray-900 text-white": pageNum == currentPage }, { "bg-white": pageNum != currentPage })}>
-                  {pageNum}
-                </Link>
-              ))}
+              <Link
+                href={buildPaginationUrl(1)}
+                className={clsx(
+                  'rounded flex items-center justify-center size-8 md:size-9',
+                  { "bg-gray-900 text-white": 1 == currentPage },
+                  { "bg-white": 1 != currentPage },)}>
+                1
+              </Link>
+              <div className={clsx({ "hidden": currentPage < 4 })}>...</div>
+              {Array.from({ length: totalPages - 2 }, (_, i) => i + 2)
+                .filter((num, ind, arr) => num == currentPage || (num < currentPage + 3 && num > currentPage - 3))
+                .map(pageNum => (
+                  <Link
+                    key={pageNum}
+                    href={buildPaginationUrl(pageNum)}
+                    className={clsx(
+                      'rounded flex items-center justify-center size-8 md:size-9',
+                      { "bg-gray-900 text-white": pageNum == currentPage },
+                      { "bg-white": pageNum != currentPage })}>
+                    {pageNum}
+                  </Link>
+                ))}
+              <div className={clsx({ "hidden": currentPage > totalPages - 4 })}>...</div>
+              <Link
+                href={buildPaginationUrl(totalPages)}
+                className={clsx(
+                  'rounded flex items-center justify-center size-8 md:size-9',
+                  { "bg-gray-900 text-white": totalPages == currentPage },
+                  { "bg-white": totalPages != currentPage },)}>
+                {totalPages}
+              </Link>
             </div>
 
             {/*  THE KILL SWITCH: Disappears if you hit the final mathematically determined chunk */}
             {currentPage < totalPages && (
               <Link
                 href={buildPaginationUrl(currentPage + 1)}
-                className="bg-white px-4 h-9 flex items-center justify-center rounded-[3px]"
+                className="bg-white px-1 md:px-4 h-8 md:h-9 flex items-center justify-center rounded-[3px]"
               >
-                Next <ChevronRightIcon className='size-5' />
+                <span className='hidden md:block'>Next</span>  <ChevronRightIcon className='size-5' />
               </Link>
             )}
           </div>
