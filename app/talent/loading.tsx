@@ -3,7 +3,7 @@ import TalentGridSkeleton from "./_components/TalentGridSkeleton";
 export default function Loading() {
   return (
     <div className="min-h-screen bg-neutral-100 pb-12 animate-pulse">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
         {/* Filter Panel */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-4 bg-white p-5 rounded-[3px]">
           {Array.from({ length: 4 }).map((_, i) => (

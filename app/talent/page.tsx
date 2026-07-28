@@ -99,7 +99,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className={`${montserrat.className} min-h-screen bg-neutral-100 pb-12`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
 
         <div className="bg-white p-5 rounded-[3px]">
           <FilterControls
