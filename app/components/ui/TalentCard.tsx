@@ -1,9 +1,15 @@
+"use client"
+
 import { Talent } from '@/app/interface-types/talent';
 import Link from 'next/link';
 import { MapPinIcon, Maximize2Icon, PlusIcon } from 'lucide-react';
 import { Avatar, Button } from '@base-ui/react';
 import { Lexend } from 'next/font/google';
 import clsx from 'clsx';
+import { useShortlistStore } from '@/app/store/useShortlistStore';
+import { useShortlistHydrated } from '@/app/store/useHasHydrated';
+import { toast } from 'sonner';
+import ShortlistTag from './ShortlistTag';
 
 
 const lexend = Lexend({ subsets: ["latin"] })
@@ -26,6 +32,23 @@ export default function TalentCard({ talent }: TalentCardProps) {
   const talentStatus = talent.talent_status?.name;
   const bgColorClass = getStatusColorClassName(talentStatus?.toLowerCase())
 
+  const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
+  const toggleShortlist = useShortlistStore((s) => s.toggle);
+  const hasHydrated = useShortlistHydrated();
+
+  const handleShortlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    toggleShortlist(talent.id)
+
+    if (hasHydrated && isShortlisted) {
+      toast(`Removed ${talent.fullname ?? 'talent'} from shortlist`);
+    } else {
+      toast.success(`Added ${talent.fullname ?? 'talent'} to shortlist`);
+    }
+  };
+
   return (
     <article
       style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
@@ -36,7 +59,14 @@ export default function TalentCard({ talent }: TalentCardProps) {
         <div className={clsx("h-1 rounded-full", bgColorClass)}></div>
         <div className='flex justify-between px-3 md:px-8  h-9'>
           <div className={clsx("h-full text-white text-xs font-bold rounded-b-[3px] flex justify-center items-end pb-2 w-4/9", bgColorClass)}>{talentStatus}</div>
-          <Button className="bg-neutral-100 h-10 w-9 flex rounded-b-[3px] -m-1 items-end justify-center pb-2 text-neutral-600"><PlusIcon className='size-5' /></Button>
+          <div onClick={handleShortlistToggle}>
+            <ShortlistTag 
+              padding={"pt-3 sm:pb-0 sm:pt-2.5 px-2 -m-1"}
+              checkIconSize={"w-4 h-4 sm:w-5 sm:h-5"}
+              plusIconSize={"w-4 h-4 sm:w-5 sm:h-5"}
+              isShortlisted={hasHydrated && isShortlisted}
+            />
+          </div>
         </div>
       </div>
 

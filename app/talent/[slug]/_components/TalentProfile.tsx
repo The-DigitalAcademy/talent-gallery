@@ -1,66 +1,37 @@
 "use client"
 
-import { useState } from "react";
-import { ActionButton } from "@/app/components/ui/ActionButton";
-import { CloseButton } from "@/app/components/ui/CloseButton";
-import { ProfileAvatar } from "@/app/components/ui/ProfileAvatar";
-import { SectionHeading } from "@/app/components/ui/SectionHeading";
-import { SkillTag } from "@/app/components/ui/SkillTag";
-import { Tag } from "@/app/components/ui/Tag";
-import { EndorsementCard } from "./EndorsementCard";
-import { ProjectCard } from "./ProjectCard";
-import { WorkExperienceCard } from "./WorkExperienceCard";
-import { getTalentStatusColor, getYouTubeEmbedUrl } from "@/app/lib/utils";
-import { CodeIcon, ProjectIcon, BriefcaseIcon, GitHubIcon, ExternalLinkIcon, ShareIcon } from "@/app/components/ui/Icons";
+import EmploymentHr from "@/app/components/ui/EmploymentHr";
+import EmploymentTag from "@/app/components/ui/EmploymentTag";
+import EndorsementCard from "@/app/components/ui/EndorsementCard";
+import ExperienceCard from "@/app/components/ui/ExperienceCard";
+import { Back, Cross, GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
 import { ShareModal } from "@/app/components/ui/ShareModal";
-
-export type TalentProfileInterface = {
-  id: string;
-  fullname: string;
-  bio: string | null;
-  profile_image_url: string | null;
-  youtube_url: string | null;
-  github_url: string | null;
-  portfolio_url: string | null;
-  linkedin_url: string | null;
-  slug: string;
-  is_published: boolean;
-  created_at: string;
-  location_id: string;
-  program_id: string;
-  cohort_id: string;
-  talent_status_id: string;
-  location: { city: string; country: string } | null;
-  cohort: { name: string } | null;
-  program: { name: string } | null;
-  talent_status: { name: string } | null;
-  capabilities: { capability: { id: string; name: string } }[];
-  work_experiences: {
-    id: string;
-    role: string;
-    company: string;
-    duration: string;
-    description: string | null;
-  }[];
-  projects: {
-    id: string;
-    name: string;
-    description: string | null;
-    capabilities: { capability: { name: string } }[];
-  }[];
-  endorsements: {
-    id: string;
-    endorser_name: string;
-    message: string;
-  }[];
-};
+import ShortlistTag from "@/app/components/ui/ShortlistTag";
+import { SkillTag } from "@/app/components/ui/SkillTag";
+import { TalentProfileInterface } from "@/app/interface-types/talent";
+import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter } from "@/app/lib/utils";
+import { useShortlistHydrated } from "@/app/store/useHasHydrated";
+import { useShortlistStore } from "@/app/store/useShortlistStore";
+import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface TalentProfileProps {
   talent: TalentProfileInterface;
+  onClose: () => void;
+  isModal: boolean
 }
 
-export function TalentProfile({ talent }: TalentProfileProps) {
+export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) {
+  const displayStatus = talent.talent_status?.name;
+  const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
+
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [position, setPosition] = useState("sticky");
+
+  const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
+  const toggleShortlist = useShortlistStore((s) => s.toggle);
+  const hasHydrated = useShortlistHydrated();
 
   const location = talent.location
     ? `${talent.location.city}, ${talent.location.country}`
@@ -71,10 +42,12 @@ export function TalentProfile({ talent }: TalentProfileProps) {
   const projects = talent.projects
   .filter((tp) => tp !== null)
   .map((tp) => ({
+    id: tp.id,
     title: tp.name,
     description: tp.description ?? "",
     contributions: [],
     capabilities: tp.capabilities.map((pc) => pc.capability.name),
+    project_url: tp.project_url
   }));
 
   const endorsement = talent.endorsements?.[0] ?? null;
@@ -105,149 +78,185 @@ export function TalentProfile({ talent }: TalentProfileProps) {
     }
   };
 
+  const handleShortlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    toggleShortlist(talent.id)
+
+    if (hasHydrated && isShortlisted) {
+      toast(`Removed ${talent.fullname ?? 'talent'} from shortlist`);
+    } else {
+      toast.success(`Added ${talent.fullname ?? 'talent'} to shortlist`);
+    }
+  };
+
+  useEffect(() => {
+    isModal ? setPosition("fixed") : setPosition("sticky -mt-1 md:-mt-2")
+  }, [isModal])
+
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl w-full mx-auto bg-white rounded-xl">
-
-        {/* Header */}
-        <div className="flex items-start justify-between p-6 pb-4">
-          <div className="flex items-center gap-4">
-            <ProfileAvatar
-              imageUrl={talent.profile_image_url ?? undefined}
-              name={talent.fullname}
-              size="w-20 h-20"
-              radius="rounded-full"
-            />
-            <div>
-              <h1 className="text-2xl font-semibold text-[#01317F]">{talent.fullname}</h1>
-              {talent.program && <p className="text-gray-700 mt-1">{talent.program.name}</p>}
-              {location && <p className="text-gray-600 text-sm mt-1">{location}</p>}
-            </div>
+    <div className="relative bg-[#ffffff] w-full h-fit rounded-[3px]">
+      {isModal &&
+        <Fragment>
+          <div onClick={onClose} className="hidden fixed md:block z-50 right-6 top-6 cursor-pointer">
+            <Cross/>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleShareClick}
-              className="flex items-center justify-center w-8 h-8 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-              title="Share Profile"
-            >
-              <ShareIcon />
-            </button>
-            <a href="/talent" aria-label="Back to gallery">
-              <CloseButton onClick={() => {}} />
-            </a>
+          <div
+            onClick={onClose}
+            className="fixed md:hidden z-50 py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 md:left-56 cursor-pointer"
+          >
+            <Back/>
+            <p className="text-sm sm:text-base">Browse talents</p>
+          </div> 
+        </Fragment>
+      }
+      <EmploymentHr bgColor={bgColorEmployement} position={position} height="h-1 sm:h-2 z-30" width="w-screen md:w-3xl lg:w-240 xl:w-293"/>
+
+      <div className="px-4 sm:px-10 md:px-16 lg:px-24 xl:px-32 w-screen md:w-3xl lg:w-240 xl:w-293 relative">
+        <div className={`flex justify-between w-[calc(100vw-32px)] sm:w-[calc(100vw-80px)] md:w-160 lg:w-3xl xl:w-229 z-40 ${position}`}>
+          {displayStatus ?
+            <EmploymentTag textColor={"text-white"} label={displayStatus!} textSize={"text-base sm:text-xl"} padding={"p-2 sm:p-4"} bgColor={bgColorEmployement} /> :
+            <div/>
+          }
+          <div className="cursor-pointer" onClick={handleShortlistToggle}>
+            <ShortlistTag 
+              padding={"pt-4 sm:pb-0 sm:pt-6 px-2 sm:px-3.5"}
+              isShortlisted={hasHydrated && isShortlisted}
+            />
           </div>
         </div>
+        
+        <div className="flex flex-col pb-8 pt-16 sm:pb-14 sm:pt-28 gap-6">
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between">
+              <div className="flex gap-2 uppercase">
+                <h1 className="font-bold text-2xl sm:text-4xl">{firstWord(talent?.fullname)}</h1>
+                <h1 className="text-2xl sm:text-4xl font-thin">{firstLetter(talent?.fullname)}.</h1>
+              </div>
+              <div className="flex gap-2">
+                <Link href={talent.github_url || ""} className="cursor-pointer">
+                  <GitHubIcon/>
+                </Link>
+                <div onClick={handleShareClick} className="cursor-pointer">
+                  <ShareIcon/>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between gap-2">
+              <h3 className="text-lg sm:text-xl font-thin">{talent.role?.name}</h3> 
 
-        <hr className="border-gray-200" />
-
-        {/* Body */}
-        <div className="px-6 py-5 space-y-6">
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {talent.cohort && <Tag label={talent.cohort.name} />}
-            {talent.program && <Tag label={talent.program.name} />}
-            {talent.talent_status && <Tag label={talent.talent_status.name} color="text-white"  bgColor={getTalentStatusColor(talent.talent_status.name)} />}
+              {location &&
+                <div className="flex gap-1 items-center">
+                  <Location/>
+                  <p className="text-[#C1C1C1] text-base sm:text-lg">{location}</p>
+                </div>
+              }
+            </div>
           </div>
 
-          {/* About */}
-          {talent.bio && (
-            <div className="space-y-2">
-              <h3 className="text-[#01317F] font-bold text-base">About</h3>
-              <p className="text-gray-700 leading-relaxed">{talent.bio}</p>
-            </div>
-          )}
-
-          {/* Video */}
-          {embedUrl && (
-            <div className="rounded-lg overflow-hidden aspect-video">
-              <iframe
-                src={embedUrl}
-                title="Profile video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </div>
-          )}
-
-          {/* Core Capabilities */}
-          {skills.length > 0 && (
-            <div className="space-y-3">
-              <SectionHeading title="Core Capabilities" icon={<CodeIcon />} />
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill, index) => (
-                  <SkillTag key={index} label={skill} bgColor="bg-gray-100" />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Selected Project Experience */}
-          {projects.length > 0 && (
-            <div className="space-y-3">
-              <SectionHeading title="Selected Project Experience" icon={<ProjectIcon />} />
-              <div className="space-y-3">
-                {projects.map((project, i) => (
-                  <ProjectCard key={i} {...project} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Work Experience */}
-          {talent.work_experiences.length > 0 && (
-            <div className="space-y-3">
-              <SectionHeading title="Work Experience" icon={<BriefcaseIcon />} />
-              <div className="space-y-3">
-                {talent.work_experiences.map((job) => (
-                  <WorkExperienceCard
-                    key={job.id}
-                    role={job.role}
-                    company={job.company}
-                    duration={job.duration}
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6">
+              {/* Youtube video */}
+              {embedUrl && (
+                <div className="rounded-[3px] overflow-hidden aspect-video">
+                  <iframe
+                    src={embedUrl}
+                    title="Profile video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
                   />
-                ))}
+                </div>
+              )}
+
+              {/* Bio */}
+              {talent.bio && (
+                <p className="text-sm sm:text-base">{talent.bio}</p>
+              )}
+            </div>
+
+            {/* Core Skills */}
+            {(skills.length > 0 || talent.capabilities_summary) &&
+              <div className="flex flex-col gap-4">
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+
+                <div className="flex flex-col gap-2">
+                  <h2 className="font-semibold text-xl sm:text-2xl">CORE SKILLS</h2>
+
+                  {/* Skill tags */}
+                  {skills.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {skills.map((skill, index) => (
+                          <SkillTag key={index} label={skill} bgColor="bg-gray-100" />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="text-sm sm:text-base">{talent.capabilities_summary}</p>
               </div>
-            </div>
-          )}
+            }
 
-          {/* Endorsement */}
-          {endorsement && (
-            <EndorsementCard
-              quote={endorsement.message}
-              author={endorsement.endorser_name}
-            />
-          )}
+            {/* Experience highlights */}
+            {(talent.work_experiences[0] || projects.length > 0) &&
+              <div className="flex flex-col gap-4">
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
-          {/* Action Buttons */}
-          {(talent.github_url || talent.portfolio_url) && (
-            <div className="flex gap-3 pt-2 pb-2">
-              {talent.github_url && (
-                <ActionButton
-                  label="View GitHub"
-                  href={talent.github_url}
-                  color="bg-[#01317F] text-white"
-                  icon={<GitHubIcon />}
-                />
-              )}
-              {talent.portfolio_url && (
-                <ActionButton
-                  label="View Portfolio"
-                  href={talent.portfolio_url}
-                  color="bg-[#FF7900] text-white"
-                  icon={<ExternalLinkIcon />}
-                />
-              )}
-            </div>
-          )}
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-semibold text-xl sm:text-2xl">EXPERIENCE HIGHLIGHTS</h2>
+
+                  {/* Work experience */}
+                  {talent.work_experiences[0] &&
+                    <ExperienceCard 
+                      title={talent.work_experiences[0]?.role} subTitle={talent.work_experiences[0]?.company} description={talent.work_experiences[0]?.description!} 
+                      bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"} 
+                      externalLink={false}
+                    />
+                  }
+
+                  {/* Projects */}
+                  {projects.length > 0 &&
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {projects.map((project) => (   
+                        <Link href={project.project_url ? project.project_url : ""} key={project.id}>            
+                          <ExperienceCard
+                            key={project.id}
+                            title={project.title} subTitle={"Project"} description={project.description} 
+                            bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"} 
+                            externalLink={true}
+                          />
+                        </Link>     
+                      ))}
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            {/* Endorsement */}
+            {endorsement &&
+              <div className="flex flex-col gap-4">
+                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-semibold text-xl sm:text-2xl">ENDORSEMENT</h2>
+                  <EndorsementCard endorser={endorsement?.endorser_name} description={endorsement?.message} 
+                    bgColor={"bg-[#f8f8f8]"} endoserStyle={"text-sm sm:text-base"} descriptionStyle={"py-2 sm:py-4 text-sm sm:text-base italic"} padding={"p-4"}
+                  />
+                </div>
+              </div>
+            }
+          </div>
         </div>
-        <ShareModal
-          isOpen={isShareOpen}
-          onClose={() => setIsShareOpen(false)}
-          talent={talent}
-        />
       </div>
-    </main>
+      <ShareModal
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        talent={talent}
+      />
+    </div>
   );
 }

@@ -117,3 +117,22 @@ export function calculateDuration(startVal: string, endVal: string, isCurrent: b
   const durationStr = durationParts.join(" ");
   return `${startStr} - ${endStr} (${durationStr})`;
 }
+
+export const getStatusBadgeStyle = (status: string | undefined) => {
+  switch (status?.toLowerCase()) {
+    case 'available for wpe': return 'bg-orange-500 text-white';
+    case 'available for hire': return 'bg-amber-400 text-white';
+    case 'in wpe': return 'bg-purple-500 text-white';
+    case 'employed': return 'bg-teal-400 text-white';
+    default: return 'bg-slate-500 text-white';
+  }
+};
+
+export function firstWord(str: string) {
+  return str.trim().split(/\s+/)[0];
+}
+
+export function firstLetter(str: string) {
+  return str.split(" ")[str.split.length - 1][0];
+}
+
