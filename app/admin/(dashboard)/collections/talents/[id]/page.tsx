@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published")
+        .select("id, fullname, bio, profile_image_url, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name)")
         .eq("id", id)
         .single()
 
@@ -27,7 +27,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
     const { data: projects, error: projectsError } = await supabase.from("projects").select().eq("talent_id", id)
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
-    const { data: _talentCapabilities, error: talentCapabilitiesError } = await supabase.from("talent_capabilities").select("id, capabilities (id, name)").eq("talent_id", id)
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -49,7 +48,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         linkedin: talent?.linkedin_url,
         github: talent?.github_url,
     }
-    const talentCapabilities = _talentCapabilities as unknown as { id: string, capabilities: { id: string, name: string } }[] // Cast Supabase response variable to correct type. capabilities is not an array
 
     return (
         <div>
@@ -68,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <URLsForm values={urlValues} />
                 <TalentCapabilitiesForm
                     capabilities={capabilities || []}
-                    talentCapabilities={talentCapabilities.map(({ id, capabilities }) => ({ id, capabilityId: capabilities?.id, capabilityName: capabilities.name }))}
+                    talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />

@@ -21,10 +21,10 @@ export async function insertCapability(capabilityId: string, talentId: string) {
         };
     }
 }
-export async function deleteCapability(talentCapabilityId: string, talentId: string) {
+export async function deleteCapability(capabilityId: string, talentId: string) {
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("talent_capabilities").delete().eq('id', talentCapabilityId)
+        const { error } = await supabase.from("talent_capabilities").delete().eq('capability_id', capabilityId).eq("talent_id", talentId)
         if (error) throw error
 
         revalidatePath(`/admin/collections/talents/${talentId}`);

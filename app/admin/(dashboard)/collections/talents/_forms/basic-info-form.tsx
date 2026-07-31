@@ -42,7 +42,7 @@ export default function BasicInfoForm({ values }: { values?: { id: string, fulln
                                 type="text"
                                 disabled={isPending}
                                 required
-                                defaultValue={values?.fullname}
+                                defaultValue={values?.fullname || state?.fields?.fullname}
                                 placeholder="Jacob Mabena"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -57,7 +57,7 @@ export default function BasicInfoForm({ values }: { values?: { id: string, fulln
                                 rows={4}
                                 disabled={isPending}
                                 required
-                                defaultValue={values?.bio}
+                                defaultValue={values?.bio || state?.fields?.bio}
                                 placeholder="A little something about the talent"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
