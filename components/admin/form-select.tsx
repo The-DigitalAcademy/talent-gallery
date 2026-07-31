@@ -1,10 +1,13 @@
+"use client"
 import { Select } from '@base-ui/react/select';
 import { CheckIcon, ChevronDownIcon, ChevronsUpDown, ChevronUpIcon } from 'lucide-react';
+import { useState } from 'react';
 
 export default function FormSelect({ placeholder = "", options, defaultValue }: { defaultValue?: string, placeholder?: string, options: { label: string, value: string }[] }) {
 
+    const [val, setVal] = useState<string | undefined | null>(defaultValue)
     return (
-        <Select.Root items={options} defaultValue={defaultValue}>
+        <Select.Root items={options} onValueChange={(value) => setVal(value)} value={val}>
             <Select.Trigger className="border w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
                 <Select.Value
                     className="data-placeholder:text-gray-500"

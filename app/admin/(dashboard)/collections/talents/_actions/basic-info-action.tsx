@@ -19,7 +19,7 @@ const FormSchema = z.object({
     bio: z
         .string()
         .trim()
-        .min(2, { message: 'Name must be at least 2 characters long.' })
+        .min(2, { message: 'bio must be at least 2 characters long.' })
         .max(250, { message: 'Name cannot exceed 250 characters.' }),
     image: z
         .any()
@@ -52,6 +52,10 @@ export async function upsertBasicInfo(id: string | null, prevState: FormState, f
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
+            fields: {
+                fullname: formData.get('fullname'),
+                bio: formData.get('bio'),
+            }
         };
     }
 
