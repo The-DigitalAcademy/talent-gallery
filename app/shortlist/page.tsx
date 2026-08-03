@@ -9,6 +9,7 @@ import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { getTalentsByIds, submitEnquiryAction, EnquiryFormState } from "./actions";
 import { Talent } from "@/app/interface-types/talent";
 import { toast } from "sonner";
+import { Avatar } from "@base-ui/react";
 
 // ─── Status badge colour map (matches existing TalentCard) ──────────────────
 const getStatusColour = (status: string | undefined) => {
@@ -234,19 +235,15 @@ export default function ShortlistPage() {
 
                     <div className="flex items-center gap-4 px-4 py-4 pr-12">
                       {/* Avatar */}
-                      <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0 flex items-center justify-center text-sm font-bold text-gray-600">
-                        {talent.profile_image_url ? (
-                          <Image
-                            src={talent.profile_image_url}
-                            alt={talent.fullname}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          initials(talent.fullname)
-                        )}
-                      </div>
+                      <Avatar.Root className="inline-flex size-12 items-center justify-center overflow-hidden rounded-full bg-gray-100 align-middle text-sm leading-none font-normal select-none shrink-0">
+                        <Avatar.Image
+                          src={talent.profile_image_url || undefined}
+                          className="size-full object-cover"
+                        />
+                        <Avatar.Fallback className="text-sm font-bold text-gray-600">
+                          {initials(talent.fullname)}
+                        </Avatar.Fallback>
+                      </Avatar.Root>
 
                       {/* Info */}
                       <div>
@@ -378,17 +375,17 @@ export default function ShortlistPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 mt-2">
+              <div className="flex items-center gap-3 mt-2">
                 <Link
                   href="/talent"
-                  className="flex-1 text-center border border-gray-300 text-gray-700 font-semibold text-sm px-6 py-3.5 rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex-1 text-center border border-gray-300 text-gray-700 font-semibold text-[13px] sm:text-sm py-2.5 px-3 sm:px-4 rounded-md hover:bg-gray-50 transition-colors whitespace-nowrap"
                 >
                   Continue Browsing
                 </Link>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm px-6 py-3.5 rounded-md transition-colors"
+                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-[13px] sm:text-sm py-2.5 px-3 sm:px-4 rounded-md transition-colors whitespace-nowrap"
                 >
                   {isPending ? "Submitting…" : "Submit Interest"}
                 </button>
