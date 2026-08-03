@@ -99,6 +99,7 @@ export default function BasicInfoForm({ values, roles }: { values?: { id: string
                         </Field.Label>
                         <Field.Control
                             type="file"
+                            accept="image/*"
                             hidden
                             onChange={(event) => handleImagePreview(event)}
                             disabled={isPending}
