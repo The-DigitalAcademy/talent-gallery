@@ -223,13 +223,13 @@ export default function ShortlistPage() {
                 return (
                   <div
                     key={talent.id}
-                    className="relative border border-orange-400 rounded-md overflow-hidden"
+                    className="relative bg-[#f8f8f8] rounded-sm overflow-hidden"
                   >
                     {/* top accent line */}
-                    <div className={`h-1 w-full ${statusColour}`} />
+                    <div className={`h-[5px] w-full ${statusColour}`} />
 
                     {/* Status badge */}
-                    <div className={`absolute top-0 right-12 ${statusColour} text-white text-[10px] font-bold px-3 py-1 rounded-b-md`}>
+                    <div className={`absolute top-0 right-8 ${statusColour} text-white text-[11px] font-bold px-3 py-1.5 rounded-b-md`}>
                       {talent.talent_status?.name ?? ""}
                     </div>
 
