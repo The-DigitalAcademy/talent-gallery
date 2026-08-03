@@ -20,28 +20,23 @@ CREATE TABLE IF NOT EXISTS enquiry_talents (
   PRIMARY KEY (enquiry_id, talent_id)
 );
 
--- 3. Enable Row Level Security
+-- 3. Grant Table Privileges
+GRANT ALL ON TABLE enquiries TO anon, authenticated, public, service_role;
+GRANT ALL ON TABLE enquiry_talents TO anon, authenticated, public, service_role;
+
+-- 4. Enable Row Level Security
 ALTER TABLE enquiries        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquiry_talents  ENABLE ROW LEVEL SECURITY;
 
--- 4. Public INSERT policies (anyone can submit an enquiry)
-CREATE POLICY "Allow public insert enquiries"
-  ON enquiries FOR INSERT
-  TO public
-  WITH CHECK (true);
+-- 5. Public INSERT & SELECT policies (required for PostgREST insert returning)
+DROP POLICY IF EXISTS "Allow public insert enquiries" ON enquiries;
+CREATE POLICY "Allow public insert enquiries" ON enquiries FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Allow public insert enquiry_talents"
-  ON enquiry_talents FOR INSERT
-  TO public
-  WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow public select enquiries" ON enquiries;
+CREATE POLICY "Allow public select enquiries" ON enquiries FOR SELECT USING (true);
 
--- 5. Authenticated SELECT policies (admin only reads)
-CREATE POLICY "Allow authenticated select enquiries"
-  ON enquiries FOR SELECT
-  TO authenticated
-  USING (true);
+DROP POLICY IF EXISTS "Allow public insert enquiry_talents" ON enquiry_talents;
+CREATE POLICY "Allow public insert enquiry_talents" ON enquiry_talents FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Allow authenticated select enquiry_talents"
-  ON enquiry_talents FOR SELECT
-  TO authenticated
-  USING (true);
+DROP POLICY IF EXISTS "Allow public select enquiry_talents" ON enquiry_talents;
+CREATE POLICY "Allow public select enquiry_talents" ON enquiry_talents FOR SELECT USING (true);

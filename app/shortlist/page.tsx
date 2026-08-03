@@ -8,6 +8,7 @@ import { useShortlistStore } from "@/app/store/useShortlistStore";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { getTalentsByIds, submitEnquiryAction, EnquiryFormState } from "./actions";
 import { Talent } from "@/app/interface-types/talent";
+import { toast } from "sonner";
 
 // ─── Status badge colour map (matches existing TalentCard) ──────────────────
 const getStatusColour = (status: string | undefined) => {
@@ -137,15 +138,26 @@ export default function ShortlistPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      const result = await submitEnquiryAction({
-        ...form,
-        talentIds,
-      });
-      setFormState(result);
-      if (result.success) {
-        setSubmitted(true);
-        // Clear the shortlist store after a successful submission
-        talentIds.forEach((id) => toggle(id));
+      try {
+        const result = await submitEnquiryAction({
+          ...form,
+          talentIds,
+        });
+        setFormState(result);
+        if (result.success) {
+          setSubmitted(true);
+          // Clear the shortlist store after a successful submission
+          talentIds.forEach((id) => toggle(id));
+        } else if (result.message) {
+          toast.error(result.message);
+        }
+      } catch (err: unknown) {
+        console.error("Form submit error:", err);
+        toast.error("An unexpected error occurred. Please try again.");
+        setFormState({
+          success: false,
+          message: "An unexpected error occurred. Please try again.",
+        });
       }
     });
   };

@@ -11,8 +11,8 @@ const SENDER = {
 
 const ADMIN_EMAIL = process.env.BREVO_ADMIN_EMAIL ?? "adam@thedigitalacademy.co.za";
 
-// Logo hosted on the live site — works in all email clients
-const LOGO_URL = "https://talent-gallery.vercel.app/shaper-logo-horizontal.png";
+// Logo hosted on Vercel Blob — reliable across all email clients
+const LOGO_URL = "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://talent-gallery.vercel.app";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -103,15 +103,6 @@ function emailWrapper(bodyHtml: string): string {
       <td align="center">
         <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;">
 
-          <!-- Logo Header -->
-          <tr>
-            <td style="padding:0 0 24px 0;text-align:left;">
-              <a href="${SITE_URL}" style="text-decoration:none;display:inline-block;">
-                <img src="${LOGO_URL}" alt="Shaper" width="120" style="display:block;height:auto;" />
-              </a>
-            </td>
-          </tr>
-
           <!-- Main Card -->
           <tr>
             <td style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
@@ -149,7 +140,10 @@ export async function sendAdminEnquiryEmail(payload: EnquiryEmailPayload): Promi
 
   const body = `
     <!-- Header -->
-    <div style="padding:32px 36px 24px;border-bottom:1px solid #f3f4f6;">
+    <div style="padding:32px 36px 24px;border-bottom:1px solid #f3f4f6;text-align:center;">
+      <div style="margin:0 auto 20px;text-align:center;">
+        <img src="${LOGO_URL}" alt="Shaper" width="130" style="display:block;height:auto;margin:0 auto;" />
+      </div>
       <div style="display:inline-block;background:#fef2f2;border-radius:6px;padding:4px 12px;margin-bottom:12px;">
         <span style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:1.5px;">New Enquiry</span>
       </div>
