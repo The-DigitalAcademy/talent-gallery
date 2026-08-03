@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import GoogleAnalytics from "./components/GoogleAnalytics";
+import GoogleAnalytics from "./_components/GoogleAnalytics";
 import PublicLayout from "./_components/PublicLayout";
 import "./globals.css";
-import { GlobalToaster } from "./components/GlobalToaster";
+import { GlobalToaster } from "./_components/GlobalToaster";
 
 export const metadata: Metadata = {
   title: {
