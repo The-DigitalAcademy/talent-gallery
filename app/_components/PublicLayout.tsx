@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./landing/Navbar";
 import FooterCTA from "./landing/FooterCTA";
+import ShortlistFAB from "./ShortlistFAB";
 
 export default function PublicLayout({
   children,
@@ -21,6 +22,7 @@ export default function PublicLayout({
       <Navbar />
       <main className="flex-1">{children}</main>
       <FooterCTA />
+      <ShortlistFAB />
     </>
   );
 }
