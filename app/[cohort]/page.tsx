@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import TalentSection from "../_components/talents/TalentSection";
 import { FilterParams } from "../talent/actions";
+import { createClient } from "../lib/supabase/server";
+import { notFound } from "next/navigation";
 
 //  DYNAMIC SEO GENERATOR
 export async function generateMetadata({ searchParams, params }: PageProps): Promise<Metadata> {
@@ -39,6 +41,17 @@ interface PageProps {
 
 export default async function Page({ searchParams, params }: PageProps) {
   const { cohort } = await params;
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("cohorts")
+    .select("id")
+    .ilike("name", cohort)
+    .maybeSingle();
+
+  if (!data) {
+    notFound();
+  }
 
   return  (
     <TalentSection searchParams={searchParams} cohort={cohort} basePath={`/${cohort}`} />
