@@ -61,7 +61,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
   // Filter by cohort name if a cohort value was passed in
   const filteredTalents = cohort
     ? talents.filter(
-        (talent) => talent.cohort?.name?.toLowerCase() === cohort.toLowerCase()
+        (talent) => talent.cohort?.name?.toLowerCase().includes(cohort.toLowerCase())
       )
     : talents;
 
