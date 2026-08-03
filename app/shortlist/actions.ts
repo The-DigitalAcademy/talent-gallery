@@ -2,7 +2,12 @@
 
 import { createClient } from "@/app/lib/supabase/server";
 import { Talent } from "@/app/interface-types/talent";
+import {
+  sendAdminEnquiryEmail,
+  sendSubmitterConfirmationEmail,
+} from "@/app/lib/brevo";
 
+// ─── Fetch talent details by IDs ─────────────────────────────────────────────
 export async function getTalentsByIds(ids: string[]): Promise<Talent[]> {
   if (!ids || ids.length === 0) return [];
 
@@ -34,21 +39,22 @@ export async function getTalentsByIds(ids: string[]): Promise<Talent[]> {
   return (data ?? []) as unknown as Talent[];
 }
 
+// ─── Form state ───────────────────────────────────────────────────────────────
 export interface EnquiryFormState {
   success: boolean;
   message: string;
   errors?: Record<string, string>;
 }
 
-export async function submitEnquiryAction(
-  payload: {
-    email: string;
-    companyName: string;
-    contactName: string;
-    message: string;
-    talentIds: string[];
-  }
-): Promise<EnquiryFormState> {
+// ─── Submit enquiry ───────────────────────────────────────────────────────────
+export async function submitEnquiryAction(payload: {
+  email: string;
+  companyName: string;
+  contactName: string;
+  message: string;
+  talentIds: string[];
+}): Promise<EnquiryFormState> {
+  // ── Validation ────────────────────────────────────────────────────────────
   const errors: Record<string, string> = {};
 
   if (!payload.email?.trim()) errors.email = "Email address is required.";
@@ -70,7 +76,7 @@ export async function submitEnquiryAction(
 
   const supabase = await createClient();
 
-  // Insert the enquiry
+  // ── Insert enquiry ────────────────────────────────────────────────────────
   const { data: enquiry, error: enquiryError } = await supabase
     .from("enquiries")
     .insert({
@@ -84,13 +90,10 @@ export async function submitEnquiryAction(
 
   if (enquiryError || !enquiry) {
     console.error("enquiry insert error:", enquiryError);
-    return {
-      success: false,
-      message: "Something went wrong. Please try again.",
-    };
+    return { success: false, message: "Something went wrong. Please try again." };
   }
 
-  // Link enquiry to each shortlisted talent
+  // ── Link enquiry → talents ────────────────────────────────────────────────
   const joins = payload.talentIds.map((talentId) => ({
     enquiry_id: enquiry.id,
     talent_id: talentId,
@@ -102,8 +105,42 @@ export async function submitEnquiryAction(
 
   if (joinError) {
     console.error("enquiry_talents insert error:", joinError);
-    // Non-blocking — enquiry was still saved
   }
+
+  // ── Fetch talent details for emails ──────────────────────────────────────
+  const talents = await getTalentsByIds(payload.talentIds);
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://talent-gallery.vercel.app";
+
+  const candidates = talents.map((t) => ({
+    fullname: t.fullname,
+    role: t.role?.name ?? null,
+    location: t.location
+      ? `${t.location.city}, ${t.location.country}`
+      : null,
+    status: t.talent_status?.name ?? null,
+    profileUrl: `${baseUrl}/talent/${t.slug}`,
+  }));
+
+  const emailPayload = {
+    contactName: payload.contactName.trim(),
+    companyName: payload.companyName.trim(),
+    email: payload.email.trim(),
+    message: payload.message?.trim() || null,
+    candidates,
+  };
+
+  // ── Send both emails (non-blocking on failure) ────────────────────────────
+  await Promise.allSettled([
+    sendAdminEnquiryEmail(emailPayload).catch((e) =>
+      console.error("Admin email failed:", e?.message ?? e)
+    ),
+    sendSubmitterConfirmationEmail(emailPayload).catch((e) =>
+      console.error("Confirmation email failed:", e?.message ?? e)
+    ),
+  ]);
 
   return {
     success: true,
