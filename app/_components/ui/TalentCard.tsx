@@ -59,7 +59,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
         <div className={clsx("h-1 rounded-full", bgColorClass)}></div>
         <div className='flex justify-between px-3 md:px-8  h-9'>
           <div className={clsx("h-full text-white text-xs font-bold rounded-b-[3px] flex justify-center items-end pb-2 w-4/9", bgColorClass)}>{talentStatus}</div>
-          <div onClick={handleShortlistToggle}>
+          <div onClick={handleShortlistToggle} className="cursor-pointer">
             <ShortlistTag 
               padding={"pt-3 sm:pb-0 sm:pt-2.5 px-2 -m-1"}
               checkIconSize={"w-4 h-4 sm:w-5 sm:h-5"}

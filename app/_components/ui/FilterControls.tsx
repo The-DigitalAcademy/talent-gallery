@@ -1,7 +1,6 @@
-// components/ui/FilterControls.tsx
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 interface LookupItem {
   id: string | number;
@@ -38,19 +37,17 @@ export default function FilterControls({
 
 function FilterSelect({ keyName, options = [] }: { keyName: string, options?: { id: string | number, value: string | undefined }[] }) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Unified selection handler that clears out pagination pages seamlessly
   const handleSelectChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (value && value !== "all") params.set(key, value)
     else params.delete(key)
-    // 💡 THE RESET KILL-SWITCH: Clears old page parameters entirely on filter adjustment
-    // This forces your action routing rules to scan the entire database table records fresh!
     params.delete("page");
 
-    router.push(`/talent?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
   return (
     <select

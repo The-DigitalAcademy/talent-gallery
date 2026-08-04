@@ -2,7 +2,7 @@
 
 import { TalentProfileInterface } from "@/app/interface-types/talent";
 import { TalentProfile } from "./TalentProfile";
-import { Back } from "@/app/components/ui/Icons";
+import { Back } from "@/app/_components/ui/Icons";
 
 interface ProfileClientProps {
   talent: TalentProfileInterface;
