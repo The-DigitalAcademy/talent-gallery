@@ -128,8 +128,12 @@ export const getStatusBadgeStyle = (status: string | undefined) => {
   }
 };
 
-export function firstWord(str: string) {
+export function firstWordFromSlug(str: string) {
   return str.trim().split(/[\s-]+/)[0];
+}
+
+export function firstWord(str: string) {
+  return str.trim().split(/\s+/)[0];
 }
 
 export function firstLetter(str: string) {

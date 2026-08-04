@@ -3,7 +3,7 @@ import TalentSection from "../_components/talents/TalentSection";
 import { FilterParams } from "../talent/actions";
 import { createClient } from "../lib/supabase/server";
 import { notFound } from "next/navigation";
-import { firstWord } from "../lib/utils";
+import { firstWordFromSlug } from "../lib/utils";
 
 //  DYNAMIC SEO GENERATOR
 export async function generateMetadata({ searchParams, params }: PageProps): Promise<Metadata> {
@@ -55,6 +55,6 @@ export default async function Page({ searchParams, params }: PageProps) {
   }
 
   return  (
-    <TalentSection searchParams={searchParams} cohort={firstWord(cohort)} basePath={`/${cohort}`} />
+    <TalentSection searchParams={searchParams} cohort={firstWordFromSlug(cohort)} basePath={`/${cohort}`} />
   );
 }
