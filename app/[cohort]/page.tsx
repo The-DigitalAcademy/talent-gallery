@@ -3,7 +3,6 @@ import TalentSection from "../_components/talents/TalentSection";
 import { FilterParams } from "../talent/actions";
 import { createClient } from "../lib/supabase/server";
 import { notFound } from "next/navigation";
-import { firstWordFromSlug } from "../lib/utils";
 
 //  DYNAMIC SEO GENERATOR
 export async function generateMetadata({ searchParams, params }: PageProps): Promise<Metadata> {
@@ -46,7 +45,7 @@ export default async function Page({ searchParams, params }: PageProps) {
   const supabase = await createClient();
   const { data: cohorts } = await supabase
     .from("cohorts")
-    .select("slug")
+    .select("name")
     .ilike("slug", cohort)
     .maybeSingle();
 
@@ -55,6 +54,6 @@ export default async function Page({ searchParams, params }: PageProps) {
   }
 
   return  (
-    <TalentSection searchParams={searchParams} cohort={firstWordFromSlug(cohort)} basePath={`/${cohort}`} />
+    <TalentSection searchParams={searchParams} cohort={cohorts?.name} basePath={`/${cohort}`} />
   );
 }
