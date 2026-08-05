@@ -96,3 +96,16 @@ export interface TalentProfileInterface {
   endorsements: Endorsement[];
   role: Role;
 };
+
+export interface ConfirmedTalentSchema {
+  id: string;
+  fullname: string;
+  bio: string | null;
+  profile_image_url: string | null;
+  slug: string;
+  location: { city: string; country: string } | null;
+  cohort: { name: string } | null;
+  program: { name: string } | null;
+  talent_status: { name: string } | null;
+  capabilities: Array<{ capability: { id: string; name: string } }>;
+}
