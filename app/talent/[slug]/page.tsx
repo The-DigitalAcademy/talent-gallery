@@ -1,6 +1,7 @@
 import { createClient } from "@/app/lib/supabase/server";
-import { TalentProfile } from "./_components/TalentProfile";
 import { Metadata } from "next";
+import ProfileClient from "./_components/ProfileClient";
+import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
 
 export async function generateMetadata({
   params,
@@ -62,37 +63,8 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = await createClient();
 
-  const { data: talent, error } = await supabase
-  .from("talents")
-  .select(`
-    *,
-    location:locations(city, country),
-    cohort:cohorts(name),
-    program:programs(name),
-    talent_status:talent_statuses(name),
-    capabilities:talent_capabilities(
-      capability:capabilities(id, name)
-    ),
-    work_experiences(*),
-    projects(
-      id,
-      name,
-      description,
-      capabilities:project_capabilities(
-        capability:capabilities(name)
-      )
-    ),
-    endorsements(
-      id,
-      endorser_name,
-      message
-    )
-  `)
-  .eq("slug", slug)
-  .eq("is_published", true)
-  .single();
+  const { data: talent, error } = await getTalentBySlug(slug);
 
   if (error) {
     return (
@@ -101,6 +73,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </main>
     );
   }
-  
-  return <TalentProfile talent={talent} />;
+
+  return  (
+    <div className="w-screen min-h-screen md:px-14 xl:px-0 md:pb-10 md:pt-0 lg:pt-0 bg-[#f1f1f1] overflow-hidden flex justify-center">
+      <ProfileClient talent={talent}/>
+    </div>
+  );
 }

@@ -31,6 +31,12 @@ export interface Program {
   created_at: Timestamptz;
 }
 
+export interface Role {
+  id: UUID;
+  name: string;
+  created_at: Timestamptz;
+}
+
 export interface Cohort {
   id: UUID;
   name: string;
@@ -67,7 +73,6 @@ export interface Project {
 }
 
 export interface TalentCapability {
-  id: UUID;
   talent_id: UUID;
   capability_id: UUID;
   created_at: Timestamptz;

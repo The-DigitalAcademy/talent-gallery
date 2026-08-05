@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "@/app/lib/supabase/server";
 import { Talent } from "../interface-types/talent";
 
@@ -7,12 +9,13 @@ export interface FilterParams {
   capability?: string;
   status?: string;
   location?: string;
-  page?: string; 
+  page?: string;
+  role?: string;
 }
 
 export async function getFilteredTalents(filters: FilterParams) {
   const page = Math.max(1, parseInt(filters.page || "1", 10));
-  
+
   // Changing this to 12 to match the itemsPerPage math in your main frontend page grid!
   const itemsPerPage = 12;
   const from = (page - 1) * itemsPerPage;
@@ -21,10 +24,10 @@ export async function getFilteredTalents(filters: FilterParams) {
   const supabase = await createClient();
 
   // 💡 THE JSON FIX: Filter the embedded collection array down to just the requested tag if active
-  const capabilitySelectFilter = filters.capability 
-    ? `(capability:capabilities!inner(id, name))` 
+  const capabilitySelectFilter = filters.capability
+    ? `(capability:capabilities!inner(id, name))`
     : `(capability:capabilities(id, name))`;
-  
+
   // 💡 THE INFINITE PAGINATION FIX: Added { count: 'exact' } options block here
   let query = supabase.from("talents").select(`
     id,
@@ -32,11 +35,12 @@ export async function getFilteredTalents(filters: FilterParams) {
     bio,
     slug,
     profile_image_url,
+    role:roles${filters.role ? '!inner' : ''} (name),
     location:locations${filters.location ? '!inner' : ''}(city, country),
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
-    capabilities:talent_capabilities${filters.capability ? '!inner' : ''}${capabilitySelectFilter},
+    capabilities${filters.capability ? '!inner' : ''}(name),
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)
@@ -48,6 +52,9 @@ export async function getFilteredTalents(filters: FilterParams) {
   if (filters.cohort) {
     query = query.ilike("cohorts.name", filters.cohort);
   }
+  if (filters.role) {
+    query = query.ilike("roles.name", filters.role);
+  }
   if (filters.programme) {
     query = query.ilike("programs.name", filters.programme);
   }
@@ -55,7 +62,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("locations.city", filters.location);
   }
   if (filters.capability) {
-    query = query.ilike("talent_capabilities.capabilities.name", filters.capability);
+    query = query.ilike("capabilities.name", filters.capability);
   }
   if (filters.status) {
     query = query.ilike("talent_statuses.name", filters.status);

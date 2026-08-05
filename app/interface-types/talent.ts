@@ -11,6 +11,11 @@ export interface Location {
 export interface NamedEntity {
   name: string;
 }
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+}
 
 export interface Talent {
   id: string;
@@ -18,6 +23,7 @@ export interface Talent {
   bio: string | null;
   slug: string;
   profile_image_url: string | null;
+  role: Role | null
 
   location: Location | null;
   cohort: NamedEntity | null;
@@ -48,12 +54,17 @@ export interface Project {
   name: string;
   description: string | null;
   capabilities: ProjectCapability[];
+  project_url: string
 };
 
 export interface Endorsement {
   id: string;
   endorser_name: string;
   message: string;
+};
+
+export interface Role {
+  name: string;
 };
 
 export interface TalentProfileInterface {
@@ -68,7 +79,7 @@ export interface TalentProfileInterface {
   slug: string;
   is_published: boolean;
   created_at: string;
-
+  capabilities_summary: string;
   location_id: string;
   program_id: string;
   cohort_id: string;
@@ -83,4 +94,18 @@ export interface TalentProfileInterface {
   work_experiences: WorkExperience[];
   projects: Project[];
   endorsements: Endorsement[];
+  role: Role;
 };
+
+export interface ConfirmedTalentSchema {
+  id: string;
+  fullname: string;
+  bio: string | null;
+  profile_image_url: string | null;
+  slug: string;
+  location: { city: string; country: string } | null;
+  cohort: { name: string } | null;
+  program: { name: string } | null;
+  talent_status: { name: string } | null;
+  capabilities: Array<{ capability: { id: string; name: string } }>;
+}

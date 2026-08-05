@@ -48,7 +48,7 @@ export default function URLsForm({ values }: Props) {
                             type="url"
                             onValueChange={(val) => setYoutubeLink(val)}
                             required
-                            defaultValue={youtubeLink}
+                            defaultValue={values?.youtube}
                             placeholder="http://youtube.com"
                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                         />

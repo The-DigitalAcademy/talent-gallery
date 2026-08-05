@@ -4,16 +4,19 @@ import { CheckIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { ChangeEvent, useActionState, useState } from "react";
 import { upsertBasicInfo } from "../_actions/basic-info-action";
 import { FormState } from "@/app/lib/definitions";
+import FormSelect from "@/components/admin/form-select";
 
 const initialState: FormState = {
     success: false,
     message: '',
 };
 
-export default function BasicInfoForm({ values }: { values?: { id: string, fullname?: string, bio?: string, profile_image_url?: string } }) {
+export default function BasicInfoForm({ values, roles }: { values?: { id: string, fullname?: string, bio?: string, profile_image_url?: string, role_id: string }, roles: { id: string, name: string }[] }) {
     const createBasicInfo = upsertBasicInfo.bind(null, values?.id || null) //bind id for update, or null for insert
     const [state, formAction, isPending] = useActionState(createBasicInfo, initialState);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(values?.profile_image_url)
+
+    console.log(roles)
 
     function handleImagePreview(e: ChangeEvent<HTMLInputElement>) {
         const file = e.target.files ? e.target.files[0] : null;
@@ -42,7 +45,7 @@ export default function BasicInfoForm({ values }: { values?: { id: string, fulln
                                 type="text"
                                 disabled={isPending}
                                 required
-                                defaultValue={values?.fullname}
+                                defaultValue={values?.fullname || state?.fields?.fullname}
                                 placeholder="Jacob Mabena"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -57,13 +60,23 @@ export default function BasicInfoForm({ values }: { values?: { id: string, fulln
                                 rows={4}
                                 disabled={isPending}
                                 required
-                                defaultValue={values?.bio}
+                                defaultValue={values?.bio || state?.fields?.bio}
                                 placeholder="A little something about the talent"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
-
+                        <Field.Root name="role" className="flex flex-col items-start gap-2 w-full" >
+                            <Field.Label className="text-xs text-gray-700" >
+                                Role
+                            </Field.Label>
+                            < FormSelect
+                                defaultValue={values?.role_id}
+                                placeholder="Select role"
+                                options={roles?.map(i => ({ label: i.name, value: i.id })) || []
+                                } />
+                            < Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
                     </div>
                     <Field.Root name="image" className="flex flex-col items-start gap-2 mx-auto">
                         <Field.Label className="text-xs text-gray-700 cursor-pointer">
@@ -86,6 +99,7 @@ export default function BasicInfoForm({ values }: { values?: { id: string, fulln
                         </Field.Label>
                         <Field.Control
                             type="file"
+                            accept="image/*"
                             hidden
                             onChange={(event) => handleImagePreview(event)}
                             disabled={isPending}
