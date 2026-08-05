@@ -11,14 +11,11 @@ export interface Location {
 export interface NamedEntity {
   name: string;
 }
-<<<<<<< HEAD
 export interface Role {
   id: string;
   name: string;
   description: string;
 }
-=======
->>>>>>> ee648200d815df57b9a64107322068133813df9f
 
 export interface Talent {
   id: string;
@@ -26,10 +23,7 @@ export interface Talent {
   bio: string | null;
   slug: string;
   profile_image_url: string | null;
-<<<<<<< HEAD
   role: Role | null
-=======
->>>>>>> ee648200d815df57b9a64107322068133813df9f
 
   location: Location | null;
   cohort: NamedEntity | null;
@@ -60,10 +54,7 @@ export interface Project {
   name: string;
   description: string | null;
   capabilities: ProjectCapability[];
-<<<<<<< HEAD
   project_url: string
-=======
->>>>>>> ee648200d815df57b9a64107322068133813df9f
 };
 
 export interface Endorsement {
@@ -72,13 +63,10 @@ export interface Endorsement {
   message: string;
 };
 
-<<<<<<< HEAD
 export interface Role {
   name: string;
 };
 
-=======
->>>>>>> ee648200d815df57b9a64107322068133813df9f
 export interface TalentProfileInterface {
   id: string;
   fullname: string;

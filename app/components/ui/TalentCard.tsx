@@ -2,9 +2,9 @@
 import { Talent } from '@/app/interface-types/talent';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ShareModal } from './ShareModal';
-import { ShareButton } from './ShareButton';
-import { ProfileAvatar } from './ProfileAvatar';
+import { ProfileAvatar } from '@/app/_components/ui/ProfileAvatar';
+import { ShareButton } from '@/app/_components/ui/ShareButton';
+import { ShareModal } from '@/app/_components/ui/ShareModal';
 
 interface TalentCardProps {
   talent: Talent
