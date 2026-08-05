@@ -171,7 +171,6 @@ export default async function TalentSection({searchParams, cohort = undefined, b
                     </div>
                 )}
             </div>
-            <button className='inline sticky bottom-10 left-[90vw] text-white bg-red-600 rounded p-3 m-4'><ClipboardListIcon className='size-8' /></button>
         </div>
     );
 }
