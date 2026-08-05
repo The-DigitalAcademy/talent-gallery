@@ -13,7 +13,7 @@ import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter } from 
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface TalentProfileProps {
@@ -159,15 +159,21 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             <div className="flex flex-col gap-6">
               {/* Youtube video */}
               {embedUrl && (
-                <div className="rounded-[3px] overflow-hidden aspect-video">
-                  <iframe
-                    src={embedUrl}
-                    title="Profile video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
-                </div>
+                <Suspense
+                  fallback={
+                    <div className="rounded-[3px] overflow-hidden aspect-video bg-gray-200 animate-pulse" />
+                  }
+                >
+                  <div className="rounded-[3px] overflow-hidden aspect-video">
+                    <iframe
+                      src={embedUrl}
+                      title="Profile video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                </Suspense>
               )}
 
               {/* Bio */}
@@ -251,6 +257,11 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             }
           </div>
         </div>
+        <ShareModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          talent={talent}
+        />
       </div>
       <ShareModal
         isOpen={isShareOpen}

@@ -11,6 +11,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@19.2.16)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@getbrevo/brevo':
+        specifier: ^6.0.2
+        version: 6.0.2
       '@sentry/nextjs':
         specifier: ^10.62.0
         version: 10.62.0(@opentelemetry/core@2.8.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.8.0(@opentelemetry/api@1.9.1))(next@16.2.7(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(webpack@5.108.3)
@@ -261,6 +264,10 @@ packages:
 
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
+
+  '@getbrevo/brevo@6.0.2':
+    resolution: {integrity: sha512-yxyacx4wkuWcCbFDdFE3RxklaHSGXEP3d0gZaxPy+9aBquvl4ksr7IQgbRCcF8crx5aRvpStVBLeh5iCbWHJrg==}
+    engines: {node: '>=18.0.0'}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -3178,6 +3185,8 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
 
   '@floating-ui/utils@0.2.11': {}
+
+  '@getbrevo/brevo@6.0.2': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
