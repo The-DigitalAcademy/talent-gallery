@@ -84,7 +84,7 @@ export default function ShortlistCard({ talent, onRemove }: ShortlistCardProps) 
       {/* Remove button */}
       <button
         onClick={() => onRemove(talent.id)}
-        className="absolute bottom-3 right-4 text-gray-300 hover:text-red-500 transition-colors"
+        className="absolute bottom-3 right-4 text-red-500 hover:text-red-700 transition-colors p-1 rounded hover:bg-red-50"
         aria-label={`Remove ${talent.fullname} from shortlist`}
       >
         <Trash2Icon size={16} />

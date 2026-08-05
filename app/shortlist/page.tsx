@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import Image from "next/image";
+import Link from "next/link";
+import { XIcon } from "lucide-react";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { getTalentsByIds, submitEnquiryAction, EnquiryFormState } from "./actions";
@@ -100,28 +101,25 @@ export default function ShortlistPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] py-10 md:py-16 px-4">
-      <div className="max-w-[680px] mx-auto bg-white rounded-xl shadow-sm p-6 md:p-10">
+      <div className="max-w-[760px] mx-auto bg-white rounded-lg shadow-sm p-8 md:p-12">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-bold text-sm">
-              N
-            </div>
-            <Image
-              src="/shaper-logo-horizontal.png"
-              alt="Shaper"
-              width={110}
-              height={26}
-              className="h-6 w-auto object-contain"
-            />
-          </div>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-xl md:text-2xl font-bold tracking-widest uppercase text-gray-900">
+            YOUR SHORTLIST
+          </h1>
+          <Link
+            href="/talent"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+            aria-label="Close shortlist"
+          >
+            <XIcon size={20} />
+          </Link>
         </div>
 
         {/* Shortlist Counter Subtitle */}
         {count > 0 && (
-          <p className="text-gray-900 font-semibold text-base mb-6">
-            You&apos;ve shortlisted{" "}
-            <span className="font-extrabold">{count}</span> candidate
+          <p className="text-gray-700 text-sm md:text-base mb-6">
+            You&apos;ve shortlisted <span className="font-bold">{count}</span> candidate
             {count !== 1 ? "s" : ""}.
           </p>
         )}

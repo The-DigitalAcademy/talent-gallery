@@ -134,17 +134,17 @@ export default function ShortlistForm({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3 mt-2">
+      <div className="flex items-center gap-4 mt-3">
         <Link
           href="/talent"
-          className="flex-1 text-center border border-gray-300 text-gray-700 font-semibold text-[13px] sm:text-sm py-2.5 px-3 sm:px-4 rounded-md hover:bg-gray-50 transition-colors whitespace-nowrap"
+          className="flex-1 text-center bg-[#E5E5E5] hover:bg-gray-300 text-gray-900 font-bold text-sm py-3.5 px-4 rounded-md transition-colors whitespace-nowrap"
         >
           Continue Browsing
         </Link>
         <button
           type="submit"
           disabled={isPending}
-          className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-[13px] sm:text-sm py-2.5 px-3 sm:px-4 rounded-md transition-colors whitespace-nowrap"
+          className="flex-1 bg-[#FF0000] hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm py-3.5 px-4 rounded-md transition-colors whitespace-nowrap"
         >
           {isPending ? "Submitting…" : "Submit Interest"}
         </button>
