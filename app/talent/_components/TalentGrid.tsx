@@ -1,5 +1,5 @@
 
-import TalentCard from "@/app/components/ui/TalentCard";
+import TalentCard from "@/app/_components/ui/TalentCard";
 import { FilterParams, getFilteredTalents } from "../actions";
 
 export default async function TalentGrid({

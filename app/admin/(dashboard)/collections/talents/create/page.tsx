@@ -2,8 +2,11 @@ import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../_forms/basic-info-form";
 import { CapabilitiesFormPlaceholder, EndorsementsFormPlaceholder, EnrolmentFormPlaceholder, ProfileLinksFormPlaceholder, ProjectsFormPlaceholder, WorkExperienceFormPlaceholder } from "@/components/admin/form-placeholders";
+import { createClient } from "@/app/lib/supabase/server";
 
 export default async function Page() {
+    const supabase = await createClient();
+    const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
     return (
         <div>
             <div className="mb-5">
@@ -13,7 +16,7 @@ export default async function Page() {
                 <h1 className="text-2xl font-bold mb">Create a new Talent</h1>
             </div>
             <div className="flex w-full flex-col gap-5">
-                <BasicInfoForm />
+                <BasicInfoForm roles={roles || []} />
                 <EnrolmentFormPlaceholder />
                 <ProfileLinksFormPlaceholder />
                 <CapabilitiesFormPlaceholder />

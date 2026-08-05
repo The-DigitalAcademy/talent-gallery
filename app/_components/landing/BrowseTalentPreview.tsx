@@ -4,7 +4,7 @@ import { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import { getFilteredTalents } from "@/app/talent/actions";
 import { Talent } from "@/app/interface-types/talent";
-import TalentCard from "@/app/components/ui/TalentCard";
+import TalentCard from "@/app/_components/ui/TalentCard";
 import TalentCardSkeleton from "@/app/talent/_components/TalentCardSkeleton";
 
 const TABS = [

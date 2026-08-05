@@ -36,13 +36,15 @@ const FormSchema = z.object({
             (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
             "Only .jpg, .jpeg, .png and .webp formats are supported."
         ),
+    role: z.uuid({ error: "required" })
 });
 
 export async function upsertBasicInfo(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
     const validatedFields = FormSchema.safeParse({
         fullname: formData.get('fullname'),
         bio: formData.get('bio'),
-        image: formData.get('image')
+        image: formData.get('image'),
+        role: formData.get('role')
     });
 
     if (!validatedFields.success) {
@@ -57,7 +59,7 @@ export async function upsertBasicInfo(id: string | null, prevState: FormState, f
         };
     }
 
-    const { fullname, bio, image } = validatedFields.data;
+    const { fullname, bio, image, role } = validatedFields.data;
     let filename = null
     let profile_image_url = null
 
@@ -77,7 +79,7 @@ export async function upsertBasicInfo(id: string | null, prevState: FormState, f
         let newItemId
         try {
             const supabase = await createClient()
-            const { error, data } = await supabase.from("talents").insert({ fullname, bio, profile_image_url }).select("id").single()
+            const { error, data } = await supabase.from("talents").insert({ fullname, bio, profile_image_url, role_id: role }).select("id").single()
             if (error) throw error
             newItemId = data.id;
         } catch (error) {
@@ -92,7 +94,7 @@ export async function upsertBasicInfo(id: string | null, prevState: FormState, f
         redirect(`/admin/collections/talents/${newItemId}`)
     } else {
         // update
-        const updatePayload: { fullname: string, bio: string, profile_image_url?: string } = { fullname, bio }
+        const updatePayload: { fullname: string, bio: string, profile_image_url?: string, role_id: string } = { fullname, bio, role_id: role }
         if (profile_image_url) { updatePayload.profile_image_url = profile_image_url }
         try {
             const supabase = await createClient()

@@ -1,13 +1,13 @@
 "use client"
 
-import EmploymentHr from "@/app/components/ui/EmploymentHr";
-import EmploymentTag from "@/app/components/ui/EmploymentTag";
-import EndorsementCard from "@/app/components/ui/EndorsementCard";
-import ExperienceCard from "@/app/components/ui/ExperienceCard";
-import { Back, Cross, GitHubIcon, Location, ShareIcon } from "@/app/components/ui/Icons";
-import { ShareModal } from "@/app/components/ui/ShareModal";
-import ShortlistTag from "@/app/components/ui/ShortlistTag";
-import { SkillTag } from "@/app/components/ui/SkillTag";
+import EmploymentHr from "@/app/_components/ui/EmploymentHr";
+import EmploymentTag from "@/app/_components/ui/EmploymentTag";
+import EndorsementCard from "@/app/_components/ui/EndorsementCard";
+import ExperienceCard from "@/app/_components/ui/ExperienceCard";
+import { Back, Cross, GitHubIcon, Location, ShareIcon } from "@/app/_components/ui/Icons";
+import { ShareModal } from "@/app/_components/ui/ShareModal";
+import ShortlistTag from "@/app/_components/ui/ShortlistTag";
+import { SkillTag } from "@/app/_components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
 import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter } from "@/app/lib/utils";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
