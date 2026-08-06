@@ -1,9 +1,9 @@
-  // app/sitemap.ts
+// app/sitemap.ts
 import { MetadataRoute } from "next";
 import { createClient } from "@/app/lib/supabase/server";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://talent-gallery.vercel.app";
+  const baseUrl = "https://talent.shaper.co.za";
   const supabase = await createClient();
 
   // Fetch all active profiles to build dynamic profile endpoints
