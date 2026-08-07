@@ -14,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         "/unauthorized"
       ],
     },
-    sitemap: "https://talent-gallery.vercel.app/sitemap.xml",
+    sitemap: "https://talent.shaper.co.za/sitemap.xml",
   };
 }
