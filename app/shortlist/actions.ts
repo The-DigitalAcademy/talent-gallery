@@ -112,7 +112,7 @@ export async function submitEnquiryAction(payload: {
 
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
-    "https://talent-gallery.vercel.app";
+    "https://talent.shaper.co.za";
 
   const candidates = talents.map((t) => ({
     fullname: t.fullname,

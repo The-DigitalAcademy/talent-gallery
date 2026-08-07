@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   keywords: ["Talent Directory", "Creative Specialists", "AI Engineering", "Portfolio Showcase"],
   authors: [{ name: "Shaper" }],
   creator: "Shaper",
-  metadataBase: new URL("https://talent-gallery.vercel.app"),
-  
+  metadataBase: new URL("https://talent.shaper.co.za"),
+
   openGraph: {
     title: "Talent Directory | Shaper",
     description: "Discover and connect with our talented learners.",
-    url: "https://talent-gallery.vercel.app",
+    url: "https://talent.shaper.co.za",
     siteName: "Shaper Talent",
     locale: "en_ZA",
     type: "website",
@@ -76,7 +76,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <PublicLayout>{children}</PublicLayout>
         {modal}
-        <GlobalToaster/>
+        <GlobalToaster />
       </body>
     </html>
   );

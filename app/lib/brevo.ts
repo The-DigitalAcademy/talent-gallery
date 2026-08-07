@@ -13,7 +13,7 @@ const ADMIN_EMAIL = process.env.BREVO_ADMIN_EMAIL ?? "adam@thedigitalacademy.co.
 
 // Logo hosted on Vercel Blob — reliable across all email clients
 const LOGO_URL = "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://talent-gallery.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://talent.shaper.co.za";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface ShortlistedCandidate {
@@ -117,7 +117,7 @@ function emailWrapper(bodyHtml: string): string {
                 <strong style="color:#6b7280;">Shaper Talent Platform</strong><br/>
                 <a href="mailto:talent@shaper.co.za" style="color:#dc2626;text-decoration:none;">talent@shaper.co.za</a>
                 &nbsp;·&nbsp;
-                <a href="${SITE_URL}" style="color:#9ca3af;text-decoration:none;">talent-gallery.vercel.app</a>
+                <a href="${SITE_URL}" style="color:#9ca3af;text-decoration:none;">talent.shaper.co.za</a>
               </p>
               <p style="margin:12px 0 0;font-size:11px;color:#d1d5db;">
                 © ${new Date().getFullYear()} Shaper. All rights reserved.
