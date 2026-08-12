@@ -24,7 +24,7 @@ const FormSchema = z.object({
         .string()
         .trim()
         .min(2, { message: 'description must be at least 2 characters long.' })
-        .max(250, { message: 'description cannot exceed 250 characters.' })
+        .max(2000, { message: 'description cannot exceed 2000 characters.' })
 });
 
 export async function insertWorkExperience(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
