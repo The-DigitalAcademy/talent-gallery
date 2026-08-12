@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: statuses, error: statusesError } = await supabase.from("talent_statuses").select()
     const { data: workExperiences, error: workExperiencesError } = await supabase.from("work_experiences").select().eq("talent_id", id)
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
-    const { data: projects, error: projectsError } = await supabase.from("projects").select().eq("talent_id", id)
+    const { data: projects, error: projectsError } = await supabase.from("projects").select("id, name, description, projectUrl:project_url, talentId:talent_id").eq("talent_id", id)
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
 
