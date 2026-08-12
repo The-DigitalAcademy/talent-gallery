@@ -40,6 +40,7 @@ export interface Role {
 export interface Cohort {
   id: UUID;
   name: string;
+  slug: string;
   created_at: Timestamptz;
 }
 
