@@ -16,8 +16,6 @@ export default function BasicInfoForm({ values, roles }: { values?: { id: string
     const [state, formAction, isPending] = useActionState(createBasicInfo, initialState);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(values?.profile_image_url)
 
-    console.log(roles)
-
     function handleImagePreview(e: ChangeEvent<HTMLInputElement>) {
         const file = e.target.files ? e.target.files[0] : null;
 
