@@ -31,6 +31,7 @@ const getStatusColorClassName = (status: string | undefined) => {
 export default function TalentCard({ talent }: TalentCardProps) {
   const talentStatus = talent.talent_status?.name;
   const bgColorClass = getStatusColorClassName(talentStatus?.toLowerCase())
+  const fullNames = talent?.fullname.split(" ")
 
   const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
   const toggleShortlist = useShortlistStore((s) => s.toggle);
@@ -60,7 +61,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
         <div className='flex justify-between px-3 md:px-8  h-9'>
           <div className={clsx("h-full text-white text-xs font-bold rounded-b-[3px] flex justify-center items-end pb-2 w-4/9", bgColorClass)}>{talentStatus}</div>
           <div onClick={handleShortlistToggle} className="cursor-pointer">
-            <ShortlistTag 
+            <ShortlistTag
               padding={"pt-3 sm:pb-0 sm:pt-2.5 px-2 -m-1"}
               checkIconSize={"w-4 h-4 sm:w-5 sm:h-5"}
               plusIconSize={"w-4 h-4 sm:w-5 sm:h-5"}
@@ -89,8 +90,8 @@ export default function TalentCard({ talent }: TalentCardProps) {
             </Avatar.Root>
             <div>
               <h3 className={`${lexend.className} uppercase tracking-wide md:text-lg md:text-lg leading-tight group-hover:text-blue-600 transition-colors mb-1`}>
-                <span className='font-bold'>{talent.fullname.split(" ")[0]}</span>
-                <span className='font-light'> {talent.fullname.split(" ")[talent.fullname.split.length - 1][0]}.</span>
+                <span className='font-bold'>{fullNames[0]}</span>
+                <span className='font-light'> {fullNames.length > 1 ? fullNames[fullNames.length - 1].charAt(0) + "." : ""}</span>
               </h3>
               <p className="text-sm mb-0.5"> {talent.role?.name} </p>
               <div className="text-xs text-gray-400 flex items-center gap-1">
