@@ -9,7 +9,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all active profiles to build dynamic profile endpoints
   const { data: talents } = await supabase
     .from("talents")
-    .select("slug, updated_at");
+    .select("slug, updated_at")
+    .eq("is_published", true);
 
   const talentUrls = (talents || []).map((talent) => ({
     url: `${baseUrl}/talent/${talent.slug}`,

@@ -40,6 +40,7 @@ export interface Role {
 export interface Cohort {
   id: UUID;
   name: string;
+  slug: string;
   created_at: Timestamptz;
 }
 
@@ -68,8 +69,8 @@ export interface Project {
   id: UUID;
   name: string;
   description: string;
-  created_at: Timestamptz;
-  talent_id: UUID;
+  projectUrl: string;
+  talentId: UUID;
 }
 
 export interface TalentCapability {

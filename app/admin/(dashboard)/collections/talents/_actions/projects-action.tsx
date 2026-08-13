@@ -9,18 +9,20 @@ const FormSchema = z.object({
         .string()
         .trim()
         .min(2, { message: 'description must be at least 2 characters long.' })
-        .max(250, { message: 'description cannot exceed 250 characters.' }),
+        .max(2000, { message: 'description cannot exceed 2000 characters.' }),
     name: z
         .string()
         .trim()
         .min(2, { message: 'name must be at least 2 characters long.' })
         .max(50, { message: 'name cannot exceed 50 characters.' }),
+    url: z.url().trim().or(z.literal("")).optional()
 });
 
 export async function insertProject(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
     const validatedFields = FormSchema.safeParse({
         description: formData.get('description'),
-        name: formData.get('name')
+        name: formData.get('name'),
+        url: formData.get('url')
     });
 
     if (!validatedFields.success) {
@@ -28,14 +30,19 @@ export async function insertProject(talentId: string | null, prevState: FormStat
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
+            fields: {
+                description: formData.get('description'),
+                name: formData.get('name'),
+                url: formData.get('url')
+            }
         };
     }
 
-    const { description, name } = validatedFields.data;
+    const { description, name, url } = validatedFields.data;
 
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("projects").insert({ talent_id: talentId, description, name })
+        const { error } = await supabase.from("projects").insert({ talent_id: talentId, description, name, project_url: url })
         if (error) throw error
 
         revalidatePath(`/admin/collections/talents/${talentId}`)

@@ -26,10 +26,10 @@ export default function URLsForm({ values }: Props) {
     const createEnrolmentInfo = upsertUrls.bind(null, values.id)
     const [state, formAction, isPending] = useActionState(createEnrolmentInfo, initialState);
     // url links
-    const [portfolioLink, setPortfolioLink] = useState<string | undefined>(values?.portfolio)
-    const [youtubeLink, setYoutubeLink] = useState<string | undefined>(values?.youtube)
-    const [linkedinLink, setLinkedinLink] = useState<string | undefined>(values?.linkedin)
-    const [githubLink, setGithubLink] = useState<string | undefined>(values?.github)
+    const [portfolioLink, setPortfolioLink] = useState<string | undefined>(values?.portfolio || state?.fields?.portfolio)
+    const [youtubeLink, setYoutubeLink] = useState<string | undefined>(values?.youtube || state?.fields?.youtube)
+    const [linkedinLink, setLinkedinLink] = useState<string | undefined>(values?.linkedin || state?.fields?.linkedin)
+    const [githubLink, setGithubLink] = useState<string | undefined>(values?.github || state?.fields?.github)
 
     return (
         <div>
@@ -47,7 +47,6 @@ export default function URLsForm({ values }: Props) {
                         <Field.Control
                             type="url"
                             onValueChange={(val) => setYoutubeLink(val)}
-                            required
                             defaultValue={values?.youtube}
                             placeholder="http://youtube.com"
                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
@@ -62,7 +61,6 @@ export default function URLsForm({ values }: Props) {
                         <Field.Control
                             type="url"
                             onValueChange={(val) => setPortfolioLink(val)}
-                            required
                             defaultValue={values.portfolio}
                             placeholder="http://myportfolio.com"
                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
@@ -77,7 +75,6 @@ export default function URLsForm({ values }: Props) {
                         <Field.Control
                             type="url"
                             onValueChange={(val) => setLinkedinLink(val)}
-                            required
                             defaultValue={values.linkedin}
                             placeholder="https://www.linkedin.com/in/john-doe"
                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
@@ -92,7 +89,6 @@ export default function URLsForm({ values }: Props) {
                         <Field.Control
                             type="url"
                             onValueChange={(val) => setGithubLink(val)}
-                            required
                             defaultValue={values.github}
                             placeholder="https://www.github.com/in/john-doe"
                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"

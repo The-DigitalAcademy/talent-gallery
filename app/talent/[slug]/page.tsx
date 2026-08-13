@@ -20,6 +20,7 @@ export async function generateMetadata({
       program:programs(name)
     `)
     .eq("slug", slug)
+    .eq("is_published", true)
     .single();
 
   if (!talent) {

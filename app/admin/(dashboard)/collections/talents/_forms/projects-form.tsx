@@ -5,6 +5,7 @@ import { CheckIcon, XIcon } from "lucide-react"
 import { useActionState } from "react";
 import clsx from "clsx";
 import { deleteProject, insertProject } from "../_actions/projects-action";
+import Link from "next/link";
 
 const initialState: FormState = {
     success: false,
@@ -27,6 +28,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                         <Field.Root name="name" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
+                                defaultValue={state?.fields?.name}
                                 required
                                 placeholder="Project name"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
@@ -37,9 +39,20 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                             <textarea
                                 name="description"
                                 rows={5}
+                                defaultValue={state?.fields?.description}
                                 required
                                 placeholder="Description"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                            />
+                            <Field.Error className="text-xs text-red-700" />
+                        </Field.Root>
+                        <Field.Root name="url" className="flex flex-col items-start gap-2 w-full">
+                            <Field.Control
+                                type="text"
+                                required
+                                defaultValue={state?.fields?.url}
+                                placeholder="Project URL"
+                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
@@ -72,10 +85,11 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
                         {!projects.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Projects</div>}
                         {projects?.map(item => (
-                            <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative">
-                                <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: item.id, name: item.name, talentId: item.talent_id }} /></div>
-                                <p className="mb-2 capitalize font-semibold text-base">{item.name}</p>
+                            <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative space-y-2">
+                                <div className="absolute right-2 top-1"><DeleteFormDialog item={item} /></div>
+                                <p className="capitalize font-semibold text-base">{item.name}</p>
                                 <p className="text-sm text-gray-500">{item.description}</p>
+                                {item.projectUrl && <Link href={item.projectUrl} className="text-sm text-blue-500">{item.projectUrl}</Link>}
                             </blockquote>))}
                     </div>
                 </div>

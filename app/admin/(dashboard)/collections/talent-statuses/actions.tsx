@@ -16,7 +16,7 @@ const FormSchema = z.object({
         .string()
         .trim()
         .min(2, { message: 'Description must be at least 2 characters long.' })
-        .max(250, { message: 'Description cannot exceed 250 characters.' })
+        .max(2000, { message: 'Description cannot exceed 2000 characters.' })
 });
 
 // 2. Define the shape of our form response state

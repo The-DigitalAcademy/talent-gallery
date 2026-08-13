@@ -46,7 +46,8 @@ export async function getFilteredTalents(filters: FilterParams) {
       project:projects(id, name, description)
     ),
     endorsements(id, endorser_name, message)
-  `, { count: 'exact' });
+  `, { count: 'exact' })
+    .eq("is_published", true);
 
   // Case-insensitive filtering
   if (filters.cohort) {
