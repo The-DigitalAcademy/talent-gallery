@@ -15,7 +15,7 @@ export default function FooterCTA() {
         <div className="md:pr-12">
           <h2 className="text-[19px] sm:text-[24px] md:text-[32px] uppercase tracking-wider leading-snug sm:leading-tight">
             <span className="text-black font-normal">READY TO EXPLORE </span>
-            <span className="text-white font-bold">TALENT?</span>
+            <span className="text-white">TALENT?</span>
           </h2>
           <p className="mt-3 text-[15px] sm:text-[16px] text-black font-normal max-w-lg leading-relaxed">
             Tell us what role you're hiring for, and we'll help identify suitable

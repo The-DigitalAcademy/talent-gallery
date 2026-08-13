@@ -3,6 +3,7 @@ import GoogleAnalytics from "./_components/GoogleAnalytics";
 import PublicLayout from "./_components/PublicLayout";
 import "./globals.css";
 import { GlobalToaster } from "./_components/GlobalToaster";
+import ScrollToTop from "./_components/ScrollToTop";
 
 export const metadata: Metadata = {
   title: {
@@ -72,8 +73,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[#f1f1f1]">
         <GoogleAnalytics />
+        <ScrollToTop/>
         <PublicLayout>{children}</PublicLayout>
         {modal}
         <GlobalToaster />

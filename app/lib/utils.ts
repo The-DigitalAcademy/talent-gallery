@@ -67,11 +67,27 @@ export function getTalentStatusColor(statusName: string): string {
     { status: "available for hire", color: "#FFB800" },
     { status: "in wpe", color: "#C755FF" },
     { status: "employed", color: "#2DD4BF" },
+    { status: "reserved", color: "#e1e1e1"}
   ];
 
   return (
     talent_status_colors.find((s) => s.status === statusName.toLowerCase())?.color
     ?? "#9CA3AF" // fallback gray
+  );
+}
+
+export function getTalentStatusSecondaryColor(statusName: string): string {
+  const talent_status_secondary_colors = [
+    { status: "available for wpe", color: "#FFC299" },
+    { status: "available for hire", color: "#FFD966" },
+    { status: "in wpe", color: "#E3A6FF" },
+    { status: "employed", color: "#7EEDDF" },
+    { status: "reserved", color: "#F5F5F5" }
+  ];
+
+  return (
+    talent_status_secondary_colors.find((s) => s.status === statusName?.toLowerCase())?.color
+    ?? "#D1D5DB" // fallback lighter gray
   );
 }
 
@@ -124,15 +140,16 @@ export const getStatusBadgeStyle = (status: string | undefined) => {
     case 'available for hire': return 'bg-amber-400 text-white';
     case 'in wpe': return 'bg-purple-500 text-white';
     case 'employed': return 'bg-teal-400 text-white';
+    case 'reserved': return 'bg-[#e1e1e1] text-black';
     default: return 'bg-slate-500 text-white';
   }
 };
 
 export function firstWord(str: string) {
-  return str.trim().split(/\s+/)[0];
+  return str?.trim().split(/\s+/)[0];
 }
 
 export function firstLetter(str: string) {
-  return str.split(" ")[str.split.length - 1][0];
+  return str?.split(" ")[str?.split.length - 1][0];
 }
 

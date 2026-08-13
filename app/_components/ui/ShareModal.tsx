@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ProfileAvatar } from "./ProfileAvatar";
 import { CloseButton } from "./CloseButton";
 import { MailIcon, CopyIcon, CheckIcon } from "./Icons";
+import { cn } from "@/app/lib/utils";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -13,9 +14,11 @@ interface ShareModalProps {
     program?: { name: string } | null;
     slug: string;
   };
+  statusColor: string;
+  statusColorHex: string;
 }
 
-export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
+export function ShareModal({ isOpen, onClose, talent, statusColor, statusColorHex }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -78,7 +81,7 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
       >
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-[#01317F] font-bold text-lg leading-none">Share Profile</h2>
+          <h2 className="text-black font-bold text-lg leading-none">Share Profile</h2>
           <CloseButton onClick={onClose} size="w-5 h-5" color="text-slate-400" hoverColor="hover:text-slate-600" />
         </div>
 
@@ -116,13 +119,13 @@ export function ShareModal({ isOpen, onClose, talent }: ShareModalProps) {
             />
             <button
               onClick={handleCopy}
-              className={`h-10 px-4 rounded-lg flex items-center justify-center gap-1.5 font-bold text-xs text-white cursor-pointer transition-all duration-150 shrink-0 ${
-                copied ? "bg-green-600 hover:bg-green-700" : "bg-[#FF7900] hover:bg-[#E06A00]"
-              }`}
+              className={cn(`h-10 px-4 rounded-lg flex items-center justify-center gap-1.5 font-bold text-xs text-white cursor-pointer transition-all duration-150 shrink-0 ${
+                copied ? "bg-green-600" : statusColor
+              }`)}
             >
               {copied ? (
                 <>
-                  <CheckIcon />
+                  <CheckIcon size="w-3 h-3 sm:w-4 sm:h-4"/>
                   <span>Copied</span>
                 </>
               ) : (

@@ -102,13 +102,13 @@ export function ExternalIcon() {
   )
 }
 
-export function QoutesIcon() {
+export function QoutesIcon({fromColor, toColor} : {fromColor: string, toColor: string}) {
   return (
     <svg className="w-8 h-8 sm:w-14 sm:h-14" viewBox="58 170 364 283" xmlns="http://www.w3.org/2000/svg" shapeRendering="geometricPrecision">
       <defs>
         <linearGradient id="quoteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FBBF24"/>
-          <stop offset="100%" stopColor="#F59E0B"/>
+          <stop offset="0%" stopColor={fromColor}/>
+          <stop offset="100%" stopColor={toColor}/>
         </linearGradient>
       </defs>
 
@@ -149,4 +149,56 @@ export function Back() {
       <path d="M15 18L9 12L15 6" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g>
     </svg>
   );
+}
+
+export function DownwardCurveArrow() {
+  return (
+    <svg width="1536" height="364" viewBox="0 0 1536 364" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M82 88
+          C340 181, 525 247, 768 248
+          C1011 247, 1196 181, 1452 87"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeDasharray="28 24"
+      />
+   
+      <path
+        d="M1447 73
+          L1472 74
+          L1467 99"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+export function UpwardCurveArrow() {
+  return (
+    <svg width="1536" height="364" viewBox="0 0 1536 364" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M82 292
+          C340 199, 525 133, 768 132
+          C1011 133, 1196 199, 1452 292"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeDasharray="28 24"
+      />
+
+      <path
+        d="M1447 306
+          L1472 306
+          L1467 281"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
 }

@@ -81,7 +81,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
   };
 
     return (
-        <div className={`${montserrat.className} min-h-screen bg-neutral-100 pb-12`}>
+        <div className={`${montserrat.className} bg-[#f1f1f1] pb-12`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 space-y-6 pt-10">
                 {cohort &&
                     <h1 className="text-2xl sm:text-3xl font-bold leading-snug tracking-wide uppercase text-center">

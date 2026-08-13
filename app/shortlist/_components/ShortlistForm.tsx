@@ -137,7 +137,7 @@ export default function ShortlistForm({
       <div className="flex items-center gap-4 mt-3">
         <Link
           href="/talent"
-          className="flex-1 text-center bg-[#E5E5E5] hover:bg-gray-300 text-gray-900 font-bold text-sm py-3.5 px-4 rounded-md transition-colors whitespace-nowrap"
+          className="flex-1 text-center bg-[#E5E5E5] hover:bg-gray-300 text-black font-bold text-sm py-3.5 px-4 rounded-md transition-colors whitespace-nowrap"
         >
           Continue Browsing
         </Link>

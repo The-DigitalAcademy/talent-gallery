@@ -82,24 +82,24 @@ export default function HeroSection({
         </div>
 
         {/* DESKTOP HERO (>= md): Exact original 2-column layout preserved */}
-        <div className="hidden md:grid md:grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
+        <div className="hidden md:grid md:grid-cols-2 gap-12 items-center min-h-[520px] pb-16">
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
-            <h1 className="text-[43px] font-medium text-gray-900 leading-tight tracking-tight uppercase">
+            <h1 className="text-[43px] text-black leading-tight tracking-tight uppercase">
               Work-Ready{" "}
-              <span className="text-red-500">Talent.</span> Ready
+              <span className="text-red-500">Talent.</span> Ready to Shape the
               <br />
-              to Shape the Future.
+              Future.
             </h1>
 
-            <p className="text-[21px] text-gray-500 leading-relaxed max-w-lg">
+            <p className="text-[21px] text-black leading-relaxed max-w-lg">
               Browse verified learners, graduates, and candidates who have
               completed practical training and workplace projects through Shaper
               programmes.
             </p>
 
-            <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-6 mt-2">
               <Link
                 href="/talent"
                 className="bg-[#01317F] text-white text-[18px] font-semibold px-6 py-3 rounded-[3px] hover:bg-blue-900 transition-colors"
@@ -108,7 +108,7 @@ export default function HeroSection({
               </Link>
               <Link
                 href="#contact"
-                className="text-[18px] font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-[18px] font-semibold text-gray-700 hover:text-black transition-colors"
               >
                 Contact Us
               </Link>
@@ -137,18 +137,18 @@ export default function HeroSection({
 
               {/* Role */}
               <div className="flex flex-col gap-0.5 flex-1">
-                <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+                <label className="ml-1 text-[12px] sm:text-[13px] font-bold text-black uppercase tracking-wider">
                   Role
                 </label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${role ? "text-gray-900" : "text-gray-600"
+                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${role ? "text-black" : "text-gray-600"
                     }`}
                 >
                   <option value="">Select a role</option>
                   {roles.map((role) => (
-                    <option key={role.id} value={role.name} className="text-gray-800">
+                    <option key={role.id} value={role.name} className="text-black">
                       {role.name}
                     </option>
                   ))}
@@ -158,18 +158,18 @@ export default function HeroSection({
 
               {/* Location */}
               <div className="flex flex-col gap-0.5 flex-1 border-t md:border-t-0 border-gray-300/70 pt-2 md:pt-0">
-                <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+                <label className="ml-1 text-[12px] sm:text-[13px] font-bold text-black uppercase tracking-wider">
                   Location
                 </label>
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${location ? "text-gray-900" : "text-gray-600"
+                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${location ? "text-black" : "text-gray-600"
                     }`}
                 >
                   <option value="">Select a location</option>
                   {locations.map((loc) => (
-                    <option key={loc.id} value={loc.city} className="text-gray-800">
+                    <option key={loc.id} value={loc.city} className="text-black">
                       {loc.city}
                     </option>
                   ))}
@@ -179,18 +179,18 @@ export default function HeroSection({
 
               {/* Skills */}
               <div className="flex flex-col gap-0.5 flex-1 border-t md:border-t-0 border-gray-300/70 pt-2 md:pt-0">
-                <label className="text-[12px] sm:text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+                <label className="ml-1 text-[12px] sm:text-[13px] font-bold text-black uppercase tracking-wider">
                   Skills
                 </label>
                 <select
                   value={skill}
                   onChange={(e) => setSkill(e.target.value)}
-                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${skill ? "text-gray-900" : "text-gray-600"
+                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${skill ? "text-black" : "text-gray-600"
                     }`}
                 >
                   <option value="">Select skills</option>
                   {capabilities.map((cap) => (
-                    <option key={cap.id} value={cap.name} className="text-gray-800">
+                    <option key={cap.id} value={cap.name} className="text-black">
                       {cap.name}
                     </option>
                   ))}
@@ -200,28 +200,29 @@ export default function HeroSection({
 
               {/* Availability */}
               <div className="flex flex-col gap-0.5 flex-1">
-                <label className="text-[13px] font-bold text-gray-500 uppercase tracking-wider">
+                <label className="ml-1 text-[13px] font-bold text-black uppercase tracking-wider">
                   Availability
                 </label>
                 <select
                   value={availability}
                   onChange={(e) => setAvailability(e.target.value)}
-                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${availability ? "text-gray-900" : "text-gray-600"
+                  className={`text-[15px] border-0 outline-none bg-transparent cursor-pointer font-normal ${availability ? "text-black" : "text-gray-600"
                     }`}
                 >
                   <option value="">Select availability</option>
                   {statuses.map((stat) => (
-                    <option key={stat.id} value={stat.name} className="text-gray-800">
+                    <option key={stat.id} value={stat.name} className="text-black">
                       {stat.name}
                     </option>
                   ))}
                 </select>
               </div>
+              <div className="hidden md:block invisible w-px h-8 bg-gray-400" />
 
               {/* Search Button */}
               <button
                 onClick={handleSearch}
-                className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded-[3px] hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
+                className="bg-[#01317F] text-white text-[18px] font-semibold px-8 py-3 rounded-[3px] hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
               >
                 Search
               </button>

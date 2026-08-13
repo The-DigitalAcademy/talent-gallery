@@ -2,6 +2,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { Metadata } from "next";
 import ProfileClient from "./_components/ProfileClient";
 import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -68,11 +69,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { data: talent, error } = await getTalentBySlug(slug);
 
   if (error) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Failed to load talent profile.</p>
-      </main>
-    );
+    notFound()
   }
 
   return  (
