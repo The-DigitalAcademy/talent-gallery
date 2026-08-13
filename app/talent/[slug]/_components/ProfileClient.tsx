@@ -18,7 +18,7 @@ export default function ProfileClient({talent} : ProfileClientProps) {
                 className="py-4 flex gap-2 items-center active:scale-95 transition left-0  md:left-56 cursor-pointer"
             >
                 <Back/>
-                <p className="text-sm md:text-base">Browse talents</p>
+                <p className="text-sm md:text-base">Browse Talent</p>
             </div>
             <TalentProfile talent={talent} onClose={close} isModal={false}/>
         </div>
