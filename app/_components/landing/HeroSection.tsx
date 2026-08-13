@@ -82,7 +82,7 @@ export default function HeroSection({
         </div>
 
         {/* DESKTOP HERO (>= md): Exact original 2-column layout preserved */}
-        <div className="hidden md:grid md:grid-cols-2 gap-12 items-center min-h-[520px] pt-28 pb-16">
+        <div className="hidden md:grid md:grid-cols-2 gap-12 items-center min-h-[520px] pb-16">
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">

@@ -100,7 +100,7 @@ export default function ShortlistPage() {
   if (submitted) return <SuccessState />;
 
   return (
-    <div className="min-h-screen bg-white md:bg-[#F5F5F5] py-0 md:py-16 px-0 sm:px-6 md:px-8 flex justify-center">
+    <div className="min-h-screen bg-white md:bg-[#f1f1f1] py-0 md:py-12 px-0 sm:px-6 md:px-8 flex justify-center">
       <div className="w-full min-h-screen md:min-h-0 md:w-3xl lg:w-[960px] xl:w-[1170px] mx-auto bg-white rounded-none md:rounded-xl shadow-none md:shadow-sm p-5 sm:p-8 md:p-12 lg:p-14">
         {/* Header */}
         <div className="flex items-center justify-between mb-2">

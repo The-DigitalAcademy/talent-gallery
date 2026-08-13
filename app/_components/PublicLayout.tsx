@@ -20,7 +20,7 @@ export default function PublicLayout({
   return (
     <>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 mt-16">{children}</main>
       <FooterCTA />
       <ShortlistFAB />
     </>

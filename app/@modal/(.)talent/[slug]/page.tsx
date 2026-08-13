@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import ModalClient from "./components/ModalClient";
 import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
 
@@ -11,11 +12,7 @@ export default async function PhotoModal({
     const { data: talent, error } = await getTalentBySlug(slug);
 
     if (error) {
-        return (
-        <main className="min-h-screen flex items-center justify-center">
-            <p className="text-black">Failed to load talent profile.</p>
-        </main>
-        );
+      notFound()
     }
     
   return (
