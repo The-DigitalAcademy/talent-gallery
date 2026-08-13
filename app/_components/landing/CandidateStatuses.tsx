@@ -42,7 +42,7 @@ export default function CandidateStatuses() {
           <div>
             {/* Heading — centered inside the grey box */}
             <div className="text-center mb-10 px-6 max-w-2xl mx-auto">
-              <h2 className="text-[26px] font-bold text-black uppercase tracking-wider">
+              <h2 className="text-[26px] text-black uppercase tracking-wider">
                 Candidate Statuses
               </h2>
               <p className="mt-3 text-[17px] text-gray-600 leading-relaxed">
@@ -52,7 +52,7 @@ export default function CandidateStatuses() {
             </div>
 
             {/* Content Area — ample horizontal space for status list */}
-            <div className="pl-6 md:pl-16 pr-6 lg:pr-[380px]">
+            <div className="pl-6 md:pl-16 pr-6 lg:pr-[440px]">
               {/* Status List */}
               <div className="flex flex-col gap-6 md:gap-5">
                 {statuses.map((status) => (
@@ -73,7 +73,7 @@ export default function CandidateStatuses() {
 
           {/* MOBILE Navy Card — sits flush at the bottom of main card on < lg screens */}
           <div className="block lg:hidden mt-8 bg-[#01317F] rounded-b-[3px] p-6 sm:p-8 text-white">
-            <h3 className="font-bold text-[16px] sm:text-[18px] uppercase tracking-wide leading-snug mb-3">
+            <h3 className="text-[16px] sm:text-[18px] uppercase tracking-wide leading-snug mb-3">
               Designed to support long-term talent connections.
             </h3>
             <p className="text-sm sm:text-base text-gray-200 leading-relaxed">
@@ -84,17 +84,17 @@ export default function CandidateStatuses() {
         </div>
 
         {/* Navy Card — positioned down and to the right, overlapping the right side */}
-        <div className="hidden lg:flex absolute right-[-30px] top-[150px] w-[350px] bg-[#01317F] rounded-[3px] overflow-hidden flex-col justify-between min-h-[440px] z-10">
+        <div className="hidden lg:flex absolute right-[-80px] top-[200px] w-[450px] bg-[#01317F] rounded-[3px] overflow-hidden flex-col justify-between z-10">
           
           {/* Navy top — heading */}
-          <div className="px-6 pt-10 pb-8">
-            <h3 className="text-white font-bold text-[16px] uppercase tracking-wider leading-snug">
-              Designed to support long-term talent connections.
+          <div className="p-6">
+            <h3 className="text-white text-[16px] uppercase tracking-wider leading-snug">
+              Designed to support<br/> long-term talent<br/> connections.
             </h3>
           </div>
 
           {/* Light section — body text, inside the same card */}
-          <div className="bg-[#D8D8D8] px-8 pt-8 pb-10 flex-1 flex flex-col justify-center border-t border-gray-300/60">
+          <div className="bg-[#D8D8D8] px-6 py-8 pb-10 pr-24 flex-1 flex flex-col justify-center border-t border-gray-300/60">
             <p className="text-gray-600 text-[16px] leading-relaxed mb-6">
               You may express interest in any candidate, regardless of their
               current status.

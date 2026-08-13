@@ -150,3 +150,55 @@ export function Back() {
     </svg>
   );
 }
+
+export function DownwardCurveArrow() {
+  return (
+    <svg width="1536" height="364" viewBox="0 0 1536 364" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M82 88
+          C340 181, 525 247, 768 248
+          C1011 247, 1196 181, 1452 87"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeDasharray="28 24"
+      />
+   
+      <path
+        d="M1447 73
+          L1472 74
+          L1467 99"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+export function UpwardCurveArrow() {
+  return (
+    <svg width="1536" height="364" viewBox="0 0 1536 364" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M82 292
+          C340 199, 525 133, 768 132
+          C1011 133, 1196 199, 1452 292"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeDasharray="28 24"
+      />
+
+      <path
+        d="M1447 306
+          L1472 306
+          L1467 281"
+        stroke="#E5E5E5"
+        strokeWidth="12"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}

@@ -86,7 +86,7 @@ export default function HeroSection({
 
           {/* LEFT: Copy */}
           <div className="flex flex-col gap-6">
-            <h1 className="text-[43px] font-medium text-black leading-tight tracking-tight uppercase">
+            <h1 className="text-[43px] text-black leading-tight tracking-tight uppercase">
               Work-Ready{" "}
               <span className="text-red-500">Talent.</span> Ready to Shape the
               <br />
@@ -222,7 +222,7 @@ export default function HeroSection({
               {/* Search Button */}
               <button
                 onClick={handleSearch}
-                className="bg-[#01317F] text-white text-[18px] font-bold px-8 py-3 rounded-[3px] hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
+                className="bg-[#01317F] text-white text-[18px] font-semibold px-8 py-3 rounded-[3px] hover:bg-blue-900 transition-colors whitespace-nowrap cursor-pointer"
               >
                 Search
               </button>

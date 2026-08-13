@@ -43,23 +43,24 @@ export default function TrustedBy() {
     setStartIndex((prev) => (prev + 1) % PARTNERS.length);
   };
 
-  // Get 4 visible partners in an infinite wrapping slice
+  // Get 5 visible partners in an infinite wrapping slice
   const visiblePartners = [
     PARTNERS[startIndex % PARTNERS.length],
     PARTNERS[(startIndex + 1) % PARTNERS.length],
     PARTNERS[(startIndex + 2) % PARTNERS.length],
     PARTNERS[(startIndex + 3) % PARTNERS.length],
+    PARTNERS[(startIndex + 4) % PARTNERS.length],
   ];
 
   return (
-    <section className="bg-white py-16 overflow-hidden w-full">
+    <section className="bg-white py-12 overflow-hidden w-full">
       <div className="w-full">
         
         {/* Grey outer card matching Candidate Status box style — full width and border-radius reset */}
-        <div className="bg-[#EFEFEF] rounded-[3px] overflow-hidden grid grid-cols-1 md:grid-cols-[580px_1fr] items-stretch relative min-h-[300px] md:min-h-[380px] w-full">
+        <div className="bg-[#EFEFEF] rounded-[3px] overflow-hidden grid grid-cols-1 md:grid-cols-[540px_1fr] items-stretch relative min-h-[300px] md:min-h-[440px] w-full">
           
           {/* LEFT: Portrait Image spanning full height */}
-          <div className="relative w-full h-full min-h-[280px]">
+          <div className="relative w-full h-full  min-h-[280px]">
             <Image
               src="/stock images/partners stock.png"
               alt="Partner professional"
@@ -70,14 +71,14 @@ export default function TrustedBy() {
           </div>
 
           {/* RIGHT: Text content & Overlay Logo Carousel */}
-          <div className="p-8 md:py-12 md:pr-16 md:pl-12 flex flex-col justify-center gap-6 relative z-10">
+          <div className="p-8 md:py-12 md:pr-16 md:pl-12 flex flex-col justify-center gap-7 relative z-10">
             
             {/* Heading & Subtitle */}
-            <div>
-              <h2 className="text-[24px] font-bold text-black uppercase tracking-wider">
+            <div className="md:-mt-9.5">
+              <h2 className="text-[32px] font-medium text-black uppercase tracking-wider">
                 TRUSTED BY
               </h2>
-              <p className="mt-2 text-[17px] text-black max-w-xl leading-relaxed">
+              <p className="mt-2 text-[18px] text-black max-w-3xl leading-relaxed">
                 Organisations that have hosted WPE learners, partnered on talent initiatives, or
                 hired Shaper candidates.
               </p>
@@ -87,7 +88,7 @@ export default function TrustedBy() {
             <div 
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-white rounded-[3px] px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-48 md:max-w-[920px] z-20"
+              className="bg-white rounded-[3px] px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-110 md:top-8 md:max-w-[1382px] z-20"
             >
               
               {/* Left Arrow (Chevron Caret Icon) */}
@@ -101,12 +102,12 @@ export default function TrustedBy() {
                 </svg>
               </button>
 
-              {/* Rendered Partner Logos — 2 visible on mobile (larger & prominent), 3 on sm, 4 on md+ */}
+              {/* Rendered Partner Logos — 2 visible on mobile (larger & prominent), 3 on sm, 5 on md+ */}
               <div className="flex items-center justify-around flex-1 gap-4 sm:gap-6 px-2 sm:px-4">
                 {visiblePartners.map((partner, index) => (
                   <div
                     key={partner.name}
-                    className={`relative h-14 sm:h-12 items-center justify-center flex-1 max-w-[160px] sm:max-w-[130px] ${
+                    className={`relative h-12 sm:h-20 items-center justify-center flex-1 max-w-[260px] sm:max-w-[130px] ${
                       index >= 2 ? (index === 2 ? "hidden sm:flex" : "hidden md:flex") : "flex"
                     }`}
                   >
@@ -115,7 +116,7 @@ export default function TrustedBy() {
                       alt={`${partner.name} Logo`}
                       width={partner.width}
                       height={partner.height}
-                      className="max-h-12 sm:max-h-11 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
+                      className="max-h-12 sm:max-h-20 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
                     />
                   </div>
                 ))}
