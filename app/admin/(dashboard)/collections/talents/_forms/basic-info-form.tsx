@@ -6,17 +6,28 @@ import { upsertBasicInfo } from "../_actions/basic-info-action";
 import { FormState } from "@/app/lib/definitions";
 import FormSelect from "@/components/admin/form-select";
 
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
+
 const initialState: FormState = {
     success: false,
     message: '',
 };
 
 export default function BasicInfoForm({ values, roles }: { values?: { id: string, fullname?: string, bio?: string, profile_image_url?: string, role_id: string }, roles: { id: string, name: string }[] }) {
-    const createBasicInfo = upsertBasicInfo.bind(null, values?.id || null) //bind id for update, or null for insert
+    const createBasicInfo = (prevState: FormState, formData: FormData) => {
+        const file = formData.get('image') as File;
+        // Check size before sending to the server
+        if (file && file.size > MAX_FILE_SIZE) {
+            return {
+                success: false,
+                message: "Validation Error. Please check the fields.",
+                errors: { image: ["File is too large. Max limit is 1MB."] }
+            };
+        }
+        return upsertBasicInfo(values?.id || null, prevState, formData)
+    }
     const [state, formAction, isPending] = useActionState(createBasicInfo, initialState);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(values?.profile_image_url)
-
-    console.log(roles)
 
     function handleImagePreview(e: ChangeEvent<HTMLInputElement>) {
         const file = e.target.files ? e.target.files[0] : null;
