@@ -53,7 +53,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
   return (
     <article
       style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}
-      className={`bg-white rounded-[3px] flex flex-col pt-10 justify-between relative transition-all duration-200 hover:border-slate-200`}
+      className={`bg-white hover:shadow-xs rounded-[3px] flex flex-col pt-10 justify-between relative transition-all duration-200 hover:border-slate-200`}
     >
       {/* TOP UTILITIES */}
       <div className={`h-10 absolute w-full top-0 left-0`}>
@@ -73,7 +73,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
 
       {/* CLICKABLE CARD BODY */}
       <Link href={`/talent/${talent.slug}`} className="px-3 md:px-9 pb-3 md:pb-7 mt-10 block group select-none flex flex-col h-full">
-        <div className='flex flex-col gap-6 flex-1 mb-6'>
+        <div className='flex flex-col gap-6 flex-1 mb-6 hover:shadow-xs'>
           {/* User Block info */}
           <header className="flex items-center gap-3">
             <Avatar.Root className="inline-flex size-17 md:size-21 items-center justify-center overflow-hidden rounded-full bg-gray-100 align-middle text-base leading-none font-normal select-none">
@@ -89,7 +89,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
               </Avatar.Fallback>
             </Avatar.Root>
             <div>
-              <h3 className={`${lexend.className} uppercase tracking-wide md:text-lg md:text-lg leading-tight group-hover:text-blue-600 transition-colors mb-1`}>
+              <h3 className={`${lexend.className} uppercase tracking-wide md:text-lg leading-tight transition-colors mb-1`}>
                 <span className='font-bold'>{fullNames[0]}</span>
                 <span className='font-light'> {fullNames.length > 1 ? fullNames[fullNames.length - 1].charAt(0) + "." : ""}</span>
               </h3>
