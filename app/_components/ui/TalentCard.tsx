@@ -72,7 +72,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
       </div>
 
       {/* CLICKABLE CARD BODY */}
-      <Link href={`/talent/${talent.slug}`} className="px-3 md:px-9 pb-3 md:pb-7 mt-10 group select-none flex flex-col h-full">
+      <Link target='_blank' href={`/talent/${talent.slug}`} className="px-3 md:px-9 pb-3 md:pb-7 mt-10 group select-none flex flex-col h-full">
         <div className='flex flex-col gap-6 flex-1 mb-6'>
           {/* User Block info */}
           <header className="flex items-center gap-3">
