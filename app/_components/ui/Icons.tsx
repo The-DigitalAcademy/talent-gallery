@@ -102,13 +102,13 @@ export function ExternalIcon() {
   )
 }
 
-export function QoutesIcon() {
+export function QoutesIcon({fromColor, toColor} : {fromColor: string, toColor: string}) {
   return (
     <svg className="w-8 h-8 sm:w-14 sm:h-14" viewBox="58 170 364 283" xmlns="http://www.w3.org/2000/svg" shapeRendering="geometricPrecision">
       <defs>
         <linearGradient id="quoteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FBBF24"/>
-          <stop offset="100%" stopColor="#F59E0B"/>
+          <stop offset="0%" stopColor={fromColor}/>
+          <stop offset="100%" stopColor={toColor}/>
         </linearGradient>
       </defs>
 

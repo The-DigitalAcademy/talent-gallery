@@ -7,7 +7,7 @@ export default function Loading() {
         {/* Back link */}
         <div className="py-4 flex gap-2 items-center left-0 md:left-56">
           <Back />
-          <p className="text-sm md:text-base">Browse talents</p>
+          <p className="text-sm md:text-base">Browse Talent</p>
         </div>
 
         <div className="relative bg-[#ffffff] w-full h-fit rounded-[3px] animate-pulse">

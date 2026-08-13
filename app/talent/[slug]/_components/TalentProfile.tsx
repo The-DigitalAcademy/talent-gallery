@@ -9,7 +9,7 @@ import { ShareModal } from "@/app/_components/ui/ShareModal";
 import ShortlistTag from "@/app/_components/ui/ShortlistTag";
 import { SkillTag } from "@/app/_components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
-import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter } from "@/app/lib/utils";
+import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter, getTalentStatusColor, getTalentStatusSecondaryColor } from "@/app/lib/utils";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
@@ -25,6 +25,8 @@ interface TalentProfileProps {
 export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) {
   const displayStatus = talent.talent_status?.name;
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
+  const fromColor = getTalentStatusColor(displayStatus!)
+  const toColor = getTalentStatusSecondaryColor(displayStatus!)
 
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [position, setPosition] = useState("sticky");
@@ -107,7 +109,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             className="fixed md:hidden z-50 py-2 flex gap-2 items-center active:scale-95 transition left-0 top-1 sm:top-2 md:left-56 cursor-pointer"
           >
             <Back/>
-            <p className="text-sm sm:text-base">Browse talents</p>
+            <p className="text-sm sm:text-base">Browse Talent</p>
           </div> 
         </Fragment>
       }
@@ -135,9 +137,11 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
                 <h1 className="text-2xl sm:text-4xl font-thin">{firstLetter(talent?.fullname)}.</h1>
               </div>
               <div className="flex gap-2">
-                <Link href={talent.github_url || ""} className="cursor-pointer">
-                  <GitHubIcon/>
-                </Link>
+                {talent.github_url &&
+                  <Link href={talent.github_url} className="cursor-pointer">
+                    <GitHubIcon/>
+                  </Link>
+                }
                 <div onClick={handleShareClick} className="cursor-pointer">
                   <ShareIcon/>
                 </div>
@@ -185,7 +189,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             {/* Core Skills */}
             {(skills.length > 0 || talent.capabilities_summary) &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+                <EmploymentHr bgColor={bgColorEmployement} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
                 <div className="flex flex-col gap-2">
                   <h2 className="font-semibold text-xl sm:text-2xl">CORE SKILLS</h2>
@@ -210,7 +214,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             {/* Experience highlights */}
             {(talent.work_experiences[0] || projects.length > 0) &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+                <EmploymentHr bgColor={bgColorEmployement} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
                 <div className="flex flex-col gap-4">
                   <h2 className="font-semibold text-xl sm:text-2xl">EXPERIENCE HIGHLIGHTS</h2>
@@ -246,12 +250,11 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             {/* Endorsement */}
             {endorsement &&
               <div className="flex flex-col gap-4">
-                <EmploymentHr bgColor={"bg-[#FFB800]"} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+                <EmploymentHr bgColor={bgColorEmployement} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
                 <div className="flex flex-col gap-4">
                   <h2 className="font-semibold text-xl sm:text-2xl">ENDORSEMENT</h2>
-                  <EndorsementCard endorser={endorsement?.endorser_name} description={endorsement?.message} 
-                    bgColor={"bg-[#f8f8f8]"} endoserStyle={"text-sm sm:text-base"} descriptionStyle={"py-2 sm:py-4 text-sm sm:text-base italic"} padding={"p-4"}
-                  />
+                  <EndorsementCard endorser={endorsement?.endorser_name} description={endorsement?.message}
+                  bgColor={"bg-[#f8f8f8]"} endoserStyle={"text-sm sm:text-base"} descriptionStyle={"py-2 sm:py-4 text-sm sm:text-base italic"} padding={"p-4"} fromColor={fromColor} toColor={toColor}                  />
                 </div>
               </div>
             }
