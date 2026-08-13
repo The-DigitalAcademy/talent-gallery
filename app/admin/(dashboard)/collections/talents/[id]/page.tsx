@@ -10,12 +10,13 @@ import ProjectsForm from "../_forms/projects-form";
 import { TalentCapabilitiesForm } from "../_forms/capability-form";
 import { PublishedStatusForm } from "../_forms/published-status-form";
 import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
+import CapabilitiesSummaryForm from "../_forms/capabilities-summary-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name)")
+        .select("id, fullname, bio, profile_image_url, role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name), capabilities_summary")
         .eq("id", id)
         .single()
 
@@ -69,6 +70,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     capabilities={capabilities || []}
                     talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
+                <CapabilitiesSummaryForm values={{ id: talent?.id, summary: talent?.capabilities_summary }} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
