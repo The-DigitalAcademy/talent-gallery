@@ -41,7 +41,7 @@ export default function HeroSection({
   };
 
   return (
-    <section id="home" className="bg-[#F1F1F1] relative">
+    <section id="home" className="bg-[#F1F1F1] relative pt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
 
         {/* MOBILE HERO (< md): Full-bleed Dark Photo Overlay Banner starting right where Nav ends with zero margins */}
