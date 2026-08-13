@@ -20,7 +20,6 @@ export async function fetchTalents(filters: TalentFilters = {}) {
             talent_statuses${filters.status ? "!inner" : ""} (id, name), 
             is_published,
             created_at`)
-        .eq("is_published", true)
 
     if (fullname)
         query = query.ilike('fullname', `%${fullname || ""}%`)
