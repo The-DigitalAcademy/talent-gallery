@@ -63,10 +63,10 @@ export default function BrowseTalentPreview() {
 
         {/* Heading — centered on mobile, left-aligned on desktop */}
         <div className="text-center md:text-left mb-10">
-          <h2 className="text-[28px] sm:text-[34px] font-medium text-gray-900 leading-tight uppercase tracking-wider">
+          <h2 className="text-[28px] sm:text-[34px] font-medium text-black leading-tight uppercase tracking-wider">
             BROWSE <span className="text-red-500 font-semibold">TALENT</span>
           </h2>
-          <p className="mt-2 text-[16px] sm:text-[18px] text-gray-500 max-w-md mx-auto md:mx-0 leading-relaxed">
+          <p className="mt-2 text-[16px] sm:text-[18px] text-black max-w-md mx-auto md:mx-0 leading-relaxed">
             Explore candidates at every stage of their professional journey.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function BrowseTalentPreview() {
                   onClick={() => handleTabChange(tab.value)}
                   className={`pb-4 text-[14px] sm:text-[16px] font-bold tracking-wider sm:tracking-widest transition-all relative whitespace-nowrap ${
                     isActive
-                      ? "text-gray-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gray-900"
+                      ? "text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gray-900"
                       : "text-gray-400 hover:text-gray-700"
                   }`}
                 >
@@ -102,7 +102,7 @@ export default function BrowseTalentPreview() {
               ))}
             </div>
           ) : talents.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-slate-100 rounded-[3px] text-gray-500 font-medium">
+            <div className="text-center py-20 bg-white border border-slate-100 rounded-[3px] text-black font-medium">
               No talent profiles found matching this status.
             </div>
           ) : (

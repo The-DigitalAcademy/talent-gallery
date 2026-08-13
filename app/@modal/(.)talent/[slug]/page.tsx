@@ -13,7 +13,7 @@ export default async function PhotoModal({
     if (error) {
         return (
         <main className="min-h-screen flex items-center justify-center">
-            <p className="text-gray-500">Failed to load talent profile.</p>
+            <p className="text-black">Failed to load talent profile.</p>
         </main>
         );
     }

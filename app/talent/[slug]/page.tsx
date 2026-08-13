@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (error) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Failed to load talent profile.</p>
+        <p className="text-black">Failed to load talent profile.</p>
       </main>
     );
   }

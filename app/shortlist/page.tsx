@@ -104,7 +104,7 @@ export default function ShortlistPage() {
       <div className="w-full min-h-screen md:min-h-0 md:w-3xl lg:w-[960px] xl:w-[1170px] mx-auto bg-white rounded-none md:rounded-xl shadow-none md:shadow-sm p-5 sm:p-8 md:p-12 lg:p-14">
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-xl md:text-2xl font-bold tracking-widest uppercase text-gray-900">
+          <h1 className="text-xl md:text-2xl font-bold tracking-widest uppercase text-black">
             YOUR SHORTLIST
           </h1>
           <Link

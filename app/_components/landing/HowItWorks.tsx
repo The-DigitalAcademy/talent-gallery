@@ -48,13 +48,13 @@ export default function HowItWorks() {
 
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-[34px] font-bold text-gray-900 leading-tight">
+          <h2 className="text-[34px] font-bold text-black leading-tight">
             Shaper
           </h2>
           <p className="text-[34px] font-bold text-red-500 uppercase tracking-widest leading-tight">
             TALENT
           </p>
-          <p className="mt-4 text-[19px] text-gray-500 max-w-lg mx-auto leading-relaxed">
+          <p className="mt-4 text-[19px] text-black max-w-lg mx-auto leading-relaxed">
             Discover emerging talent equipped with practical skills and
             real-world experience.
           </p>
@@ -103,14 +103,14 @@ export default function HowItWorks() {
               </div>
 
               {/* Title */}
-              <h3 className="text-[16px] font-bold text-gray-900 uppercase tracking-wider leading-snug mb-3">
+              <h3 className="text-[16px] font-bold text-black uppercase tracking-wider leading-snug mb-3">
                 {step.title.map((line, i) => (
                   <span key={i} className="inline md:block">{line} </span>
                 ))}
               </h3>
 
               {/* Description */}
-              <p className="text-[16px] md:text-[18px] text-gray-500 leading-relaxed max-w-[280px]">
+              <p className="text-[16px] md:text-[18px] text-black leading-relaxed max-w-[280px]">
                 {step.description}
               </p>
 

@@ -42,7 +42,7 @@ export default function CandidateStatuses() {
           <div>
             {/* Heading — centered inside the grey box */}
             <div className="text-center mb-10 px-6 max-w-2xl mx-auto">
-              <h2 className="text-[26px] font-bold text-gray-900 uppercase tracking-wider">
+              <h2 className="text-[26px] font-bold text-black uppercase tracking-wider">
                 Candidate Statuses
               </h2>
               <p className="mt-3 text-[17px] text-gray-600 leading-relaxed">

@@ -70,7 +70,7 @@ export default function ShortlistCard({ talent, onRemove }: ShortlistCardProps) 
         {/* Info */}
         <div className="flex-1 min-w-0">
           <h3 className="text-base sm:text-lg md:text-xl uppercase tracking-wide leading-snug truncate">
-            <span className="font-bold text-gray-900">{firstName}</span>
+            <span className="font-bold text-black">{firstName}</span>
             {lastInitial && (
               <span className="font-medium text-gray-700"> {lastInitial}</span>
             )}
@@ -79,7 +79,7 @@ export default function ShortlistCard({ talent, onRemove }: ShortlistCardProps) 
             {talent.role?.name}
           </p>
           {talent.location && (
-            <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 flex items-center gap-1 mt-1 sm:mt-1.5 truncate">
+            <p className="text-[11px] sm:text-xs md:text-sm text-black flex items-center gap-1 mt-1 sm:mt-1.5 truncate">
               <MapPinIcon size={12} className="shrink-0 text-gray-400" />
               <span>
                 {talent.location.city}, {talent.location.country}
