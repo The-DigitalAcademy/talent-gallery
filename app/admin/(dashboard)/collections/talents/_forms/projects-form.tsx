@@ -49,7 +49,6 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                         <Field.Root name="url" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
                                 type="text"
-                                required
                                 defaultValue={state?.fields?.url}
                                 placeholder="Project URL"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
