@@ -1,3 +1,6 @@
+import Image from "next/image";
+import { DownwardCurveArrow, UpwardCurveArrow } from "../ui/Icons";
+
 export default function HowItWorks() {
   const steps = [
     {
@@ -47,14 +50,17 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto md:px-6 lg:px-6">
 
         {/* Heading */}
-        <div className="text-center mb-16">
-          <h2 className="text-[34px] font-bold text-gray-900 leading-tight">
-            Shaper
-          </h2>
-          <p className="text-[34px] font-bold text-red-500 uppercase tracking-widest leading-tight">
+        <div className="flex flex-col items-center text-center mb-16">
+          <Image
+            src={"https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper-brand-name.png"}
+            alt={"Shaper logo"}
+            width={160}
+            height={160}
+          />
+          <p className="-mt-3 text-[34px] font-medium text-red-500 uppercase tracking-widest leading-tight">
             TALENT
           </p>
-          <p className="mt-4 text-[19px] text-gray-500 max-w-lg mx-auto leading-relaxed">
+          <p className="mt-4 text-[19px] text-black max-w-lg mx-auto leading-relaxed">
             Discover emerging talent equipped with practical skills and
             real-world experience.
           </p>
@@ -76,41 +82,28 @@ export default function HowItWorks() {
 
                 {/* DESKTOP Dotted arrow — straight horizontal arrow */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:flex absolute left-[calc(50%+36px)] right-[-50%+36px] w-[calc(100%-72px)] items-center pointer-events-none">
-                    <svg
-                      viewBox="0 0 160 24"
-                      className="w-full h-5 text-gray-300"
-                      fill="none"
-                      preserveAspectRatio="none"
-                    >
-                      <path
-                        d="M 32 12 L 142 12"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeDasharray="5 4"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M 146 7 L 154 12 L 146 17"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
+                  <>
+                    {index == 0 ?
+                      <div className="hidden md:flex absolute -top-43 left-[calc(50%+50.5px)] w-[calc(100%-72px)] items-center pointer-events-none">
+                        <UpwardCurveArrow/>
+                      </div> :
+                      <div className="hidden md:flex absolute -bottom-43 left-[calc(50%+50.5px)] w-[calc(100%-72px)] items-center pointer-events-none">
+                        <DownwardCurveArrow/>
+                      </div>
+                    }
+                  </>
                 )}
               </div>
 
               {/* Title */}
-              <h3 className="text-[16px] font-bold text-gray-900 uppercase tracking-wider leading-snug mb-3">
+              <h3 className="text-[20px] text-black uppercase tracking-wider leading-snug mb-3">
                 {step.title.map((line, i) => (
                   <span key={i} className="inline md:block">{line} </span>
                 ))}
               </h3>
 
               {/* Description */}
-              <p className="text-[16px] md:text-[18px] text-gray-500 leading-relaxed max-w-[280px]">
+              <p className="text-[14px] md:text-[16px] text-black leading-relaxed max-w-[280px]">
                 {step.description}
               </p>
 

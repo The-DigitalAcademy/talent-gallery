@@ -73,7 +73,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[#f1f1f1]">
         <GoogleAnalytics />
         <ScrollToTop/>
         <PublicLayout>{children}</PublicLayout>

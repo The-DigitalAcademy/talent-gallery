@@ -10,10 +10,10 @@ export default function EmptyState() {
         <ClipboardListIcon size={32} className="text-red-400" />
       </div>
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl font-bold text-black mb-2">
           Your shortlist is empty
         </h2>
-        <p className="text-gray-500 text-sm max-w-xs">
+        <p className="text-black text-sm max-w-xs">
           Browse our talent directory and shortlist candidates you&apos;d like to
           connect with.
         </p>
