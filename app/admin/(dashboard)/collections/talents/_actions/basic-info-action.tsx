@@ -20,7 +20,7 @@ const FormSchema = z.object({
         .string()
         .trim()
         .min(2, { message: 'bio must be at least 2 characters long.' })
-        .max(250, { message: 'Name cannot exceed 250 characters.' }),
+        .max(2000, { message: 'Name cannot exceed 2000 characters.' }),
     image: z
         .any()
         // Convert the empty browser placeholder into undefined. With FormData object, the browser still appends a placeholder File object with a size of 0 and a generic type.
