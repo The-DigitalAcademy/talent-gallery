@@ -3,6 +3,8 @@ import { Cohort } from "@/app/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { DeleteFormDialog, UpdateFormDialog } from "./forms";
+import { ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 
 export const columns: ColumnDef<Cohort>[] = [
     { accessorKey: "name", header: "name" },
@@ -10,6 +12,13 @@ export const columns: ColumnDef<Cohort>[] = [
         accessorKey: "created_at",
         header: "created",
         cell: ({ row }) => moment(row.getValue("created_at")).fromNow()
+    },
+    {
+        accessorKey: "slug",
+        header: "public page",
+        cell: ({ row }) => (<Link target="_blank" className="text-blue-500 flex gap-1" href={`/${row.getValue("slug")}`}>
+            {`${window.location.origin}/${row.getValue("slug")}`}<ExternalLinkIcon className='size-3 ' />
+        </Link>)
     },
     {
         accessorKey: "id",
