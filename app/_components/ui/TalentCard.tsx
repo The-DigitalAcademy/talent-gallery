@@ -29,7 +29,6 @@ const getStatusColorClassName = (status: string | undefined) => {
 };
 
 export default function TalentCard({ talent }: TalentCardProps) {
-  console.log(talent.capabilities)
   const talentStatus = talent.talent_status?.name;
   const bgColorClass = getStatusColorClassName(talentStatus?.toLowerCase())
   const fullNames = talent?.fullname.split(" ")
