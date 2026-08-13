@@ -1,9 +1,10 @@
+// components/ScrollToTop.jsx
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function ScrollToTop() {
+function ScrollToTopInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isPopState = useRef(false);
@@ -18,13 +19,19 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     if (isPopState.current) {
-      // Back/forward navigation — let the browser restore scroll position
       isPopState.current = false;
       return;
     }
-    // Forward navigation via Link/router.push — force scroll to top
     window.scrollTo(0, 0);
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export default function ScrollToTop() {
+  return (
+    <Suspense fallback={null}>
+      <ScrollToTopInner />
+    </Suspense>
+  );
 }
