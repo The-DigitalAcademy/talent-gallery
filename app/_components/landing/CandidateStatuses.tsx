@@ -84,7 +84,7 @@ export default function CandidateStatuses() {
         </div>
 
         {/* Navy Card — positioned down and to the right, overlapping the right side */}
-        <div className="hidden lg:flex absolute right-[-80px] top-[200px] w-[450px] bg-[#01317F] rounded-[3px] overflow-hidden flex-col justify-between z-10">
+        <div className="hidden lg:flex absolute -right-4 2xl:-right-6 top-[200px] w-[420px] bg-[#01317F] rounded-[3px] overflow-hidden flex-col justify-between z-10">
           
           {/* Navy top — heading */}
           <div className="p-6">
