@@ -5,10 +5,10 @@ import { revalidatePath } from "next/cache";
 import z from "zod";
 
 const FormSchema = z.object({
-    youtube: z.url("Invalid URL").optional(),
-    portfolio: z.url("Invalid URL").optional(),
-    linkedin: z.url("Invalid URL").optional(),
-    github: z.url("Invalid URL").optional(),
+    youtube: z.url("Invalid URL").or(z.literal("")).optional(),
+    portfolio: z.url("Invalid URL").or(z.literal("")).optional(),
+    linkedin: z.url("Invalid URL").or(z.literal("")).optional(),
+    github: z.url("Invalid URL").or(z.literal("")).optional(),
 });
 
 export async function upsertUrls(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
@@ -26,6 +26,12 @@ export async function upsertUrls(id: string, prevState: FormState, formData: For
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
+            fields: {
+                youtube: formData.get('youtube'),
+                portfolio: formData.get('portfolio'),
+                linkedin: formData.get('linkedin'),
+                github: formData.get('github')
+            }
         };
     }
 
