@@ -89,7 +89,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={item} /></div>
                                 <p className="capitalize font-semibold text-base">{item.name}</p>
                                 <p className="text-sm text-gray-500">{item.description}</p>
-                                <Link href={item.projectUrl} className="text-sm text-blue-500">{item.projectUrl}</Link>
+                                {item.projectUrl && <Link href={item.projectUrl} className="text-sm text-blue-500">{item.projectUrl}</Link>}
                             </blockquote>))}
                     </div>
                 </div>
