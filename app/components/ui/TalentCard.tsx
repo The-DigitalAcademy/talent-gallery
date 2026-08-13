@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ProfileAvatar } from '@/app/_components/ui/ProfileAvatar';
 import { ShareButton } from '@/app/_components/ui/ShareButton';
 import { ShareModal } from '@/app/_components/ui/ShareModal';
+import { getTalentStatusColor } from '@/app/lib/utils';
 
 interface TalentCardProps {
   talent: Talent
@@ -34,6 +35,8 @@ export default function TalentCard({ talent }: TalentCardProps) {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
+  const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
+  const fromColor = getTalentStatusColor(displayStatus!)
 
   return (
     <div 
@@ -136,6 +139,8 @@ export default function TalentCard({ talent }: TalentCardProps) {
         isOpen={isShareOpen} 
         onClose={() => setIsShareOpen(false)} 
         talent={talent} 
+        statusColor={bgColorEmployement}
+        statusColorHex={fromColor}
       />
     </div>
   );
