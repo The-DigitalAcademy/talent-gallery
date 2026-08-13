@@ -232,16 +232,21 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
                   {/* Projects */}
                   {projects.length > 0 &&
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {projects.map((project) => (   
-                        <Link href={project.project_url ? project.project_url : ""} key={project.id}>            
+                      {projects.map((project) =>
+                        project.project_url ?
+                          <Link href={project.project_url ? project.project_url : "#"} key={project.id}>
+                            <ExperienceCard
+                              key={project.id}
+                              title={project.title} subTitle={"Project"} description={project.description}
+                              bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"}
+                              externalLink={true} />
+                          </Link> :
                           <ExperienceCard
                             key={project.id}
-                            title={project.title} subTitle={"Project"} description={project.description} 
-                            bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"} 
-                            externalLink={true}
-                          />
-                        </Link>     
-                      ))}
+                            title={project.title} subTitle={"Project"} description={project.description}
+                            bgColor={"bg-[#f8f8f8]"} titleStyle={"font-bold text-sm sm:text-base"} subTitleStyle={"text-sm sm:text-base"} descriptionStyle={"text-sm sm:text-base"} padding={"py-2 sm:py-4 px-5 sm:px-8"}
+                            externalLink={false} />
+                      )}
                     </div>
                   }
                 </div>
