@@ -5,14 +5,14 @@ function getBrevoClient() {
 }
 
 const SENDER = {
-  email: process.env.BREVO_SENDER_EMAIL ?? "adam@thedigitalacademy.co.za",
+  email: process.env.BREVO_SENDER_EMAIL ?? "talent@shaper.co.za",
   name: process.env.BREVO_SENDER_NAME ?? "Shaper",
 };
 
-const ADMIN_EMAIL = process.env.BREVO_ADMIN_EMAIL ?? "adam@thedigitalacademy.co.za";
+const ADMIN_EMAIL = process.env.BREVO_ADMIN_EMAIL ?? "talent@shaper.co.za";
 
 // Logo hosted on Vercel Blob — reliable across all email clients
-const LOGO_URL = "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper_logo.png";
+const LOGO_URL = "https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper-icon-brand.png";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://talent.shaper.co.za";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -224,7 +224,7 @@ export async function sendSubmitterConfirmationEmail(payload: EnquiryEmailPayloa
         We've got your enquiry!
       </h1>
       <p style="margin:0;font-size:15px;color:#6b7280;line-height:1.6;">
-        Hi <strong style="color:#111827;">${payload.contactName}</strong>, thanks for reaching out through the Shaper Talent Platform.
+        Hi <strong style="color:#111827;">${payload.contactName}</strong>, thanks for reaching out through the Shaper TALENT Platform.
       </p>
     </div>
 
