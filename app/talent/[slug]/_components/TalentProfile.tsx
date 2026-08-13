@@ -138,7 +138,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
               </div>
               <div className="flex gap-2">
                 {talent.github_url &&
-                  <Link href={talent.github_url} className="cursor-pointer">
+                  <Link href={talent.github_url} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
                     <GitHubIcon/>
                   </Link>
                 }
@@ -264,12 +264,16 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
           isOpen={isShareOpen}
           onClose={() => setIsShareOpen(false)}
           talent={talent}
+          statusColor={bgColorEmployement}
+          statusColorHex={fromColor}
         />
       </div>
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
         talent={talent}
+        statusColor={bgColorEmployement}
+        statusColorHex={fromColor}
       />
     </div>
   );

@@ -86,7 +86,7 @@ export function getTalentStatusSecondaryColor(statusName: string): string {
   ];
 
   return (
-    talent_status_secondary_colors.find((s) => s.status === statusName.toLowerCase())?.color
+    talent_status_secondary_colors.find((s) => s.status === statusName?.toLowerCase())?.color
     ?? "#D1D5DB" // fallback lighter gray
   );
 }
@@ -146,10 +146,10 @@ export const getStatusBadgeStyle = (status: string | undefined) => {
 };
 
 export function firstWord(str: string) {
-  return str.trim().split(/\s+/)[0];
+  return str?.trim().split(/\s+/)[0];
 }
 
 export function firstLetter(str: string) {
-  return str.split(" ")[str.split.length - 1][0];
+  return str?.split(" ")[str?.split.length - 1][0];
 }
 
