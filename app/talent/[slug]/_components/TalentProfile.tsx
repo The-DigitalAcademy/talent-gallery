@@ -27,6 +27,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   const bgColorEmployement = getStatusBadgeStyle(displayStatus!);
   const fromColor = getTalentStatusColor(displayStatus!)
   const toColor = getTalentStatusSecondaryColor(displayStatus!)
+  const fullNames = talent?.fullname.split(" ")
 
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [position, setPosition] = useState("sticky");
@@ -133,8 +134,8 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="flex gap-2 uppercase">
-                <h1 className="font-bold text-2xl sm:text-4xl">{firstWord(talent?.fullname)}</h1>
-                <h1 className="text-2xl sm:text-4xl font-thin">{firstLetter(talent?.fullname)}.</h1>
+                <h1 className="font-bold text-2xl sm:text-4xl">{fullNames[0]}</h1>
+                <h1 className="text-2xl sm:text-4xl font-thin">{fullNames.length > 1 ? fullNames[fullNames.length - 1].charAt(0) + "." : ""}</h1>
               </div>
               <div className="flex gap-2">
                 {talent.github_url &&
