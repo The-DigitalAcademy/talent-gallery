@@ -40,6 +40,22 @@ const FormSchema = z.object({
 });
 
 export async function upsertBasicInfo(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+    console.log("=== DEBUG UPDATE TALENT START ===");
+
+    for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+            console.log("FILE:", {
+                name: value.name,
+                type: value.type,
+                size: value.size,
+            });
+        } else {
+            console.log("FIELD:", key, value);
+        }
+    }
+
+    console.log("=== DEBUG UPDATE TALENT END ===");
+
     const validatedFields = FormSchema.safeParse({
         fullname: formData.get('fullname'),
         bio: formData.get('bio'),
