@@ -65,7 +65,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
       )
     : talents;
 
-  const totalCount = cohort ? filteredTalents.length : (talentResult?.count || 0);
+  const totalCount = talentResult?.count || 0;
 
   // Calculate total pages dynamically based on database state matching filters
   const totalPages = Math.ceil(totalCount / itemsPerPage) || 1;
@@ -101,7 +101,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
 
                 {/*  ACCURATE DYNAMIC RECONCILIATION COUNT COUNTER */}
                 <div className="text-xs px-1">
-                    Showing {filteredTalents.length} of {totalCount} talents
+                    Showing {filteredTalents.length} of {totalCount} talent
                 </div>
 
                 {/* Talent Cards Grid Matrix */}
