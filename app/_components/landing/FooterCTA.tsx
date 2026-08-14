@@ -5,7 +5,7 @@ export default function FooterCTA() {
       {/* Background Split for Full-Width Screen */}
       <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-[60%_40%] -z-10 pointer-events-none">
         <div className="bg-[#FF0000]" />
-        <div className="bg-[#00338D]" />
+        <div className="bg-[#01317F]" />
       </div>
 
       {/* Content Container aligned to max-w-7xl */}
@@ -15,7 +15,7 @@ export default function FooterCTA() {
         <div className="md:pr-12">
           <h2 className="text-[19px] sm:text-[24px] md:text-[32px] uppercase tracking-wider leading-snug sm:leading-tight">
             <span className="text-black font-normal">READY TO EXPLORE </span>
-            <span className="text-white">TALENT?</span>
+            <span className="text-white">TALENT</span>?
           </h2>
           <p className="mt-3 text-[15px] sm:text-[16px] text-black font-normal max-w-lg leading-relaxed">
             Tell us what role you're hiring for, and we'll help identify suitable
@@ -57,7 +57,7 @@ export default function FooterCTA() {
       </div>
 
       {/* Bottom Copyright Sub-Bar */}
-      <div className="bg-[#002259] py-3 text-center text-xs text-white/70 border-t border-white/10">
+      <div className="bg-[#F1F1F1] py-3 text-center text-xs  border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6">
           © {new Date().getFullYear()} Shaper Talent. All rights reserved.
         </div>
