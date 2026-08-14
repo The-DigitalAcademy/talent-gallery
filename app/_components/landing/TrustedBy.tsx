@@ -88,7 +88,7 @@ export default function TrustedBy() {
             <div 
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="bg-white rounded-[3px] px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-110 md:top-8 md:max-w-[1382px] z-20"
+              className="bg-white rounded-[3px] px-4 py-4 flex items-center justify-between relative border border-gray-200 min-h-[90px] md:-ml-110 md:top-8 z-20"
             >
               
               {/* Left Arrow (Chevron Caret Icon) */}
