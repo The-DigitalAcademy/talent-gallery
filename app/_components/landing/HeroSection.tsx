@@ -130,7 +130,7 @@ export default function HeroSection({
       </div>
 
       {/* Search Bar — hidden on mobile, visible on desktop (perfectly centered on transition line) */}
-      <div className="hidden md:block absolute bottom-0 left-0 right-0 z-10 translate-y-1/2">
+      <div className="hidden lg:block absolute bottom-0 left-0 right-0 z-10 translate-y-1/2">
         <div className="max-w-7xl mx-auto px-6 lg:px-6">
           <div className="bg-[#E1E1E1] rounded-[3px] px-4 sm:px-6 py-4 border border-gray-300/60">
             <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-3">
