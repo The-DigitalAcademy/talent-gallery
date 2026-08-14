@@ -101,7 +101,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
 
                 {/*  ACCURATE DYNAMIC RECONCILIATION COUNT COUNTER */}
                 <div className="text-xs px-1">
-                    Showing {filteredTalents.length} of {totalCount} talents
+                    Showing {filteredTalents.length} of {totalCount} talent
                 </div>
 
                 {/* Talent Cards Grid Matrix */}
