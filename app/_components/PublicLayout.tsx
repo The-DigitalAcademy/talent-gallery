@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./landing/Navbar";
 import FooterCTA from "./landing/FooterCTA";
 import ShortlistFAB from "./ShortlistFAB";
+import CookieBanner from "./ui/CookieBanner";
 
 export default function PublicLayout({
   children,
@@ -23,6 +24,7 @@ export default function PublicLayout({
       <main className="flex-1 mt-16">{children}</main>
       <FooterCTA />
       <ShortlistFAB />
+      <CookieBanner />
     </>
   );
 }
