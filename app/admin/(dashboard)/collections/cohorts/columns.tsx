@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Cohort } from "@/app/lib/definitions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
@@ -8,18 +7,10 @@ import { DeleteFormDialog, UpdateFormDialog } from "./forms";
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
 function CohortPublicLink({ slug }: { slug: string }) {
-  const [origin, setOrigin] = useState<string>(
-    process.env.NEXT_PUBLIC_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_URL ?? ""
-  );
-
-  useEffect(() => {
-    if (!origin && typeof window !== "undefined") {
-      setOrigin(window.location.origin);
-    }
-  }, [origin]);
-
-  const displayUrl = origin ? `${origin}/${slug}` : `/${slug}`;
+  const displayUrl = siteUrl ? `${siteUrl}/${slug}` : `/${slug}`;
 
   return (
     <Link

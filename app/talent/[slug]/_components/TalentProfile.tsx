@@ -58,8 +58,8 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   const embedUrl = talent.youtube_url ? getYouTubeEmbedUrl(talent.youtube_url) : null;
 
   const handleShareClick = async () => {
-    const origin = process.env.NEXT_PUBLIC_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_URL ?? (typeof window !== "undefined" ? window.location.origin : "");
-    const shareUrl = `${origin}/talent/${talent.slug}`;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+    const shareUrl = `${siteUrl}/talent/${talent.slug}`;
     const shareData = {
       title: `${talent.fullname} - Profile`,
       url: shareUrl,
