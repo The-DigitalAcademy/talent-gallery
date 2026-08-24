@@ -22,9 +22,8 @@ export function ShareModal({ isOpen, onClose, talent, statusColor, statusColorHe
   const [copied, setCopied] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const shareUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/talent/${talent.slug}`
-    : "";
+  const origin = process.env.NEXT_PUBLIC_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_URL ?? (typeof window !== "undefined" ? window.location.origin : "");
+  const shareUrl = `${origin}/talent/${talent.slug}`;
 
   // Handle escape key to close modal
   useEffect(() => {

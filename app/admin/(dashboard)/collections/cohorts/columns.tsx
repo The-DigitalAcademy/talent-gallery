@@ -9,11 +9,15 @@ import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 
 function CohortPublicLink({ slug }: { slug: string }) {
-  const [origin, setOrigin] = useState("");
+  const [origin, setOrigin] = useState<string>(
+    process.env.NEXT_PUBLIC_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_URL ?? ""
+  );
 
   useEffect(() => {
-    setOrigin(window.location.origin);
-  }, []);
+    if (!origin && typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, [origin]);
 
   const displayUrl = origin ? `${origin}/${slug}` : `/${slug}`;
 
