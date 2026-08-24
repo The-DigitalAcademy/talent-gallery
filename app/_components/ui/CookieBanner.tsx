@@ -20,8 +20,8 @@ export default function CookieBanner() {
     setIsVisible(false);
   };
 
-  const handleDecline = () => {
-    localStorage.setItem("shaper_cookie_consent", "declined");
+  const handleDismiss = () => {
+    localStorage.setItem("shaper_cookie_consent", "dismissed");
     setIsVisible(false);
   };
 
@@ -30,9 +30,9 @@ export default function CookieBanner() {
   return (
     <aside
       aria-label="Cookie consent banner"
-      className="fixed bottom-4 left-4 right-4 md:right-auto md:left-6 md:max-w-[340px] z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3"
+      className="fixed bottom-24 sm:bottom-6 left-4 right-4 sm:right-auto sm:left-6 sm:max-w-[340px] z-40 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3"
     >
-      <div className="bg-white/95 backdrop-blur-md border border-gray-200 shadow-lg rounded-xl p-3.5 sm:p-4 text-gray-900">
+      <div className="bg-white/95 backdrop-blur-md border border-gray-200 shadow-xl rounded-xl p-3.5 sm:p-4 text-gray-900">
         <div className="flex items-start justify-between gap-2.5 mb-2">
           <div className="flex items-center gap-2">
             <div className="size-7 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center text-red-600 shrink-0">
@@ -44,7 +44,7 @@ export default function CookieBanner() {
           </div>
 
           <button
-            onClick={handleDecline}
+            onClick={handleDismiss}
             className="text-gray-400 hover:text-gray-600 transition-colors p-0.5 rounded-md hover:bg-gray-100 cursor-pointer"
             aria-label="Close cookie banner"
           >
@@ -56,20 +56,12 @@ export default function CookieBanner() {
           We use cookies to improve your browsing experience and analyze site traffic.
         </p>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleAccept}
-            className="flex-1 bg-gray-900 hover:bg-black text-white font-medium text-xs py-1.5 px-3 rounded-lg transition-colors cursor-pointer text-center"
-          >
-            Accept
-          </button>
-          <button
-            onClick={handleDecline}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-xs py-1.5 px-3 rounded-lg transition-colors cursor-pointer text-center"
-          >
-            Decline
-          </button>
-        </div>
+        <button
+          onClick={handleAccept}
+          className="w-full bg-gray-900 hover:bg-black text-white font-medium text-xs py-2 px-3 rounded-lg transition-colors cursor-pointer text-center"
+        >
+          Accept All
+        </button>
       </div>
     </aside>
   );
