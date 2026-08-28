@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
       // disable it.
       allowedOrigins: [
         'talent-test.shaper.co.za',
-        'moodle.shaper.co.za',
       ],
     },
   },
