@@ -1,8 +1,10 @@
 "use server";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 
 export async function insertCapability(capabilityId: string, talentId: string) {
+    await requireAdmin();
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("talent_capabilities").insert({ talent_id: talentId, capability_id: capabilityId })
@@ -22,6 +24,7 @@ export async function insertCapability(capabilityId: string, talentId: string) {
     }
 }
 export async function deleteCapability(capabilityId: string, talentId: string) {
+    await requireAdmin();
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("talent_capabilities").delete().eq('capability_id', capabilityId).eq("talent_id", talentId)

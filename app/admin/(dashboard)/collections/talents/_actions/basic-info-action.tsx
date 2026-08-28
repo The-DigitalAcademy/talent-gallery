@@ -1,6 +1,7 @@
 "use server";
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { slugify } from "@/app/lib/utils";
 import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
@@ -40,6 +41,7 @@ const FormSchema = z.object({
 });
 
 export async function upsertBasicInfo(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+    await requireAdmin();
     const validatedFields = FormSchema.safeParse({
         fullname: formData.get('fullname'),
         bio: formData.get('bio'),
