@@ -13,6 +13,20 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  experimental: {
+    serverActions: {
+      // Hostnames allowed to call Server Actions, in addition to the request
+      // host. Needed when the app is reached through a reverse proxy on a
+      // different hostname: the browser sends Origin: <proxy host> while the
+      // app sees the upstream host, and the Server Action CSRF check rejects
+      // the mismatch. This adds those origins to the check; it does not
+      // disable it.
+      allowedOrigins: [
+        'talent-test.shaper.co.za',
+        'moodle.shaper.co.za',
+      ],
+    },
+  },
 };
 
 export default withSentryConfig(nextConfig, {
