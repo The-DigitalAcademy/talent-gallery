@@ -98,16 +98,16 @@ export default function BrowseTalentPreview() {
           </p>
         </div>
 
-        {/* Tab Filters — horizontally scrollable on mobile with smooth chevron arrows */}
+        {/* Tab Filters — horizontally scrollable with YouTube-style borderless blending chevrons centered with text */}
         <div className="relative mb-12 flex items-center gap-2">
-          {/* Mobile Left Scroll Arrow */}
+          {/* Left Scroll Arrow */}
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
-              className="md:hidden flex items-center justify-center shrink-0 size-8 bg-white border border-gray-200 text-gray-700 rounded-full shadow-xs active:scale-95 transition-transform"
+              className="flex items-center justify-center shrink-0 size-9 bg-slate-200/80 hover:bg-slate-300/80 text-slate-800 rounded-full cursor-pointer transition-all active:scale-95 border-0 shadow-none -mt-3.5"
               aria-label="Scroll tabs left"
             >
-              <ChevronLeft className="size-4 text-gray-800" />
+              <ChevronLeft className="size-5 text-slate-800" />
             </button>
           )}
 
@@ -116,7 +116,7 @@ export default function BrowseTalentPreview() {
             onScroll={checkScroll}
             className="flex-1 flex justify-start border-b border-gray-200 overflow-x-auto scrollbar-none"
           >
-            <div className="flex gap-6 sm:gap-12 min-w-max pr-4 md:pr-0">
+            <div className="flex gap-6 sm:gap-12 min-w-max pr-4">
               {TABS.map((tab) => {
                 const isActive = activeTab === tab.value;
                 return (
@@ -136,14 +136,14 @@ export default function BrowseTalentPreview() {
             </div>
           </div>
 
-          {/* Mobile Right Scroll Arrow */}
+          {/* Right Scroll Arrow */}
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="md:hidden flex items-center justify-center shrink-0 size-8 bg-white border border-gray-200 text-gray-700 rounded-full shadow-xs active:scale-95 transition-transform animate-pulse"
+              className="flex items-center justify-center shrink-0 size-9 bg-slate-200/80 hover:bg-slate-300/80 text-slate-800 rounded-full cursor-pointer transition-all active:scale-95 border-0 shadow-none -mt-3.5"
               aria-label="Scroll tabs right"
             >
-              <ChevronRight className="size-4 text-gray-800" />
+              <ChevronRight className="size-5 text-slate-800" />
             </button>
           )}
         </div>
