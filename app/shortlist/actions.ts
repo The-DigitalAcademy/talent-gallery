@@ -76,26 +76,50 @@ export async function submitEnquiryAction(payload: {
 
   const supabase = await createClient();
 
-  // ── Insert enquiry ────────────────────────────────────────────────────────
-  const { data: enquiry, error: enquiryError } = await supabase
-    .from("enquiries")
-    .insert({
-      email: payload.email.trim(),
-      company_name: payload.companyName.trim(),
-      contact_name: payload.contactName.trim(),
-      message: payload.message?.trim() || null,
-    })
-    .select("id")
-    .single();
+  // ── Validate the shortlist server-side ────────────────────────────────────
+  // Never trust the talentIds the client sends. Resolve every one against the
+  // talents table (published only) BEFORE recording anything: this fixes the
+  // bug where bogus/unpublished ids still returned success, and gives us the
+  // talent details for the notification emails in the same round-trip.
+  const uniqueIds = Array.from(new Set(payload.talentIds));
+  const talents = await getTalentsByIds(uniqueIds);
 
-  if (enquiryError || !enquiry) {
+  const resolvedIds = new Set(talents.map((t) => t.id));
+  const unknownIds = uniqueIds.filter((id) => !resolvedIds.has(id));
+  if (unknownIds.length > 0) {
+    return {
+      success: false,
+      message:
+        "One or more selected candidates are no longer available. Please refresh your shortlist and try again.",
+      errors: {
+        general: "Your shortlist contains candidates that could not be found.",
+      },
+    };
+  }
+
+  // ── Insert enquiry ────────────────────────────────────────────────────────
+  // Generate the id in application code instead of relying on
+  // `INSERT ... RETURNING` (`.select("id")`). The public form submits as the
+  // anonymous role, which now holds INSERT-only rights on enquiries -- a
+  // returning clause would need SELECT and would fail. See
+  // supabase/migrations/20260828_lockdown_enquiries_authz.sql.
+  const enquiryId = crypto.randomUUID();
+  const { error: enquiryError } = await supabase.from("enquiries").insert({
+    id: enquiryId,
+    email: payload.email.trim(),
+    company_name: payload.companyName.trim(),
+    contact_name: payload.contactName.trim(),
+    message: payload.message?.trim() || null,
+  });
+
+  if (enquiryError) {
     console.error("enquiry insert error:", enquiryError);
     return { success: false, message: "Something went wrong. Please try again." };
   }
 
   // ── Link enquiry → talents ────────────────────────────────────────────────
-  const joins = payload.talentIds.map((talentId) => ({
-    enquiry_id: enquiry.id,
+  const joins = uniqueIds.map((talentId) => ({
+    enquiry_id: enquiryId,
     talent_id: talentId,
   }));
 
@@ -106,9 +130,6 @@ export async function submitEnquiryAction(payload: {
   if (joinError) {
     console.error("enquiry_talents insert error:", joinError);
   }
-
-  // ── Fetch talent details for emails ──────────────────────────────────────
-  const talents = await getTalentsByIds(payload.talentIds);
 
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??

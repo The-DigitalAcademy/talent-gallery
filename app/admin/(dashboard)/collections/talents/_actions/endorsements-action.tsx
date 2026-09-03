@@ -1,6 +1,7 @@
 "use server";
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
@@ -18,6 +19,7 @@ const FormSchema = z.object({
 });
 
 export async function insertEndorsement(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+    await requireAdmin();
     const validatedFields = FormSchema.safeParse({
         message: formData.get('message'),
         name: formData.get('name')
@@ -54,6 +56,7 @@ export async function insertEndorsement(talentId: string | null, prevState: Form
 }
 
 export async function deleteEndorsement(id: string, talentId: string) {
+    await requireAdmin();
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("endorsements").delete().eq('id', id)

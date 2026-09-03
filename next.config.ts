@@ -5,8 +5,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        // Pin to our exact Vercel Blob store host, not the whole
+        // *.public.blob.vercel-storage.com wildcard. The wildcard let the
+        // Next image optimizer proxy images from ANY tenant's blob store.
         protocol: 'https',
-        hostname: '*.public.blob.vercel-storage.com',
+        hostname: 'w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com',
       },
     ],
   },
