@@ -1,6 +1,7 @@
 "use server";
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
@@ -12,6 +13,7 @@ const FormSchema = z.object({
 });
 
 export async function upsertUrls(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+    await requireAdmin();
     // Extract and validate raw form entries using the schema
     const validatedFields = FormSchema.safeParse({
         youtube: formData.get('youtube'),

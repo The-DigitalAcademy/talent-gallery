@@ -1,6 +1,7 @@
 "use server";
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
@@ -12,6 +13,7 @@ const FormSchema = z.object({
 });
 
 export async function updateCapabilitiesSummary(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+    await requireAdmin();
     const validatedFields = FormSchema.safeParse({ summary: formData.get('summary') });
 
     if (!validatedFields.success) {

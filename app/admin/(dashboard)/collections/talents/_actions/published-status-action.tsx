@@ -1,8 +1,10 @@
 "use server";
 import { createClient } from "@/app/lib/supabase/server";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 
 export async function updateIsPublished(talentId: string, isPublished: boolean) {
+    await requireAdmin();
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("talents").update({ is_published: isPublished }).eq('id', talentId)

@@ -2,6 +2,7 @@
 'use server'
 
 import { createClient } from '@/app/lib/supabase/server';
+import { requireAdmin } from '@/app/lib/auth/requireAdmin';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -30,6 +31,7 @@ export type FormState = {
 };
 
 export async function upsert(id: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+    await requireAdmin();
     // Extract and validate raw form entries using the schema
     const validatedFields = FormSchema.safeParse({
         name: formData.get('name'),
@@ -91,6 +93,7 @@ export async function upsert(id: string | null, prevState: FormState, formData: 
 }
 
 export async function deleteTalentStatus(id: string) {
+    await requireAdmin();
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("talent_statuses").delete().eq('id', id)
