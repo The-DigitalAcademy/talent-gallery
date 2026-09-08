@@ -50,24 +50,27 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto md:px-6 lg:px-6">
 
         {/* Heading */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <Image
-            src={"https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper-brand-name.png"}
-            alt={"Shaper logo"}
-            width={160}
-            height={160}
-          />
-          <p className="-mt-3 text-[34px] font-medium text-red-500 uppercase tracking-widest leading-tight">
+        <div className="flex flex-col items-center text-center mb-16 px-6 sm:px-8">
+          <div className="relative h-12 w-48 sm:w-56 mb-1">
+            <Image
+              src={"https://w4u9ywo6wdd8vjiq.public.blob.vercel-storage.com/shaper-brand-name.png"}
+              alt={"Shaper logo"}
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <p className="-mt-1 text-[32px] sm:text-[34px] font-medium text-red-500 uppercase tracking-widest leading-tight">
             TALENT
           </p>
-          <p className="mt-4 text-[19px] text-black max-w-lg mx-auto leading-relaxed">
+          <p className="mt-4 text-[17px] sm:text-[19px] text-black max-w-lg mx-auto px-4 sm:px-6 leading-relaxed">
             Discover emerging talent equipped with practical skills and
             real-world experience.
           </p>
         </div>
 
-        {/* Steps — Vertical stack on mobile with dashed connector line; 3 columns on desktop */}
-        <div className="flex flex-col md:grid md:grid-cols-3 gap-10 md:gap-8 items-center md:items-start">
+        {/* Steps — Vertical stack on mobile with dashed arrow; 3 columns on desktop */}
+        <div className="flex flex-col md:grid md:grid-cols-3 gap-10 md:gap-8 items-center md:items-start px-6 sm:px-0">
 
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center text-center w-full">
@@ -80,17 +83,18 @@ export default function HowItWorks() {
                   {step.icon}
                 </div>
 
-                {/* DESKTOP Dotted arrow — straight horizontal arrow */}
+                {/* DESKTOP Dotted arrow */}
                 {index < steps.length - 1 && (
                   <>
-                    {index == 0 ?
+                    {index == 0 ? (
                       <div className="hidden md:flex absolute -top-43 left-[calc(50%+50.5px)] w-[calc(100%-72px)] items-center pointer-events-none">
-                        <UpwardCurveArrow/>
-                      </div> :
-                      <div className="hidden md:flex absolute -bottom-43 left-[calc(50%+50.5px)] w-[calc(100%-72px)] items-center pointer-events-none">
-                        <DownwardCurveArrow/>
+                        <UpwardCurveArrow />
                       </div>
-                    }
+                    ) : (
+                      <div className="hidden md:flex absolute -bottom-43 left-[calc(50%+50.5px)] w-[calc(100%-72px)] items-center pointer-events-none">
+                        <DownwardCurveArrow />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -107,10 +111,13 @@ export default function HowItWorks() {
                 {step.description}
               </p>
 
-              {/* MOBILE Vertical Red Dashed Line between steps */}
+              {/* MOBILE Vertical Dashed Arrow — exact desktop #E5E5E5 */}
               {index < steps.length - 1 && (
-                <div className="block md:hidden my-6">
-                  <div className="w-[1.5px] h-14 border-r-2 border-dashed border-red-300" />
+                <div className="flex md:hidden flex-col items-center my-6 text-[#E5E5E5]">
+                  <div className="w-[2px] h-12 border-r-2 border-dashed border-[#E5E5E5]" />
+                  <svg className="w-5 h-5 text-[#E5E5E5] -mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 5v14M19 12l-7 7-7-7" />
+                  </svg>
                 </div>
               )}
 
