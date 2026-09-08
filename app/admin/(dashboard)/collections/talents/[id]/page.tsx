@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
             <div className="flex w-full flex-col gap-5">
                 <BasicInfoForm values={talent!} roles={roles || []} />
-                <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
+                <EnrolmentForm values={enrolmentValues} data={enrolmentData} talentId={talent?.id} />
                 <URLsForm values={urlValues} />
                 <TalentCapabilitiesForm
                     capabilities={capabilities || []}

@@ -5,22 +5,26 @@ import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
-    program: z.uuid({ error: "required" }),
-    cohort: z.uuid({ error: "required" }),
-    location: z.uuid({ error: "required" }),
-    status: z.uuid({ error: "required" }),
+const Schema = z.object({
+    program: z.uuid({ error: "required" }).nullable().optional(),
+    cohort: z.uuid({ error: "required" }).nullable().optional(),
+    location: z.uuid({ error: "required" }).nullable().optional(),
+    status: z.uuid({ error: "required" }).nullable().optional(),
 });
 
-export async function upsertEnrolmentInfo(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+interface DbPayload {
+    program_id?: string | null;
+    cohort_id?: string | null;
+    location_id?: string | null;
+    talent_status_id?: string | null;
+}
+
+export async function upsertEnrolmentInfo(talentId: string, data: SchemaType): Promise<Omit<FormState, "fields"> & { data?: SchemaType }> {
     await requireAdmin();
     // Extract and validate raw form entries using the schema
-    const validatedFields = FormSchema.safeParse({
-        program: formData.get('program'),
-        cohort: formData.get('cohort'),
-        location: formData.get('location'),
-        status: formData.get('status'),
-    });
+    const validatedFields = Schema.safeParse(data);
 
     // If validation fails, format the Zod errors and return them to the UI
     if (!validatedFields.success) {
@@ -31,27 +35,33 @@ export async function upsertEnrolmentInfo(id: string, prevState: FormState, form
         };
     }
 
-    // At this point, the data is completely valid and strictly typed
-    const { program, cohort, location, status } = validatedFields.data;
+    const keyMap = {
+        program: "program_id",
+        cohort: "cohort_id",
+        location: "location_id",
+        status: "talent_status_id"
+    }
+
+    // Only assign if the value exists in validatedFields.data
+    const payload = Object.entries(keyMap).reduce<DbPayload>((acc, [oldKey, newKey]) => {
+        const value = validatedFields.data[oldKey as keyof SchemaType]
+        if (value !== undefined) acc[newKey as keyof DbPayload] = value
+        return acc;
+    }, {})
 
     // update
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("talents")
-            .update({
-                program_id: program,
-                cohort_id: cohort,
-                location_id: location,
-                talent_status_id: status
-            })
-            .eq('id', id)
-        if (error) throw error
+        const { error, data: updatedData } = await supabase.from("talents")
+            .update(payload)
+            .eq('id', talentId)
+            .select("program:program_id, cohort:cohort_id, location:location_id, status:talent_status_id").single()
 
-        revalidatePath("/admin/collections/talents");
-        revalidatePath(`/admin/collections/talents/${id}`);
+        if (error) throw error
         return {
             success: true,
             message: 'Success! Item updated',
+            data: updatedData
         };
     } catch (error) {
         console.log(error)
