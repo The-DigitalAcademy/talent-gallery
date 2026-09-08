@@ -1,50 +1,114 @@
 "use client"
 import { Button, Field, Form } from "@base-ui/react";
 import { CheckIcon, UploadCloudIcon, XIcon } from "lucide-react";
-import { ChangeEvent, useActionState, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { upsertBasicInfo } from "../_actions/basic-info-action";
-import { FormState } from "@/app/lib/definitions";
 import FormSelect from "@/components/admin/form-select";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { cn, slugify } from "@/app/lib/utils";
+import { toast } from "sonner";
 
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
+type FormValues = {
+    fullname?: string | null,
+    bio?: string | null,
+    profileImageUrl?: string | null,
+    roleId: string | null
+}
 
-const initialState: FormState = {
-    success: false,
-    message: '',
-};
+export default function BasicInfoForm({ talentId, values, roles }: { talentId?: string, values?: FormValues, roles: { id: string, name: string }[] }) {
+    const [showCheck, setShowCheck] = useState(false)
+    const { handleSubmit, register, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting } } = useForm<FormValues>({ defaultValues: values })
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(defaultValues?.profileImageUrl)
+    const [file, setFile] = useState<File | null>(null)
 
-export default function BasicInfoForm({ values, roles }: { values?: { id: string, fullname?: string, bio?: string, profile_image_url?: string, role_id: string }, roles: { id: string, name: string }[] }) {
-    const createBasicInfo = (prevState: FormState, formData: FormData) => {
-        const file = formData.get('image') as File;
-        // Check size before sending to the server
-        if (file && file.size > MAX_FILE_SIZE) {
-            return {
-                success: false,
-                message: "Validation Error. Please check the fields.",
-                errors: { image: ["File is too large. Max limit is 1MB."] }
-            };
-        }
-        return upsertBasicInfo(values?.id || null, prevState, formData)
-    }
-    const [state, formAction, isPending] = useActionState(createBasicInfo, initialState);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(values?.profile_image_url)
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
 
-    function handleImagePreview(e: ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files ? e.target.files[0] : null;
-
-        // Generate a temporary local URL for preview
+        // rename & upload file
+        let newProfileImageUrl = null
         if (file) {
+            // rename file
+            let processedFile = null
+            const fileExtension = file.name.split('.').pop();
+            const newName = `${slugify(data.fullname!)}.${fileExtension}`;
+
+            // Instantiate new File object using the old file
+            processedFile = new File([file], newName, {
+                type: file.type,
+                lastModified: file.lastModified,
+            });
+
+
+            const formData = new FormData()
+            formData.append('file', processedFile!)
+
+            // upload image
+            const response = await fetch("/admin/collections/talents/profile-image", {
+                method: "POST",
+                body: formData
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                toast.error(errorData.error || "Image upload failed")
+            }
+
+            const { url } = await response.json()
+            newProfileImageUrl = url
+        }
+
+
+        // get changed values only
+        const dirtyValues = Object.fromEntries(
+            Object.entries(dirtyFields)
+                .filter(([_, value]) => value === true)
+                .map(([key]) => [key, data[key as keyof FormValues]])
+        )
+        if (newProfileImageUrl !== null) {
+            dirtyValues.profileImageUrl = newProfileImageUrl
+        }
+        // submit to backend
+        const result = await upsertBasicInfo(talentId ? talentId : null, dirtyValues)
+        // set errors from server
+        if (result.success == false) {
+            setError("form", { message: result.message })
+            if (result.errors) {
+                for (const key in result.errors) {
+                    const errKey = key as keyof FormValues
+                    setError(errKey, { message: result?.errors[errKey]?.toString() })
+                }
+            }
+        }
+
+        // reset default values
+        if (result.success) {
+            setShowCheck(true)
+            if (result.data) reset(result.data)
+            setImagePreviewUrl(result.data?.profileImageUrl)
+        }
+    }
+
+    function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files ? e.target.files[0] : null;
+        if (file) {
+            setFile(file)
             const objectUrl = URL.createObjectURL(file);
             setImagePreviewUrl(objectUrl);
         }
     }
+
+    useEffect(() => {
+        if (showCheck) {
+            const timer = setTimeout(() => setShowCheck(false), 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [showCheck])
+
     return (
         <div>
             <h2 className="mb-2 font-semibold">Basic Profile</h2>
             <Form
+                onSubmit={handleSubmit(onSubmit)}
                 className="w-full border border-gray-200 p-6 bg-white rounded-lg"
-                action={formAction}
-                errors={state.errors}
             >
                 <div className="grid grid-cols-2 gap-7 mb-5">
                     <div className="flex flex-col gap-7">
@@ -54,39 +118,40 @@ export default function BasicInfoForm({ values, roles }: { values?: { id: string
                             </Field.Label>
                             <Field.Control
                                 type="text"
-                                disabled={isPending}
                                 required
-                                defaultValue={values?.fullname || state?.fields?.fullname}
+                                {...register("fullname")}
                                 placeholder="Jacob Mabena"
-                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                className={cn(
+                                    "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
+                                    { "border-blue-500 focus:border-blue-500": dirtyFields.fullname }
+                                )}
                             />
-                            <Field.Error className="text-xs text-red-700" />
+                            <Field.Error className="text-xs text-red-700" >{errors?.fullname?.message}</Field.Error>
                         </Field.Root>
                         <Field.Root name="bio" className="flex flex-col items-start gap-2 w-full">
                             <Field.Label className="text-xs text-gray-700">
                                 Bio
                             </Field.Label>
                             <textarea
-                                name="bio"
+                                {...register("bio")}
                                 rows={4}
-                                disabled={isPending}
-                                required
-                                defaultValue={values?.bio || state?.fields?.bio}
                                 placeholder="A little something about the talent"
-                                className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
+                                className={cn(
+                                    "border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
+                                    { "border-blue-500 focus:border-blue-500": dirtyFields.bio })}
                             />
-                            <Field.Error className="text-xs text-red-700" />
+                            <Field.Error className="text-xs text-red-700" >{errors.bio?.message}</Field.Error>
                         </Field.Root>
-                        <Field.Root name="role" className="flex flex-col items-start gap-2 w-full" >
+                        <Field.Root name="role" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.roleId })} >
                             <Field.Label className="text-xs text-gray-700" >
                                 Role
                             </Field.Label>
                             < FormSelect
-                                defaultValue={values?.role_id}
+                                defaultValue={defaultValues?.roleId}
+                                onValueChange={(val) => setValue("roleId", val, { shouldDirty: true })}
                                 placeholder="Select role"
-                                options={roles?.map(i => ({ label: i.name, value: i.id })) || []
-                                } />
-                            < Field.Error className="text-xs text-red-700" />
+                                options={roles?.map(i => ({ label: i.name, value: i.id })) || []} />
+                            <Field.Error className="text-xs text-red-700" >{errors.roleId?.message}</Field.Error>
                         </Field.Root>
                     </div>
                     <Field.Root name="image" className="flex flex-col items-start gap-2 mx-auto">
@@ -94,7 +159,7 @@ export default function BasicInfoForm({ values, roles }: { values?: { id: string
                             <div className="mb-2">Profile Image</div>
                             <div className="">
                                 {imagePreviewUrl ?
-                                    <div className="relative size-45 overflow-hidden border rounded-lg border-dashed border-gray-300">
+                                    <div className={cn("relative size-45 overflow-hidden border rounded-lg border-dashed border-gray-300", { "border-blue-500": defaultValues?.profileImageUrl !== imagePreviewUrl })}>
                                         <img className="object-cover object-center h-full w-full" src={imagePreviewUrl} />
                                         <div className="absolute bg-white/10 hover:bg-white/50 hover:text-gray-600 text-transparent inset-0 flex flex size-45  flex-col items-center justify-center">
                                             <UploadCloudIcon />
@@ -112,36 +177,25 @@ export default function BasicInfoForm({ values, roles }: { values?: { id: string
                             type="file"
                             accept="image/*"
                             hidden
-                            onChange={(event) => handleImagePreview(event)}
-                            disabled={isPending}
+                            onChange={(event) => handleFileChange(event)}
                             className="border active:border-gray-600 focus:border-gray-600 border-gray-300 rounded-lg w-full text-sm text-slate-500 h-8 file:h-full file:px-4 file:mr-2 file:text-sm file:border-r file:border-gray-300 file:bg-gray-50 hover:file:bg-gray-100"
                         />
-                        <Field.Error className="text-xs text-red-700" />
+                        <Field.Error className="text-xs text-red-700" >{errors.profileImageUrl?.message}</Field.Error>
                     </Field.Root>
                 </div >
                 <div className="flex justify-end items-center gap-4">
-                    {(!isPending && state.success) &&
-                        <div className="text-green-700/75 text-xs flex items-center gap-1">
-                            <CheckIcon className="w-4" />Saved
-                        </div>
-                    }
-                    {(!isPending && !state.success && state.message) && (
-                        <div className="text-red-700/75 text-xs flex items-center gap-1">
-                            <XIcon className="w-4" />{state.message}
-                        </div>
-                    )}
+                    <div className="text-red-700/75 text-xs flex items-center gap-1">
+                        {errors?.form?.message}
+                    </div>
                     <Button
-                        disabled={isPending}
+                        disabled={(!isDirty || isSubmitting) && defaultValues?.profileImageUrl == imagePreviewUrl}
                         focusableWhenDisabled
                         type="submit"
-                        className="rounded-xl justify-center border border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-100 shadow-sm cursor-pointer transition items-center data-disabled:animate-pulse data-disabled:cursor-default"
+                        className={cn("bg-green-600 hover:bg-green-700 data-disabled:bg-green-600/50", "text-white rounded-lg justify-center  text-sm px-3 h-8 flex gap-1  cursor-pointer transition items-center data-disabled:cursor-default")}
                     >
-                        {isPending ?
-                            <span className="w-4 h-4 border-3 border-gray-600 rounded-full inline-block animate-spin border-b-gray-100" ></span>
-                            :
-                            "Save Changes"
-                        }
-
+                        {isSubmitting && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
+                        {(showCheck && !isSubmitting && !isDirty) && <CheckIcon className="w-4" />}
+                        <span>Save</span>
                     </Button>
                 </div>
             </Form>
