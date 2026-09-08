@@ -37,14 +37,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         statuses: statuses || []
     }
     const enrolmentValues = {
-        id: talent?.id,
         cohort: talent?.cohort_id,
         program: talent?.program_id,
         location: talent?.location_id,
         status: talent?.talent_status_id
     }
     const urlValues = {
-        id: talent?.id,
         youtube: talent?.youtube_url,
         portfolio: talent?.portfolio_url,
         linkedin: talent?.linkedin_url,
@@ -65,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="flex w-full flex-col gap-5">
                 <BasicInfoForm values={talent!} roles={roles || []} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} talentId={talent?.id} />
-                <URLsForm values={urlValues} />
+                <URLsForm talentId={talent?.id} values={urlValues} />
                 <TalentCapabilitiesForm
                     capabilities={capabilities || []}
                     talentCapabilities={talent?.capabilities || []}

@@ -2,7 +2,6 @@
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
 import { requireAdmin } from "@/app/lib/auth/requireAdmin";
-import { revalidatePath } from "next/cache";
 import z from "zod";
 
 const Schema = z.object({
