@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
                 <DeleteTalentFormDialog id={talent?.id} name={talent?.fullname}>
-                    <div className="rounded-lg bg-red-600 w-30 hover:bg-red-800 justify-center border border-gray-300 text-base px-5 h-8 flex gap-1 text-white font-semibold shadow-sm cursor-pointer transition items-center">
+                    <div className="rounded-lg bg-red-600 w-30 hover:bg-red-700 justify-center text-base px-5 h-8 flex gap-1 text-white font-semibold cursor-pointer transition items-center">
                         <Trash2Icon className='size-4' /> Delete
                     </div>
                 </DeleteTalentFormDialog>
