@@ -39,9 +39,9 @@ export default function CandidateStatuses() {
         {/* Grey Box — spacious container with right margin for overlapping Navy Card */}
         <div className="bg-[#EFEFEF] rounded-[3px] pt-12 pb-0 min-h-[520px] w-full overflow-hidden flex flex-col justify-between">
           
-          <div>
+          <div className="flex flex-col md:flex-row md:gap-8">
             {/* Heading — centered inside the grey box */}
-            <div className="text-center mb-10 px-6 max-w-2xl mx-auto">
+            <div className="text-center md:text-left mb-10 px-6 md:px-0 md:pl-10 w-full md:w-[30%] mx-auto">
               <h2 className="text-[26px] text-black uppercase tracking-wider">
                 Candidate Statuses
               </h2>
@@ -52,7 +52,7 @@ export default function CandidateStatuses() {
             </div>
 
             {/* Content Area — ample horizontal space for status list */}
-            <div className="pl-6 md:pl-16 pr-6 lg:pr-[440px]">
+            <div className="px-6 md:pl-0 md:pr-10 w-full md:w-[60%]">
               {/* Status List */}
               <div className="flex flex-col gap-6 md:gap-5">
                 {statuses.map((status) => (
@@ -72,7 +72,7 @@ export default function CandidateStatuses() {
           </div>
 
           {/* MOBILE Navy Card — sits flush at the bottom of main card on < lg screens */}
-          <div className="mt-8 bg-[#01317F] rounded-b-[3px] p-6 sm:p-8 text-white">
+          <div className="mt-8 bg-[#01317F] rounded-b-[3px] p-6 sm:px-10 sm:py-8 text-white">
             <h3 className="text-[16px] sm:text-[18px] uppercase tracking-wide leading-snug mb-3">
               Designed to support long-term talent connections.
             </h3>
