@@ -1,8 +1,8 @@
 "use client"
-import { FormState, Project } from "@/app/lib/definitions"
+import { Project } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
-import { CheckIcon, XIcon } from "lucide-react"
-import { useEffect, useState } from "react";
+import { XIcon } from "lucide-react"
+import { useState } from "react";
 import { deleteProject, insertProject } from "../_actions/projects-action";
 import Link from "next/link";
 import { cn } from "@/app/lib/utils";
@@ -17,8 +17,7 @@ type FormValues = {
 }
 
 export default function ProjectsForm({ projects, talentId }: { projects: Project[], talentId: string }) {
-    const [showCheck, setShowCheck] = useState(false)
-    const { handleSubmit, register, reset, setError, formState: { isDirty, errors, isSubmitting, isValid } } = useForm<FormValues>()
+    const { handleSubmit, register, reset, setError, formState: { errors, isSubmitting, isValid } } = useForm<FormValues>()
 
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -35,20 +34,8 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
             }
         }
 
-        // reset default values
-        if (result.success) {
-            setShowCheck(true)
-            reset()
-        }
+        if (result.success) reset()
     }
-
-
-    useEffect(() => {
-        if (showCheck) {
-            const timer = setTimeout(() => setShowCheck(false), 3000)
-            return () => clearTimeout(timer)
-        }
-    }, [showCheck])
 
     return (
         <div>
@@ -94,7 +81,6 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                                 className={cn("bg-green-600 hover:bg-green-700 data-disabled:bg-green-600/50", "text-white rounded-lg justify-center  text-sm px-3 h-8 flex gap-1  cursor-pointer transition items-center data-disabled:cursor-default")}
                             >
                                 {isSubmitting && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
-                                {(showCheck && !isSubmitting && !isDirty) && <CheckIcon className="w-4" />}
                                 <span>Add</span>
                             </Button>
                         </div>
