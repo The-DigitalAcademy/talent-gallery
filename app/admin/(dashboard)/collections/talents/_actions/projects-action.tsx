@@ -5,7 +5,7 @@ import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
+const Schema = z.object({
     description: z
         .string()
         .trim()
@@ -16,27 +16,20 @@ const FormSchema = z.object({
         .trim()
         .min(2, { message: 'name must be at least 2 characters long.' })
         .max(50, { message: 'name cannot exceed 50 characters.' }),
-    url: z.url().trim().or(z.literal("")).optional()
+    url: z.url().trim().or(z.literal("")).nullable().optional()
 });
 
-export async function insertProject(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+export async function insertProject(talentId: string, data: SchemaType): Promise<FormState> {
     await requireAdmin();
-    const validatedFields = FormSchema.safeParse({
-        description: formData.get('description'),
-        name: formData.get('name'),
-        url: formData.get('url')
-    });
+    const validatedFields = Schema.safeParse(data);
 
     if (!validatedFields.success) {
         return {
             success: false,
             message: 'Validation failed. Please check the fields.',
-            errors: validatedFields.error.flatten().fieldErrors,
-            fields: {
-                description: formData.get('description'),
-                name: formData.get('name'),
-                url: formData.get('url')
-            }
+            errors: validatedFields.error.flatten().fieldErrors
         };
     }
 
