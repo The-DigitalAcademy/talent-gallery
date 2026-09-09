@@ -1,43 +1,65 @@
 "use client"
-import { FormState, WorkExperience } from "@/app/lib/definitions"
+import { WorkExperience } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
-import { CheckIcon, XIcon } from "lucide-react"
+import { XIcon } from "lucide-react"
 import { deleteWorkExperience, insertWorkExperience } from "../_actions/work-experience-action";
-import { useActionState, useState, useEffect, useRef } from "react";
-import { calculateDuration } from "@/app/lib/utils";
-import clsx from "clsx";
+import { useState } from "react";
+import { cn } from "@/app/lib/utils";
+import { SubmitHandler, useForm } from "react-hook-form";
+import moment from "moment";
+import { toast } from "sonner";
 
-const initialState: FormState = {
-    success: false,
-    message: '',
-};
+type FormValues = {
+    company: string,
+    role: string,
+    startDate: Date,
+    endDate: Date,
+    description?: string | null
+    isCurrent: boolean
+}
 
 export default function WorkExperienceForm({ workExperiences, talentId }: { workExperiences: WorkExperience[], talentId: string }) {
-    const createWorkExperience = insertWorkExperience.bind(null, talentId)
-    const [state, formAction, isPending] = useActionState(createWorkExperience, initialState);
-    const formRef = useRef<HTMLFormElement>(null);
+    const { handleSubmit, register, reset, setError, watch, formState: { errors, isSubmitting, isValid } } = useForm<FormValues>({ defaultValues: { isCurrent: false } })
 
-    // Controlled date/checkbox states for duration calculations
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [isCurrent, setIsCurrent] = useState(false);
+    const [isCurrent, startDate] = watch(["isCurrent", "startDate"])
 
-    // Calculate computed duration dynamically on the client
-    const computedDuration = calculateDuration(startDate, endDate, isCurrent);
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        const { company, role, description, startDate, endDate, isCurrent } = data
 
-    // Reset date states and form inputs on successful submit, or sync states on error
-    useEffect(() => {
-        if (state.success) {
-            setStartDate("");
-            setEndDate("");
-            setIsCurrent(false);
-            formRef.current?.reset();
-        } else if (state?.fields) {
-            setStartDate(state.fields.start_date || "");
-            setEndDate(state.fields.end_date || "");
-            setIsCurrent(state.fields.is_current || false);
+        // DURATION VALUE
+        const finalEndDate = isCurrent ? new Date() : endDate
+        const totalMonths = moment(finalEndDate).diff(moment(startDate), "months")
+        let totalDurationsText = `${totalMonths} months`
+        if (totalMonths > 11) {
+            const years = Math.floor(totalMonths / 12);
+            const months = totalMonths % 12;
+
+            // Handle pluralization
+            const yearStr = years === 1 ? 'year' : 'years';
+            const monthStr = months === 1 ? 'month' : 'months';
+
+            // If remaining months is 0, you can choose to omit it or keep it
+            totalDurationsText = months > 0
+                ? `${years} ${yearStr} ${months} ${monthStr}`
+                : `${years} ${yearStr}`;
         }
-    }, [state]);
+        const duration = `${moment(startDate).format('MMM YYYY')} - ${moment(finalEndDate).format('MMM YYYY')} (${totalDurationsText})`
+
+        const result = await insertWorkExperience(talentId, { company, duration, role, description })
+
+        // set errors from server
+        if (result.success == false) {
+            setError("form", { message: result.message })
+            if (result.errors) {
+                for (const key in result.errors) {
+                    const errKey = key as keyof FormValues
+                    setError(errKey, { message: result?.errors[errKey]?.toString() })
+                }
+            }
+        }
+
+        if (result.success) reset()
+    }
 
     return (
         <div>
@@ -45,126 +67,90 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
             <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
                 <div className="grid grid-cols-3 gap-7">
                     <Form
-                        ref={formRef}
-                        action={formAction}
-                        errors={state.errors}
+                        onSubmit={handleSubmit(onSubmit)}
                         className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
                         <Field.Root name="company" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
-                                type="text"
-                                name="company"
-                                required
-                                defaultValue={state?.fields?.company}
+                                {...register("company", { required: true, minLength: 2, maxLength: 50 })}
                                 placeholder="Company"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
-                            <Field.Error className="text-xs text-red-700" />
+                            <p className="text-xs text-red-700 block">{errors.company?.message}</p>
                         </Field.Root>
                         <Field.Root name="role" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
-                                type="text"
-                                name="role"
-                                required
-                                defaultValue={state?.fields?.role}
+                                {...register("role", { required: true, minLength: 2, maxLength: 50 })}
                                 placeholder="Role"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
-                        
+
                         <Field.Root name="duration" className="flex flex-col items-start gap-2 w-full">
-                            <Field.Control
-                                type="hidden"
-                                name="duration"
-                                value={computedDuration}
-                            />
                             <div className="w-full space-y-2">
                                 <div className="grid grid-cols-2 gap-2">
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-sm font-normal text-gray-700">Start date</label>
+                                    <Field.Root name="startDate" className="flex flex-col gap-1">
+                                        <Field.Label className="text-sm font-normal text-gray-700">Start date</Field.Label>
                                         <input
                                             type="month"
-                                            name="start_date"
-                                            required
-                                            value={startDate}
-                                            onChange={(e) => setStartDate(e.target.value)}
-                                            max={isCurrent ? undefined : endDate}
+                                            {...register("startDate", { required: true, valueAsDate: true })}
+                                            max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
                                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal"
                                         />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-sm font-normal text-gray-700">End date</label>
+                                    </Field.Root>
+                                    <Field.Root name="endDate" className="flex flex-col gap-1">
+                                        <Field.Label className="text-sm font-normal text-gray-700">End date</Field.Label>
                                         <input
                                             type="month"
-                                            name="end_date"
-                                            required={!isCurrent}
+                                            {...register("endDate", { required: !isCurrent, valueAsDate: true })}
                                             disabled={isCurrent}
-                                            value={isCurrent ? "" : endDate}
-                                            onChange={(e) => setEndDate(e.target.value)}
-                                            min={startDate}
+                                            min={`${startDate?.getFullYear()}-${String(startDate?.getMonth() + 1).padStart(2, '0')}`}
+                                            max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
                                             className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal disabled:bg-gray-100 disabled:text-gray-400"
                                         />
-                                    </div>
+                                    </Field.Root>
                                 </div>
-                                <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer mt-1 font-normal">
-                                    <input
-                                        type="checkbox"
-                                        name="is_current"
-                                        checked={isCurrent}
-                                        onChange={(e) => setIsCurrent(e.target.checked)}
-                                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                    />
-                                    <span>I currently work here (Ongoing)</span>
-                                </label>
-                                {computedDuration && (
-                                    <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-100">
-                                        Duration Preview: <span className="font-semibold text-gray-700">{computedDuration}</span>
-                                    </div>
-                                )}
+                                <Field.Root>
+                                    <Field.Label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer mt-1 font-normal">
+                                        <input
+                                            type="checkbox"
+                                            {...register("isCurrent")}
+                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        />
+                                        <span>I currently work here (Ongoing)</span>
+                                    </Field.Label>
+                                </Field.Root>
                             </div>
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
 
                         <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
                             <textarea
-                                name="description"
+                                {...register("description", { minLength: 2, maxLength: 2000 })}
                                 rows={3}
-                                required
-                                defaultValue={state?.fields?.description}
                                 placeholder="Description"
                                 className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
                             <Field.Error className="text-xs text-red-700" />
                         </Field.Root>
                         <div className="flex justify-end items-center gap-4">
-                            {(!isPending && state.success) &&
-                                <div className="text-green-700/75 text-xs flex items-center gap-1">
-                                    <CheckIcon className="w-4" />Saved
-                                </div>
-                            }
-                            {(!isPending && !state.success && state.message) && (
-                                <div className="text-red-700/75 text-xs flex items-center gap-1">
-                                    <XIcon className="w-4" />{state.message}
-                                </div>
-                            )}
+                            <div className="text-red-700/75 text-xs flex items-center gap-1">
+                                {errors?.form?.message}
+                            </div>
                             <Button
-                                disabled={isPending}
+                                disabled={!isValid || isSubmitting}
                                 focusableWhenDisabled
                                 type="submit"
-                                className="rounded-xl justify-center border border-gray-300 text-sm px-3 h-8 flex gap-1 hover:bg-gray-100 shadow-sm cursor-pointer transition items-center data-disabled:animate-pulse data-disabled:cursor-default"
+                                className={cn("bg-green-600 hover:bg-green-700 data-disabled:bg-green-600/50", "text-white rounded-lg justify-center  text-sm px-3 h-8 flex gap-1  cursor-pointer transition items-center data-disabled:cursor-default")}
                             >
-                                {isPending ?
-                                    <span className="w-4 h-4 border-3 border-gray-600 rounded-full inline-block animate-spin border-b-gray-100" ></span>
-                                    :
-                                    "Add"
-                                }
-
+                                {isSubmitting && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
+                                <span>Add</span>
                             </Button>
                         </div>
                     </Form>
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
                         {!workExperiences.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Work Experience</div>}
-                        {workExperiences?.map(work => (
+                        {workExperiences?.toReversed().map(work => (
                             <div key={work.id} className="border border-gray-200 rounded-lg p-3 relative">
                                 <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: work.id, name: work.role, talentId: work.talent_id }} /></div>
                                 <div className="text-sm text-gray-700 break-words">{work.company}</div>
@@ -180,8 +166,19 @@ export default function WorkExperienceForm({ workExperiences, talentId }: { work
 }
 
 function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId: string } }) {
-    const deleteWorkExperienceWithId = deleteWorkExperience.bind(null, item.id, item.talentId)
-    const [state, formAction, isPending] = useActionState(deleteWorkExperienceWithId, initialState);
+    const [isPending, setIsPending] = useState(false);
+
+    async function onDelete() {
+        setIsPending(true)
+        const result = await deleteWorkExperience(item.id, item.talentId)
+
+        if (result.success == true)
+            toast.success("Work experience deleted")
+        else
+            toast.error(result.message || "failed to delete project")
+
+        setIsPending(false)
+    }
 
     return (
         <Dialog.Root>
@@ -193,28 +190,22 @@ function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId
                 <Dialog.Viewport>
                     <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 flex flex-col gap-4 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 shadow bg-white border border-gray-300 p-4 rounded-xl transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.9] data-starting-style:opacity-0">
                         <div className='flex justify-between items-center'>
-                            <Dialog.Title className="font-semibold">{isPending ? "Deleting" : "Delete"} {item.name}{isPending ? "..." : ""}</Dialog.Title>
+                            <Dialog.Title className="font-semibold">Delete {item.name}</Dialog.Title>
                             <Dialog.Close className="text-black" ><XIcon /></Dialog.Close>
                         </div>
-                        {(!isPending && !state.success) && <Dialog.Description className="text-sm text-gray-500">This action cannot be undone</Dialog.Description>}
-                        <Form
-                            action={formAction}
-                            className="flex w-full flex-col gap-4"
-                        >
-                            {state.message && (
-                                <div className={clsx({ "text-red-700": !state.success, "text-green-700": state.success }, "text-sm")}>
-                                    {state.message}
-                                </div>
-                            )}
-                            {!state.success && <Button
+                        <Dialog.Description className="text-sm text-gray-500">This action cannot be undone</Dialog.Description>
+                        <div className="flex w-full flex-col gap-4">
+                            <Button
+                                onClick={() => onDelete()}
                                 disabled={isPending}
                                 focusableWhenDisabled
                                 type="submit"
-                                className="rounded-xl border ml-auto border-red-300 text-red-400 text-sm px-3 h-8 flex gap-1 hover:bg-red-200/50 shadow-sm cursor-pointer transition items-center data-disabled:text-gray-300 data-disabled:cursor-default"
+                                className={cn("bg-red-500 hover:bg-red-600 data-disabled:bg-red-500/50", "text-white rounded-lg  ml-auto justify-center text-sm px-3 h-8 flex gap-1 cursor-pointer transition items-center data-disabled:cursor-default")}
                             >
-                                Delete
-                            </Button>}
-                        </Form>
+                                {isPending && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
+                                <span>Delete</span>
+                            </Button>
+                        </div>
                     </Dialog.Popup>
                 </Dialog.Viewport>
             </Dialog.Portal>
