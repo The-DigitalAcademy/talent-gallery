@@ -3,10 +3,8 @@ import { Cohort, Location, Program, TalentStatus } from "@/app/lib/definitions"
 import FormSelect from "@/components/admin/form-select"
 import { Button, Field, Form } from "@base-ui/react"
 import { upsertEnrolmentInfo } from "../_actions/enrolment-action";
-import { CheckIcon } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { cn } from "@/app/lib/utils";
-import { useEffect, useState } from "react";
 
 type Props = {
     data: {
@@ -27,7 +25,6 @@ type FormValues = {
 }
 
 export default function EnrolmentForm({ values, data, talentId }: Props) {
-    const [showCheck, setShowCheck] = useState(false)
     const { handleSubmit, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting } } = useForm<FormValues>({ defaultValues: values })
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -51,19 +48,8 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
             }
         }
 
-        // reset default values
-        if (result.success) {
-            setShowCheck(true)
-            if (result.data) reset(result.data)
-        }
+        if (result.success) reset(result.data)
     }
-
-    useEffect(() => {
-        if (showCheck) {
-            const timer = setTimeout(() => setShowCheck(false), 3000)
-            return () => clearTimeout(timer)
-        }
-    }, [showCheck])
 
     return (
         <div>
@@ -130,7 +116,6 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
                         className={cn("bg-green-600 hover:bg-green-700 data-disabled:bg-green-600/50", "text-white rounded-lg justify-center  text-sm px-3 h-8 flex gap-1  cursor-pointer transition items-center data-disabled:cursor-default")}
                     >
                         {isSubmitting && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
-                        {(showCheck && !isSubmitting && !isDirty) && <CheckIcon className="w-4" />}
                         <span>Save</span>
                     </Button>
                 </div>
