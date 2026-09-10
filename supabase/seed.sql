@@ -870,6 +870,8 @@ INSERT INTO "public"."work_experiences" ("id", "talent_id", "company", "role", "
 -- Data for Name: buckets; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
 --
 
+INSERT INTO "storage"."buckets" ("id", "name", "public", "file_size_limit", "allowed_mime_types") VALUES
+	('profile-images', 'profile-images', true, 1048576, ARRAY['image/*']);
 
 
 --

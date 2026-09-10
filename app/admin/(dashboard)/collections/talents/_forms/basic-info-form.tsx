@@ -1,12 +1,13 @@
 "use client"
 import { Button, Field, Form } from "@base-ui/react";
-import { CheckIcon, UploadCloudIcon, XIcon } from "lucide-react";
+import { CheckIcon, UploadCloudIcon } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { upsertBasicInfo } from "../_actions/basic-info-action";
 import FormSelect from "@/components/admin/form-select";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { cn, slugify } from "@/app/lib/utils";
 import { toast } from "sonner";
+import { createClient } from "@/app/lib/supabase/client";
 
 type FormValues = {
     fullname?: string | null,
@@ -15,6 +16,8 @@ type FormValues = {
     roleId: string | null
 }
 
+const supabase = createClient()
+
 export default function BasicInfoForm({ talentId, values, roles }: { talentId?: string, values?: FormValues, roles: { id: string, name: string }[] }) {
     const [showCheck, setShowCheck] = useState(false)
     const { handleSubmit, register, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting } } = useForm<FormValues>({ defaultValues: values })
@@ -22,38 +25,21 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
     const [file, setFile] = useState<File | null>(null)
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-
-        // rename & upload file
+        const BUCKET_NAME = "profile-images"
+        // upload file
         let newProfileImageUrl = null
         if (file) {
-            // rename file
-            let processedFile = null
             const fileExtension = file.name.split('.').pop();
-            const newName = `${slugify(data.fullname!)}.${fileExtension}`;
+            const uuidSuffix = crypto.randomUUID().substring(0, 6)
+            const filepath = `${slugify(data?.fullname ?? defaultValues?.fullname ?? "")}-${uuidSuffix}.${fileExtension}`;
 
-            // Instantiate new File object using the old file
-            processedFile = new File([file], newName, {
-                type: file.type,
-                lastModified: file.lastModified,
-            });
-
-
-            const formData = new FormData()
-            formData.append('file', processedFile!)
-
-            // upload image
-            const response = await fetch("/admin/collections/talents/profile-image", {
-                method: "POST",
-                body: formData
-            })
-
-            if (!response.ok) {
-                const errorData = await response.json()
-                toast.error(errorData.error || "Image upload failed")
+            const { error: uploadError } = await supabase.storage.from(BUCKET_NAME).upload(filepath, file)
+            if (uploadError) {
+                toast.error("Couldn't upload image", { description: uploadError.message })
+            } else {
+                const { data: url } = await supabase.storage.from(BUCKET_NAME).getPublicUrl(filepath)
+                newProfileImageUrl = url.publicUrl
             }
-
-            const { url } = await response.json()
-            newProfileImageUrl = url
         }
 
 
@@ -83,7 +69,7 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
         if (result.success) {
             setShowCheck(true)
             if (result.data) reset(result.data)
-            setImagePreviewUrl(result.data?.profileImageUrl)
+            if (result.data?.profileImageUrl) setImagePreviewUrl(result.data.profileImageUrl)
         }
     }
 
