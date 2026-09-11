@@ -5,7 +5,7 @@ import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
+const Schema = z.object({
     message: z
         .string()
         .trim()
@@ -18,12 +18,11 @@ const FormSchema = z.object({
         .max(50, { message: 'name cannot exceed 50 characters.' }),
 });
 
-export async function insertEndorsement(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+export async function insertEndorsement(talentId: string, data: SchemaType): Promise<FormState> {
     await requireAdmin();
-    const validatedFields = FormSchema.safeParse({
-        message: formData.get('message'),
-        name: formData.get('name')
-    });
+    const validatedFields = Schema.safeParse(data);
 
     if (!validatedFields.success) {
         return {

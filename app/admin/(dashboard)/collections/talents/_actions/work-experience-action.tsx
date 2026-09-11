@@ -5,7 +5,7 @@ import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
+const Schema = z.object({
     company: z
         .string()
         .trim()
@@ -24,33 +24,21 @@ const FormSchema = z.object({
     description: z
         .string()
         .trim()
-        .min(2, { message: 'description must be at least 2 characters long.' })
         .max(2000, { message: 'description cannot exceed 2000 characters.' })
+        .nullable().optional()
 });
 
-export async function insertWorkExperience(talentId: string | null, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+export async function insertWorkExperience(talentId: string, data: SchemaType): Promise<FormState> {
     await requireAdmin();
-    const validatedFields = FormSchema.safeParse({
-        company: formData.get('company'),
-        role: formData.get('role'),
-        duration: formData.get('duration'),
-        description: formData.get('description')
-    });
+    const validatedFields = Schema.safeParse(data);
 
     if (!validatedFields.success) {
         return {
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
-            fields: {
-                company: formData.get('company'),
-                role: formData.get('role'),
-                duration: formData.get('duration'),
-                description: formData.get('description'),
-                start_date: formData.get('start_date'),
-                end_date: formData.get('end_date'),
-                is_current: formData.get('is_current') === 'true' || formData.get('is_current') === 'on'
-            }
         };
     }
 
@@ -72,15 +60,6 @@ export async function insertWorkExperience(talentId: string | null, prevState: F
         return {
             success: false,
             message: 'A database error occurred. Please try again.',
-            fields: {
-                company,
-                role,
-                duration,
-                description,
-                start_date: formData.get('start_date'),
-                end_date: formData.get('end_date'),
-                is_current: formData.get('is_current') === 'true' || formData.get('is_current') === 'on'
-            }
         };
     }
 }

@@ -26,7 +26,8 @@ const TALENT_SELECT = `
         endorser_name,
         message
     ),
-    role:roles(name)
+    role:roles(name),
+    isPublished:is_published
 `;
 
 export async function getTalentBySlug(slug: string) {
@@ -36,7 +37,6 @@ export async function getTalentBySlug(slug: string) {
     .from('talents')
     .select(TALENT_SELECT)
     .eq('slug', slug)
-    .eq('is_published', true)
     .single();
 
   return { data, error };

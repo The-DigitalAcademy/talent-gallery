@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import ProfileClient from "./_components/ProfileClient";
 import { getTalentBySlug } from "@/app/lib/talents/getTalentBySlug";
 import { notFound } from "next/navigation";
+import { EyeOffIcon } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -21,7 +22,6 @@ export async function generateMetadata({
       program:programs(name)
     `)
     .eq("slug", slug)
-    .eq("is_published", true)
     .single();
 
   if (!talent) {
@@ -74,7 +74,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return  (
     <div className="w-screen min-h-screen md:px-14 xl:px-0 md:pb-10 md:pt-0 lg:pt-0 bg-[#f1f1f1] overflow-hidden flex justify-center">
-      <ProfileClient talent={talent}/>
+      <ProfileClient talent={talent} />
+      {talent?.isPublished === false &&
+        <div className="fixed right-5 top-20 bg-amber-500 z-50 py-2 px-3 rounded-lg w-50">
+          <div className="text-lg font-bold flex gap-1"><EyeOffIcon /> Not Published</div>
+          <p className="text-xs">Only visible to Admin</p>
+        </div>}
     </div>
   );
 }

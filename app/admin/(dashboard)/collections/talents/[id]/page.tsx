@@ -11,12 +11,13 @@ import { TalentCapabilitiesForm } from "../_forms/capability-form";
 import { PublishedStatusForm } from "../_forms/published-status-form";
 import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
 import CapabilitiesSummaryForm from "../_forms/capabilities-summary-form";
+import { ExternalLinkIcon } from "@/app/_components/ui/Icons";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profile_image_url, role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name), capabilities_summary")
+        .select("id, fullname, bio, profileImageUrl:profile_image_url, roleId:role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name), capabilities_summary, slug")
         .eq("id", id)
         .single()
 
@@ -37,14 +38,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         statuses: statuses || []
     }
     const enrolmentValues = {
-        id: talent?.id,
         cohort: talent?.cohort_id,
         program: talent?.program_id,
         location: talent?.location_id,
         status: talent?.talent_status_id
     }
     const urlValues = {
-        id: talent?.id,
         youtube: talent?.youtube_url,
         portfolio: talent?.portfolio_url,
         linkedin: talent?.linkedin_url,
@@ -58,24 +57,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <ChevronLeftIcon className="w-4" /> <span className="text-base">Talents</span>
                 </Link>
                 <div className="flex justify-between">
-                    <h1 className="text-2xl font-bold mb">{talent?.fullname}</h1>
+                    <h1 className="text-2xl font-bold mb flex gap-2">{talent?.fullname}  <Link className="text-blue-600 " target="_blank" href={`/talent/${talent?.slug}`}><ExternalLinkIcon /> </Link></h1>
                     <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
                 </div>
             </div>
             <div className="flex w-full flex-col gap-5">
-                <BasicInfoForm values={talent!} roles={roles || []} />
-                <EnrolmentForm values={enrolmentValues} data={enrolmentData} />
-                <URLsForm values={urlValues} />
+                <BasicInfoForm talentId={talent?.id} values={talent!} roles={roles || []} />
+                <EnrolmentForm values={enrolmentValues} data={enrolmentData} talentId={talent?.id} />
+                <URLsForm talentId={talent?.id} values={urlValues} />
                 <TalentCapabilitiesForm
                     capabilities={capabilities || []}
                     talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
-                <CapabilitiesSummaryForm values={{ id: talent?.id, summary: talent?.capabilities_summary }} />
+                <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
                 <DeleteTalentFormDialog id={talent?.id} name={talent?.fullname}>
-                    <div className="rounded-lg bg-red-600 w-30 hover:bg-red-800 justify-center border border-gray-300 text-base px-5 h-8 flex gap-1 text-white font-semibold shadow-sm cursor-pointer transition items-center">
+                    <div className="rounded-lg bg-red-600 w-30 hover:bg-red-700 justify-center text-base px-5 h-8 flex gap-1 text-white font-semibold cursor-pointer transition items-center">
                         <Trash2Icon className='size-4' /> Delete
                     </div>
                 </DeleteTalentFormDialog>
