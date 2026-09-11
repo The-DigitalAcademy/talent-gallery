@@ -17,7 +17,7 @@ type FormValues = {
 
 export default function BasicInfoForm({ talentId, values, roles }: { talentId?: string, values?: FormValues, roles: { id: string, name: string }[] }) {
     const [showCheck, setShowCheck] = useState(false)
-    const { handleSubmit, register, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting } } = useForm<FormValues>({ defaultValues: values })
+    const { handleSubmit, register, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting, isValid } } = useForm<FormValues>({ defaultValues: values })
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(defaultValues?.profileImageUrl)
     const [file, setFile] = useState<File | null>(null)
 
@@ -70,7 +70,7 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
         const result = await upsertBasicInfo(talentId ? talentId : null, dirtyValues)
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -107,7 +107,7 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
         <div>
             <h2 className="mb-2 font-semibold">Basic Profile</h2>
             <Form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit, (err) => console.log(err))}
                 className="w-full border border-gray-200 p-6 bg-white rounded-lg"
             >
                 <div className="grid grid-cols-2 gap-7 mb-5">
@@ -118,15 +118,15 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
                             </Field.Label>
                             <Field.Control
                                 type="text"
-                                required
-                                {...register("fullname")}
+                                {...register("fullname", { required: !!talentId && "required" })}
                                 placeholder="Jacob Mabena"
                                 className={cn(
                                     "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                    { "border-blue-500 focus:border-blue-500": dirtyFields.fullname }
+                                    { "bg-yellow-50": dirtyFields.fullname && talentId },
+                                    { "border-red-700 focus:border-red-700": errors.fullname }
                                 )}
                             />
-                            <Field.Error className="text-xs text-red-700" >{errors?.fullname?.message}</Field.Error>
+                            <p className="text-xs text-red-700" >{errors?.fullname?.message}</p>
                         </Field.Root>
                         <Field.Root name="bio" className="flex flex-col items-start gap-2 w-full">
                             <Field.Label className="text-xs text-gray-700">
@@ -138,20 +138,20 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
                                 placeholder="A little something about the talent"
                                 className={cn(
                                     "border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                    { "border-blue-500 focus:border-blue-500": dirtyFields.bio })}
+                                    { "bg-yellow-50": dirtyFields.bio && talentId })}
                             />
-                            <Field.Error className="text-xs text-red-700" >{errors.bio?.message}</Field.Error>
+                            <p className="text-xs text-red-700" >{errors.bio?.message}</p>
                         </Field.Root>
-                        <Field.Root name="role" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.roleId })} >
+                        <Field.Root name="role" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.roleId && talentId })} >
                             <Field.Label className="text-xs text-gray-700" >
                                 Role
                             </Field.Label>
                             < FormSelect
                                 defaultValue={defaultValues?.roleId}
-                                onValueChange={(val) => setValue("roleId", val, { shouldDirty: true })}
+                                onValueChange={(val) => setValue("roleId", val === "" ? null : val, { shouldDirty: true })}
                                 placeholder="Select role"
                                 options={roles?.map(i => ({ label: i.name, value: i.id })) || []} />
-                            <Field.Error className="text-xs text-red-700" >{errors.roleId?.message}</Field.Error>
+                            <p className="text-xs text-red-700" >{errors.roleId?.message}</p>
                         </Field.Root>
                     </div>
                     <Field.Root name="image" className="flex flex-col items-start gap-2 mx-auto">
@@ -159,7 +159,7 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
                             <div className="mb-2">Profile Image</div>
                             <div className="">
                                 {imagePreviewUrl ?
-                                    <div className={cn("relative size-45 overflow-hidden border rounded-lg border-dashed border-gray-300", { "border-blue-500": defaultValues?.profileImageUrl !== imagePreviewUrl })}>
+                                    <div className={cn("relative size-45 overflow-hidden border rounded-lg border-dashed border-gray-300", { "bg-yellow-50 p-1": defaultValues?.profileImageUrl !== imagePreviewUrl })}>
                                         <img className="object-cover object-center h-full w-full" src={imagePreviewUrl} />
                                         <div className="absolute bg-white/10 hover:bg-white/50 hover:text-gray-600 text-transparent inset-0 flex flex size-45  flex-col items-center justify-center">
                                             <UploadCloudIcon />
@@ -180,12 +180,12 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
                             onChange={(event) => handleFileChange(event)}
                             className="border active:border-gray-600 focus:border-gray-600 border-gray-300 rounded-lg w-full text-sm text-slate-500 h-8 file:h-full file:px-4 file:mr-2 file:text-sm file:border-r file:border-gray-300 file:bg-gray-50 hover:file:bg-gray-100"
                         />
-                        <Field.Error className="text-xs text-red-700" >{errors.profileImageUrl?.message}</Field.Error>
+                        <p className="text-xs text-red-700" >{errors.profileImageUrl?.message}</p>
                     </Field.Root>
                 </div >
                 <div className="flex justify-end items-center gap-4">
                     <div className="text-red-700/75 text-xs flex items-center gap-1">
-                        {errors?.form?.message}
+                        {errors?.root?.message}
                     </div>
                     <Button
                         disabled={(!isDirty || isSubmitting) && defaultValues?.profileImageUrl == imagePreviewUrl}

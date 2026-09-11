@@ -25,7 +25,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
 
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -51,7 +51,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                                 placeholder="Project name"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
-                            <p className="text-xs text-red-700 block">{errors.name?.message}</p>
+                            <p className="text-xs text-red-700">{errors.name?.message}</p>
                         </Field.Root>
                         <Field.Root name="description" className="flex flex-col items-start gap-2 w-full">
                             <textarea
@@ -64,7 +64,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                         </Field.Root>
                         <Field.Root name="url" className="flex flex-col items-start gap-2 w-full">
                             <Field.Control
-                                {...register("url", {})}
+                                {...register("url")}
                                 placeholder="Project URL"
                                 className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
                             />
@@ -72,7 +72,7 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                         </Field.Root>
                         <div className="flex justify-end items-center gap-4">
                             <div className="text-red-700/75 text-xs flex items-center gap-1">
-                                {errors?.form?.message}
+                                {errors?.root?.message}
                             </div>
                             <Button
                                 disabled={!isValid || isSubmitting}

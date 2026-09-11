@@ -42,7 +42,7 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
 
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -73,46 +73,46 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
                 className="w-full border border-gray-200 p-6 bg-white rounded-lg"
             >
                 <div className="grid grid-cols-2 gap-7 mb-5" >
-                    <Field.Root name="location" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.location })} >
+                    <Field.Root name="location" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.location })} >
                         <Field.Label className="text-xs text-gray-700" >
                             Location
                         </Field.Label>
                         < FormSelect
-                            onValueChange={(val) => setValue("location", val, { shouldDirty: true })}
+                            onValueChange={(val) => setValue("location", val === "" ? null : val, { shouldDirty: true })}
                             defaultValue={defaultValues?.location}
                             placeholder="Select location"
                             options={data.locations?.map(i => ({ label: `${i.city}, ${i.country}`, value: i.id })) || []
                             } />
                         <div className="text-xs text-red-700">{errors.location?.message}</div>
                     </Field.Root>
-                    < Field.Root name="program" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.program })} >
+                    < Field.Root name="program" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.program })} >
                         <Field.Label className="text-xs text-gray-700" >
                             Program
                         </Field.Label>
                         < FormSelect
-                            onValueChange={(val) => setValue("program", val, { shouldDirty: true })}
+                            onValueChange={(val) => setValue("program", val === "" ? null : val, { shouldDirty: true })}
                             defaultValue={defaultValues?.program}
                             placeholder="Select program"
                             options={data.programs?.map(i => ({ label: i.name, value: i.id })) || []} />
                         <Field.Error className="text-xs text-red-700">{errors.program?.message}</Field.Error>
                     </Field.Root>
-                    < Field.Root name="cohort" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.cohort })} >
+                    < Field.Root name="cohort" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.cohort })} >
                         <Field.Label className="text-xs text-gray-700" >
                             Cohort
                         </Field.Label>
                         < FormSelect
-                            onValueChange={(val) => setValue("cohort", val, { shouldDirty: true })}
+                            onValueChange={(val) => setValue("cohort", val === "" ? null : val, { shouldDirty: true })}
                             defaultValue={defaultValues?.cohort}
                             placeholder="Select cohort"
                             options={data.cohorts?.map(i => ({ label: i.name, value: i.id })) || []} />
                         < Field.Error className="text-xs text-red-700" >{errors.cohort?.message}</Field.Error>
                     </Field.Root>
-                    < Field.Root name="status" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:border-blue-500 [&>button]:focus:border-blue-500": dirtyFields.status })} >
+                    < Field.Root name="status" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.status })} >
                         <Field.Label className="text-xs text-gray-700" >
                             Status
                         </Field.Label>
                         < FormSelect
-                            onValueChange={(val) => setValue("status", val, { shouldDirty: true })}
+                            onValueChange={(val) => setValue("status", val === "" ? null : val, { shouldDirty: true })}
                             defaultValue={defaultValues?.status}
                             placeholder="Select status"
                             options={data.statuses?.map(i => ({ label: i.name, value: i.id })) || []} />
@@ -121,7 +121,7 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
                 </div>
                 <div className="flex justify-end items-center gap-4">
                     <div className="text-red-700/75 text-xs flex items-center gap-1">
-                        {errors?.form?.message}
+                        {errors?.root?.message}
                     </div>
                     <Button
                         disabled={!isDirty || isSubmitting}
