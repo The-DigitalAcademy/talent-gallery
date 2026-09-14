@@ -15,7 +15,21 @@ const Schema = z.object({
         .string()
         .trim()
         .min(2, { message: 'bio must be at least 2 characters long.' })
-        .max(2000, { message: 'Name cannot exceed 2000 characters.' }).nullable().optional(),
+        .max(2000, { message: 'Name cannot exceed 2000 characters.' }).or(z.literal("")).nullable().optional(),
+    profileImageUrl: z.url("Invalid URL").nullable().optional(),
+    roleId: z.uuid({ error: "required" }).nullable().optional()
+});
+const CreateSchema = z.object({
+    fullname: z
+        .string()
+        .trim()
+        .min(2, { message: 'Name must be at least 2 characters long.' })
+        .max(50, { message: 'Name cannot exceed 50 characters.' }),
+    bio: z
+        .string()
+        .trim()
+        .min(2, { message: 'bio must be at least 2 characters long.' })
+        .max(2000, { message: 'Name cannot exceed 2000 characters.' }).or(z.literal("")).nullable().optional(),
     profileImageUrl: z.url("Invalid URL").nullable().optional(),
     roleId: z.uuid({ error: "required" }).nullable().optional()
 });
@@ -34,7 +48,7 @@ export async function upsertBasicInfo(talentId: string | null, data: SchemaType)
 
     // check for empty object
     if (Object.keys(data).length === 0) return { success: true, message: 'Success! Item updated' }
-    const validatedFields = Schema.safeParse(data);
+    const validatedFields = talentId ? Schema.safeParse(data) : CreateSchema.safeParse(data);
 
     if (!validatedFields.success) {
         return {

@@ -22,7 +22,7 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
 
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -61,7 +61,7 @@ export default function EndorsementsForm({ endorsements, talentId }: { endorseme
                         </Field.Root>
                         <div className="flex justify-end items-center gap-4">
                             <div className="text-red-700/75 text-xs flex items-center gap-1">
-                                {errors?.form?.message}
+                                {errors?.root?.message}
                             </div>
                             <Button
                                 disabled={!isValid || isSubmitting}

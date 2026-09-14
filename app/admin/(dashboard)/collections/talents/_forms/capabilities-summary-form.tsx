@@ -18,7 +18,7 @@ export default function CapabilitiesSummaryForm({ talentId, summary }: { talentI
 
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -57,14 +57,14 @@ export default function CapabilitiesSummaryForm({ talentId, summary }: { talentI
                             rows={5}
                             {...register("summary")}
                             disabled={isSubmitting}
-                            className={cn("border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal", { "border-blue-500 focus:border-blue-500": dirtyFields.summary })}
+                            className={cn("border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal", { "bg-yellow-50": dirtyFields.summary })}
                         />
                         <Field.Error className="text-xs text-red-700" />
                     </Field.Root>
                 </div>
                 <div className="flex justify-end items-center gap-4">
                     <div className="text-red-700/75 text-xs flex items-center gap-1">
-                        {errors?.form?.message}
+                        {errors?.root?.message}
                     </div>
                     <Button
                         disabled={!isDirty || isSubmitting}

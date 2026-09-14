@@ -38,7 +38,7 @@ export default function URLsForm({ talentId, values }: Props) {
 
         // set errors from server
         if (result.success == false) {
-            setError("form", { message: result.message })
+            setError("root", { message: result.message })
             if (result.errors) {
                 for (const key in result.errors) {
                     const errKey = key as keyof FormValues
@@ -79,7 +79,7 @@ export default function URLsForm({ talentId, values }: Props) {
                             placeholder="http://youtube.com"
                             className={cn(
                                 "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                { "border-blue-500 focus:border-blue-500": dirtyFields.youtube })}
+                                { "bg-yellow-50": dirtyFields.youtube })}
                         />
                         <Field.Error className="text-xs text-red-700" />
                         <LinkPreviewCard targetUrl={youtubeLink} />
@@ -94,7 +94,7 @@ export default function URLsForm({ talentId, values }: Props) {
                             placeholder="http://myportfolio.com"
                             className={cn(
                                 "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                { "border-blue-500 focus:border-blue-500": dirtyFields.portfolio })
+                                { "bg-yellow-50": dirtyFields.portfolio })
                             }
                         />
                         <Field.Error className="text-xs text-red-700" />
@@ -110,7 +110,7 @@ export default function URLsForm({ talentId, values }: Props) {
                             placeholder="https://www.linkedin.com/in/john-doe"
                             className={cn(
                                 "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                { "border-blue-500 focus:border-blue-500": dirtyFields.linkedin })
+                                { "bg-yellow-50": dirtyFields.linkedin })
                             }
                         />
                         <Field.Error className="text-xs text-red-700" />
@@ -126,7 +126,7 @@ export default function URLsForm({ talentId, values }: Props) {
                             placeholder="https://www.github.com/in/john-doe"
                             className={cn(
                                 "border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal",
-                                { "border-blue-500 focus:border-blue-500": dirtyFields.github })
+                                { "bg-yellow-50": dirtyFields.github })
                             }
                         />
                         <Field.Error className="text-xs text-red-700" />
@@ -135,7 +135,7 @@ export default function URLsForm({ talentId, values }: Props) {
                 </div>
                 <div className="flex justify-end items-center gap-4">
                     <div className="text-red-700/75 text-xs flex items-center gap-1">
-                        {errors?.form?.message}
+                        {errors?.root?.message}
                     </div>
                     <Button
                         disabled={!isDirty || isSubmitting}
