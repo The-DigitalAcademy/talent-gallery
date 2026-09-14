@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export default function FormSelect({ placeholder = "", options, defaultValue, onValueChange = () => { } }: { defaultValue?: string | null, placeholder?: string, options: { label: string, value: string }[], onValueChange?: (value: any) => void }) {
 
-    const [val, setVal] = useState<string | undefined | null>(defaultValue)
+    const [val, setVal] = useState<string | undefined | null>(defaultValue ?? null)
     useEffect(() => { onValueChange(val) }, [val])
 
     return (
