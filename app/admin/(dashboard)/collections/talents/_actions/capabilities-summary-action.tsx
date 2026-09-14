@@ -5,37 +5,40 @@ import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
+const Schema = z.object({
     summary: z
         .string()
         .trim()
-        .max(2000, { message: 'summary cannot exceed 2000 characters.' }),
+        .max(2000, { message: 'summary cannot exceed 2000 characters.' })
+        .nullable(),
 });
 
-export async function updateCapabilitiesSummary(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+export async function upsertCapabilitiesSummary(talentId: string, data: SchemaType): Promise<Omit<FormState, "fields"> & { data?: SchemaType }> {
     await requireAdmin();
-    const validatedFields = FormSchema.safeParse({ summary: formData.get('summary') });
+    const validatedFields = Schema.safeParse(data);
 
     if (!validatedFields.success) {
         return {
             success: false,
             message: 'Validation failed. Please check the fields.',
             errors: validatedFields.error.flatten().fieldErrors,
-            fields: {
-                summary: formData.get('summary'),
-            }
         };
     }
 
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("talents").update({ capabilities_summary: validatedFields.data.summary }).eq('id', id)
+        const { error, data: updatedData } = await supabase.from("talents")
+            .update({ capabilities_summary: validatedFields.data.summary })
+            .eq('id', talentId)
+            .select("summary:capabilities_summary").single()
         if (error) throw error
 
-        revalidatePath(`/admin/collections/talents/${id}`);
         return {
             success: true,
             message: 'Success! Item updated',
+            data: updatedData
         };
     } catch (error) {
         console.log(error)

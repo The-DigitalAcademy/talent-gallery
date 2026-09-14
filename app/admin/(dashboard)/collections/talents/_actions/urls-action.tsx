@@ -2,61 +2,66 @@
 import { FormState } from "@/app/lib/definitions";
 import { createClient } from "@/app/lib/supabase/server";
 import { requireAdmin } from "@/app/lib/auth/requireAdmin";
-import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const FormSchema = z.object({
-    youtube: z.url("Invalid URL").or(z.literal("")).optional(),
-    portfolio: z.url("Invalid URL").or(z.literal("")).optional(),
-    linkedin: z.url("Invalid URL").or(z.literal("")).optional(),
-    github: z.url("Invalid URL").or(z.literal("")).optional(),
+const Schema = z.object({
+    youtube: z.url("Invalid URL").or(z.literal("")).nullable().optional(),
+    portfolio: z.url("Invalid URL").or(z.literal("")).nullable().optional(),
+    linkedin: z.url("Invalid URL").or(z.literal("")).nullable().optional(),
+    github: z.url("Invalid URL").or(z.literal("")).nullable().optional(),
 });
 
-export async function upsertUrls(id: string, prevState: FormState, formData: FormData): Promise<FormState> {
+type SchemaType = z.infer<typeof Schema>
+
+interface DbPayload {
+    youtube_url?: string | null,
+    portfolio_url?: string | null,
+    linkedin_url?: string | null,
+    github_url?: string | null
+}
+
+export async function upsertUrls(talentId: string, data: SchemaType): Promise<Omit<FormState, "fields"> & { data?: SchemaType }> {
     await requireAdmin();
     // Extract and validate raw form entries using the schema
-    const validatedFields = FormSchema.safeParse({
-        youtube: formData.get('youtube'),
-        portfolio: formData.get('portfolio'),
-        linkedin: formData.get('linkedin'),
-        github: formData.get('github'),
-    });
+    const validatedFields = Schema.safeParse(data);
 
     // If validation fails, format the Zod errors and return them to the UI
     if (!validatedFields.success) {
         return {
             success: false,
             message: 'Validation failed. Please check the fields.',
-            errors: validatedFields.error.flatten().fieldErrors,
-            fields: {
-                youtube: formData.get('youtube'),
-                portfolio: formData.get('portfolio'),
-                linkedin: formData.get('linkedin'),
-                github: formData.get('github')
-            }
+            errors: validatedFields.error.flatten().fieldErrors
         };
     }
 
-    // At this point, the data is completely valid and strictly typed
-    const { youtube, portfolio, linkedin, github } = validatedFields.data;
+    const keyMap = {
+        youtube: "youtube_url",
+        portfolio: "portfolio_url",
+        linkedin: "linkedin_url",
+        github: "github_url",
+    }
+
+    // Only assign if the value exists in validatedFields.data
+    const payload = Object.entries(keyMap).reduce<DbPayload>((acc, [oldKey, newKey]) => {
+        const value = validatedFields.data[oldKey as keyof SchemaType]
+        if (value !== undefined) acc[newKey as keyof DbPayload] = value
+        return acc;
+    }, {})
 
     // update
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("talents")
-            .update({
-                youtube_url: youtube,
-                portfolio_url: portfolio,
-                linkedin_url: linkedin,
-                github_url: github
-            })
-            .eq('id', id)
+        const { error, data: updatedData } = await supabase.from("talents")
+            .update(payload)
+            .eq('id', talentId)
+            .select("youtube:youtube_url, portfolio:portfolio_url, linkedin:linkedin_url, github:github_url")
+            .single()
         if (error) throw error
 
-        revalidatePath(`/admin/collections/talents/${id}`);
         return {
             success: true,
             message: 'Success! Item updated',
+            data: updatedData
         };
     } catch (error) {
         console.log(error)
