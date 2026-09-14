@@ -4,6 +4,7 @@ import { Button, Form, Input } from "@base-ui/react"
 import { useActionState, useState } from "react";
 import { deleteCapability, insertCapability } from "../_actions/capability-action";
 import { SearchIcon, XIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const initialState: FormState = {
     success: false,
@@ -28,20 +29,29 @@ export function AddCapabilityForm({ capability, talentId }: { capability: Capabi
 }
 
 export function DeleteCapabilityForm({ capabilityId, capabilityName, talentId }: { capabilityId: string, capabilityName: string, talentId: string }) {
-    const addCapability = deleteCapability.bind(null, capabilityId, talentId)
-    const [state, formAction, isPending] = useActionState(addCapability, initialState);
+    const [isPending, setIsPending] = useState(false);
+
+    async function handleClick() {
+        setIsPending(true)
+        const result = await deleteCapability(capabilityId, talentId)
+
+        if (!result.success)
+            toast.error(result.message || "failed to delete capability")
+
+    }
 
     return (
-        <Form action={formAction}>
+        <>{!isPending &&
             <Button
+                onClick={() => handleClick()}
                 disabled={isPending}
                 type="submit"
                 className="text-xs border flex items-center gap-1 transition bg-gray-200 font-medium text-gray-700 cursor-pointer border-gray-300 hover:shadow-lg rounded-full px-3 py-1 data-disabled:text-gray-400 data-disabled:cursor-default"
             >
                 {isPending && <span className="w-3 h-3 border-2 border-gray-600 rounded-full inline-block animate-spin border-b-gray-200" ></span>}
-                <span>{capabilityName}</span>  <XIcon className="border text-gray-500 rounded-full size-5 p-[2px]" />
-            </Button>
-        </Form>
+                <span>{capabilityName}</span>  <XIcon className="text-gray-500 rounded-full size-5 p-[2px] pr-0" />
+            </Button>}
+        </>
     )
 }
 

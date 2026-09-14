@@ -2,9 +2,9 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { FormState } from "@/app/lib/definitions";
 
-export default async function deleteTalent(id: string) {
+export default async function deleteTalent(id: string): Promise<FormState> {
     await requireAdmin();
     try {
         const supabase = await createClient()
@@ -12,6 +12,10 @@ export default async function deleteTalent(id: string) {
         if (error) throw error
 
         revalidatePath("/admin/collections/talents");
+        return {
+            success: true,
+            message: "talent deleted"
+        }
     } catch (error) {
         console.log(error)
         return {
@@ -19,5 +23,4 @@ export default async function deleteTalent(id: string) {
             message: 'A database error occurred. Please try again.',
         };
     }
-    redirect("/admin/collections/talents");
 }
