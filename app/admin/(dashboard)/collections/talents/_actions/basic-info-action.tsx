@@ -45,6 +45,9 @@ type SchemaType = z.infer<typeof Schema>
 
 export async function upsertBasicInfo(talentId: string | null, data: SchemaType): Promise<Omit<FormState, "fields"> & { data?: SchemaType }> {
     await requireAdmin();
+
+    // check for empty object
+    if (Object.keys(data).length === 0) return { success: true, message: 'Success! Item updated' }
     const validatedFields = talentId ? Schema.safeParse(data) : CreateSchema.safeParse(data);
 
     if (!validatedFields.success) {
