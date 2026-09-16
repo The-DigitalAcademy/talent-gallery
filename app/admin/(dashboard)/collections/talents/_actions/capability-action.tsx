@@ -3,11 +3,11 @@ import { createClient } from "@/app/lib/supabase/server";
 import { requireAdmin } from "@/app/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
 
-export async function insertCapability(capabilityId: string, talentId: string) {
+export async function insertCapability(capabilityId: string, talentId: string, position: number) {
     await requireAdmin();
     try {
         const supabase = await createClient()
-        const { error } = await supabase.from("talent_capabilities").insert({ talent_id: talentId, capability_id: capabilityId })
+        const { error } = await supabase.from("talent_capabilities").insert({ talent_id: talentId, capability_id: capabilityId, sort_position: position })
         if (error) throw error
 
         revalidatePath(`/admin/collections/talents/${talentId}`);
@@ -28,6 +28,29 @@ export async function deleteCapability(capabilityId: string, talentId: string) {
     try {
         const supabase = await createClient()
         const { error } = await supabase.from("talent_capabilities").delete().eq('capability_id', capabilityId).eq("talent_id", talentId)
+        if (error) throw error
+
+        revalidatePath(`/admin/collections/talents/${talentId}`);
+        return {
+            success: true,
+            message: 'Success! Item deleted',
+        };
+    } catch (error) {
+        console.log(error)
+        return {
+            success: false,
+            message: 'A database error occurred. Please try again.',
+        };
+    }
+}
+
+export async function updateCapability(talentId: string, capabilityId: string, data: { sortPosition: number }) {
+    await requireAdmin();
+
+    const { sortPosition } = data
+    try {
+        const supabase = await createClient()
+        const { error, data } = await supabase.from("talent_capabilities").update({ sort_position: sortPosition }).eq('capability_id', capabilityId).eq("talent_id", talentId)
         if (error) throw error
 
         revalidatePath(`/admin/collections/talents/${talentId}`);
