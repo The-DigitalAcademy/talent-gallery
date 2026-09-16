@@ -76,7 +76,7 @@ export function DraggableCapability({ item, index }: { index: number, item: Tale
     const { ref, isDragging } = useSortable({ id: item.id, index })
     return (
         <Button ref={ref} data-shadow={isDragging || undefined} className="flex items-center justify-between gap-2 w-full hover:bg-gray-100 py-1 px-1 rounded cursor-grab active:cursor-grabbing">
-            <span>{item.name} - {`${item.sortPosition}`}</span>
+            <span>{item.name}</span>
             <ChevronsUpDownIcon className="w-4 text-gray-600" />
         </Button>)
 }
