@@ -42,6 +42,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
     ${filters.capability ? 'capability_filter:capabilities!inner(name),' : ''}
     capabilities(name),
+    talentCapabilities:talent_capabilities(capability:capabilities(id, name), sortPosition:sort_position),
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)
@@ -83,7 +84,9 @@ export async function getFilteredTalents(filters: FilterParams) {
 
   // Return both data and count so your frontend knows when to stop paginating
   return {
-    data: (data ?? []) as unknown as Talent[],
+    data: (data ?? []) as unknown as TalentWithCapabilities[],
     count: count ?? 0,
   };
 }
+
+export type TalentWithCapabilities = Talent & { talentCapabilities: { capability: { id: string, name: string }, sortPosition: number }[] }
