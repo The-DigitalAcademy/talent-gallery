@@ -14,7 +14,7 @@ type PageProps = {
 export default async function Page(props: PageProps) {
     const searchParams = await props.searchParams;
     const supabase = await createClient();
-    const { data, error } = await supabase.from("capabilities").select("id, name, created_at").ilike('name', `%${searchParams?.name || ""}%`).order('created_at', { ascending: false });
+    const { data, error } = await supabase.from("capabilities").select("id, name, created_at").ilike('name', `%${searchParams?.name || ""}%`).order('name', { ascending: true });
 
     return (
         <>

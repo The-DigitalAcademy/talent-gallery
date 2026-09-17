@@ -35,6 +35,7 @@ export interface Talent {
 
 export interface TalentCapability {
   capability: Capability;
+  sortPosition: number
 }
 
 export interface ProjectCapability {
