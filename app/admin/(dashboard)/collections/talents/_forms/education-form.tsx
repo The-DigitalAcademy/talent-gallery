@@ -1,214 +1,594 @@
-"use client"
-import { Button, Dialog, Field, Form } from "@base-ui/react"
+"use client";
+
+import { Button, Dialog, Field, Form } from "@base-ui/react";
 import { XIcon } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/app/lib/utils";
-import { SubmitHandler, useForm } from "react-hook-form";
 import moment from "moment";
+import { useMemo, useState } from "react";
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+  useWatch,
+} from "react-hook-form";
 import { toast } from "sonner";
-import { deleteEducation, insertEducation } from "../_actions/education-action";
-import { Education, FieldsOfStudy, Qualifications } from "@/app/lib/definitions";
+
+import { cn } from "@/app/lib/utils";
+import {
+  Education,
+  FieldsOfStudy,
+  Qualifications,
+} from "@/app/lib/definitions";
+
+import { FormCombobox } from "@/components/admin/form-combobox";
+
+import {
+  deleteEducation,
+  insertEducation,
+} from "../_actions/education-action";
 
 type FormValues = {
-    institution: string,
-    qualification: string,
-    fieldOfStudy: string,
-    startDate: Date,
-    endDate: Date,
-    isCurrent: boolean
-}
+  institution: string;
+  qualification: string;
+  fieldOfStudy: string | null;
+  startDate: Date;
+  endDate: Date;
+  isCurrent: boolean;
+};
 
-export default function EducationForm({ education, talentId, qualifications, fieldsOfStudy }: { education: Education[], talentId: string, qualifications: Qualifications[], fieldsOfStudy: FieldsOfStudy[]}) {
-    const { handleSubmit, register, reset, setError, watch, formState: { errors, isSubmitting, isValid } } = useForm<FormValues>({ defaultValues: { isCurrent: false } })
+type EducationFormProps = {
+  education: Education[];
+  talentId: string;
+  qualifications: Qualifications[];
+  fieldsOfStudy: FieldsOfStudy[];
+};
 
-    const [isCurrent, startDate] = watch(["isCurrent", "startDate"])
+export default function EducationForm({
+  education,
+  talentId,
+  qualifications,
+  fieldsOfStudy,
+}: EducationFormProps) {
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+    setError,
+    setValue,
+    formState: {
+      errors,
+      dirtyFields,
+      isSubmitting,
+      isValid,
+    },
+  } = useForm<FormValues>({
+    mode: "onChange",
+    defaultValues: {
+      institution: "",
+      qualification: "",
+      fieldOfStudy: null,
+      isCurrent: false,
+    },
+  });
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        const { institution, qualification, fieldOfStudy, startDate, endDate, isCurrent } = data
+  const selectedQualification = useWatch({
+    control,
+    name: "qualification",
+  });
 
-        // DURATION VALUE
-        const finalEndDate = isCurrent ? new Date() : endDate
-        const totalMonths = moment(finalEndDate).diff(moment(startDate), "months")
-        let totalDurationsText = `${totalMonths} months`
-        if (totalMonths > 11) {
-            const years = Math.floor(totalMonths / 12);
-            const months = totalMonths % 12;
+  const isCurrent = useWatch({
+    control,
+    name: "isCurrent",
+  });
 
-            // Handle pluralization
-            const yearStr = years === 1 ? 'year' : 'years';
-            const monthStr = months === 1 ? 'month' : 'months';
+  const startDate = useWatch({
+    control,
+    name: "startDate",
+  });
 
-            // If remaining months is 0, you can choose to omit it or keep it
-            totalDurationsText = months > 0
-                ? `${years} ${yearStr} ${months} ${monthStr}`
-                : `${years} ${yearStr}`;
-        }
-        const duration = `${moment(startDate).format('MMM YYYY')} - ${moment(finalEndDate).format('MMM YYYY')} (${totalDurationsText})`
+  /**
+   * Memoized so the combobox receives stable option objects
+   * between renders (prevents the selected value from being reset).
+   */
+  const qualificationOptions = useMemo(
+    () =>
+      qualifications.map((qualification) => ({
+        label: qualification.name,
+        value: qualification.id,
+      })),
+    [qualifications],
+  );
 
-        const result = await insertEducation(talentId, { institution, duration, qualification, fieldOfStudy })
+  /**
+   * Only show fields of study belonging to the
+   * selected qualification.
+   */
+  const fieldOfStudyOptions = useMemo(
+    () =>
+      selectedQualification
+        ? fieldsOfStudy
+            .filter(
+              (field) =>
+                field.qualification_id === selectedQualification,
+            )
+            .map((field) => ({
+              label: field.name,
+              value: field.id,
+            }))
+        : [],
+    [fieldsOfStudy, selectedQualification],
+  );
 
-        // set errors from server
-        if (result.success == false) {
-            setError("root", { message: result.message })
-            if (result.errors) {
-                for (const key in result.errors) {
-                    const errKey = key as keyof FormValues
-                    setError(errKey, { message: result?.errors[errKey]?.toString() })
-                }
-            }
-        }
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const {
+      institution,
+      qualification,
+      fieldOfStudy,
+      startDate,
+      endDate,
+      isCurrent,
+    } = data;
 
-        if (result.success) reset()
+    const finalEndDate = isCurrent ? new Date() : endDate;
+
+    // valueAsDate on <input type="month"> returns a UTC date,
+    // so use moment.utc to avoid off-by-one-month shifts.
+    const totalMonths = moment
+      .utc(finalEndDate)
+      .diff(moment.utc(startDate), "months");
+
+    const totalDurationText = formatDuration(totalMonths);
+
+    const duration = `${moment
+      .utc(startDate)
+      .format("MMM YYYY")} - ${moment
+      .utc(finalEndDate)
+      .format("MMM YYYY")} (${totalDurationText})`;
+
+    const result = await insertEducation(talentId, {
+      institution,
+      duration,
+      qualification,
+      fieldOfStudy,
+    });
+
+    if (!result.success) {
+      setError("root", {
+        message: result.message,
+      });
+
+      if (result.errors) {
+        Object.entries(result.errors).forEach(
+          ([key, message]) => {
+            setError(key as keyof FormValues, {
+              message: String(message),
+            });
+          },
+        );
+      }
+
+      return;
     }
 
-    return (
-        <div>
-            <h2 className="mb-2 font-semibold">Education</h2>
-            <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
-                <div className="grid grid-cols-3 gap-7">
-                    <Form
-                        onSubmit={handleSubmit(onSubmit)}
-                        className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
-                        <Field.Root name="institution" className="flex flex-col items-start gap-2 w-full">
-                            <Field.Control
-                                {...register("institution", { required: true, minLength: 2, maxLength: 50 })}
-                                placeholder="Institution"
-                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 placeholder:text-sm font-normal"
-                            />
-                            <p className="text-xs text-red-700 block">{errors.institution?.message}</p>
-                        </Field.Root>
-                        <Field.Root name="qualification" className="flex flex-col items-start gap-2 w-full">
-                            <Field.Control
-                                {...register("qualification", { required: true, minLength: 2, maxLength: 50 })}
-                                placeholder="Qualification"
-                                className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 placeholder:text-sm font-normal"
-                            />
-                            <Field.Error className="text-xs text-red-700" />
-                        </Field.Root>
-                        <Field.Root name="fieldOfStudy" className="flex flex-col items-start gap-2 w-full">
-                            <textarea
-                                {...register("fieldOfStudy", { minLength: 2, maxLength: 2000 })}
-                                rows={3}
-                                placeholder="Field of Study"
-                                className="border p-2 h-full text-sm w-full rounded-lg outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm placeholder:text-sm font-normal"
-                            />
-                            <Field.Error className="text-xs text-red-700" />
-                        </Field.Root>
+    toast.success("Education added");
 
-                        <Field.Root name="duration" className="flex flex-col items-start gap-2 w-full">
-                            <div className="w-full space-y-2">
-                                <div className="grid grid-cols-2 gap-2">
-                                    <Field.Root name="startDate" className="flex flex-col gap-1">
-                                        <Field.Label className="text-sm font-normal text-gray-700">Start date</Field.Label>
-                                        <input
-                                            type="month"
-                                            {...register("startDate", { required: true, valueAsDate: true })}
-                                            max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
-                                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal"
-                                        />
-                                    </Field.Root>
-                                    <Field.Root name="endDate" className="flex flex-col gap-1">
-                                        <Field.Label className="text-sm font-normal text-gray-700">End date</Field.Label>
-                                        <input
-                                            type="month"
-                                            {...register("endDate", { required: !isCurrent, valueAsDate: true })}
-                                            disabled={isCurrent}
-                                            min={`${startDate?.getFullYear()}-${String(startDate?.getMonth() + 1).padStart(2, '0')}`}
-                                            max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
-                                            className="border text-sm w-full rounded-lg h-8 outline-0 focus:border-gray-600 active:border-gray-600 border-gray-300 px-2 text-sm font-normal disabled:bg-gray-100 disabled:text-gray-400"
-                                        />
-                                    </Field.Root>
-                                </div>
-                                <Field.Root>
-                                    <Field.Label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer mt-1 font-normal">
-                                        <input
-                                            type="checkbox"
-                                            {...register("isCurrent")}
-                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                        <span>I am currently studying here (Ongoing)</span>
-                                    </Field.Label>
-                                </Field.Root>
-                            </div>
-                            <Field.Error className="text-xs text-red-700" />
-                        </Field.Root>
+    reset({
+      institution: "",
+      qualification: "",
+      fieldOfStudy: null,
+      isCurrent: false,
+    });
+  };
+console.log(qualifications[0], qualificationOptions[0]);
+  return (
+    <div>
+      <h2 className="mb-2 font-semibold">Education</h2>
 
-                        <div className="flex justify-end items-center gap-4">
-                            <div className="text-red-700/75 text-xs flex items-center gap-1">
-                                {errors?.root?.message}
-                            </div>
-                            <Button
-                                disabled={!isValid || isSubmitting}
-                                focusableWhenDisabled
-                                type="submit"
-                                className={cn("bg-green-600 hover:bg-green-700 data-disabled:bg-green-600/50", "text-white rounded-lg justify-center  text-sm px-3 h-8 flex gap-1  cursor-pointer transition items-center data-disabled:cursor-default")}
-                            >
-                                {isSubmitting && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
-                                <span>Add</span>
-                            </Button>
-                        </div>
-                    </Form>
-                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-65 pr-5">
-                        {!education.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Education</div>}
-                        {education?.toReversed().map(e => (
-                            <div key={e.id} className="border border-gray-200 rounded-lg p-3 relative">
-                                <div className="absolute right-2 top-1"><DeleteFormDialog item={{ id: e.id, name: e.institution, talentId: e.talent_id }} /></div>
-                                <div className="text-sm text-gray-700 break-words">{e.institution}</div>
-                                {/* <div className="font-semibold text-base break-words">{e.}</div> */}
-                                <div className="flex gap-5 text-xs text-gray-500 break-words">{e.duration}</div>
-                                {/* <div className="text-sm text-gray-500 break-words">{e.}</div> */}
-                            </div>))}
+      <div className="w-full rounded-lg border border-gray-200 bg-white p-6">
+        <div className="grid grid-cols-3 gap-7">
+          {/* FORM */}
+          <Form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4 rounded-lg border border-gray-200 p-3"
+          >
+            {/* Institution */}
+            <Field.Root
+              name="institution"
+              className="flex w-full flex-col items-start gap-2"
+            >
+              <Field.Label className="text-xs text-gray-700">
+                Institution
+              </Field.Label>
+
+              <Field.Control
+                {...register("institution", {
+                  required: "Institution is required",
+                  minLength: {
+                    value: 2,
+                    message:
+                      "Institution must be at least 2 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message:
+                      "Institution cannot exceed 50 characters",
+                  },
+                })}
+                placeholder="Institution"
+                className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 placeholder:text-sm focus:border-gray-600"
+              />
+
+              <div className="text-xs text-red-700">
+                {errors.institution?.message}
+              </div>
+            </Field.Root>
+
+            {/* Qualification */}
+            <Controller
+              control={control}
+              name="qualification"
+              rules={{ required: "Qualification is required" }}
+              render={({ field, fieldState }) => (
+                <Field.Root
+                  name={field.name}
+                  invalid={fieldState.invalid}
+                  className={cn(
+                    "flex w-full flex-col items-start gap-2",
+                    {
+                      "[&>button]:bg-yellow-50":
+                        dirtyFields.qualification,
+                    },
+                  )}
+                >
+                  <Field.Label className="text-xs text-gray-700">
+                    Qualification
+                  </Field.Label>
+
+                  <FormCombobox
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value ?? "");
+
+                      // Qualification changed.
+                      // The previously selected field may no longer
+                      // belong to the new qualification.
+                      setValue("fieldOfStudy", null, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                    placeholder="Select qualification"
+                    options={qualificationOptions}
+                  />
+
+                  <div className="text-xs text-red-700">
+                    {fieldState.error?.message}
+                  </div>
+                </Field.Root>
+              )}
+            />
+
+            {/* Field of Study */}
+            <Controller
+              control={control}
+              name="fieldOfStudy"
+              render={({ field, fieldState }) => (
+                <Field.Root
+                  name={field.name}
+                  invalid={fieldState.invalid}
+                  className={cn(
+                    "flex w-full flex-col items-start gap-2",
+                    {
+                      "[&>button]:bg-yellow-50":
+                        dirtyFields.fieldOfStudy,
+                    },
+                  )}
+                >
+                  <Field.Label className="text-xs text-gray-700">
+                    Field of Study
+                  </Field.Label>
+
+                  <FormCombobox
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={!selectedQualification}
+                    placeholder={
+                      selectedQualification
+                        ? "Select field of study"
+                        : "Select qualification first"
+                    }
+                    options={fieldOfStudyOptions}
+                  />
+
+                  <div className="text-xs text-red-700">
+                    {fieldState.error?.message}
+                  </div>
+                </Field.Root>
+              )}
+            />
+
+            {/* Dates */}
+            <Field.Root
+              name="duration"
+              className="flex w-full flex-col items-start gap-2"
+            >
+              <div className="w-full space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  {/* Start date */}
+                  <Field.Root
+                    name="startDate"
+                    className="flex flex-col gap-1"
+                  >
+                    <Field.Label className="text-sm font-normal text-gray-700">
+                      Start date
+                    </Field.Label>
+
+                    <input
+                      type="month"
+                      {...register("startDate", {
+                        required: "Start date is required",
+                        valueAsDate: true,
+                      })}
+                      max={getCurrentMonth()}
+                      className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 focus:border-gray-600"
+                    />
+
+                    <div className="text-xs text-red-700">
+                      {errors.startDate?.message}
                     </div>
+                  </Field.Root>
+
+                  {/* End date */}
+                  <Field.Root
+                    name="endDate"
+                    className="flex flex-col gap-1"
+                  >
+                    <Field.Label className="text-sm font-normal text-gray-700">
+                      End date
+                    </Field.Label>
+
+                    <input
+                      type="month"
+                      {...register("endDate", {
+                        required: !isCurrent
+                          ? "End date is required"
+                          : false,
+                        valueAsDate: true,
+                        validate: (value) => {
+                          if (!value || !startDate) {
+                            return true;
+                          }
+
+                          if (value < startDate) {
+                            return "End date must be after start date";
+                          }
+
+                          return true;
+                        },
+                      })}
+                      disabled={isCurrent}
+                      min={
+                        startDate
+                          ? formatMonth(startDate)
+                          : undefined
+                      }
+                      max={getCurrentMonth()}
+                      className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 disabled:bg-gray-100 disabled:text-gray-400 focus:border-gray-600"
+                    />
+
+                    <div className="text-xs text-red-700">
+                      {errors.endDate?.message}
+                    </div>
+                  </Field.Root>
                 </div>
+
+                {/* Current */}
+                <Field.Root>
+                  <Field.Label className="mt-1 flex cursor-pointer items-center gap-2 text-xs font-normal text-gray-600">
+                    <input
+                      type="checkbox"
+                      {...register("isCurrent")}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+
+                    <span>
+                      I am currently studying here
+                    </span>
+                  </Field.Label>
+                </Field.Root>
+              </div>
+            </Field.Root>
+
+            {/* Submit */}
+            <div className="flex items-center justify-end gap-4">
+              <div className="text-xs text-red-700/75">
+                {errors.root?.message}
+              </div>
+
+              <Button
+                disabled={!isValid || isSubmitting}
+                focusableWhenDisabled
+                type="submit"
+                className={cn(
+                  "flex h-8 cursor-pointer items-center justify-center gap-1 rounded-lg bg-green-600 px-3 text-sm text-white transition",
+                  "hover:bg-green-700",
+                  "data-disabled:cursor-default data-disabled:bg-green-600/50",
+                )}
+              >
+                {isSubmitting && (
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-3 border-white/75 border-b-white/25" />
+                )}
+
+                <span>Add</span>
+              </Button>
             </div>
+          </Form>
+
+          {/* EDUCATION LIST */}
+          <div className="col-span-2 flex max-h-65 flex-col gap-3 overflow-y-scroll pr-5">
+            {!education.length && (
+              <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
+                No Education
+              </div>
+            )}
+
+            {education.toReversed().map((item) => (
+              <div
+                key={item.id}
+                className="relative rounded-lg border border-gray-200 p-3"
+              >
+                <div className="absolute right-2 top-1">
+                  <DeleteFormDialog
+                    item={{
+                      id: item.id,
+                      name: item.institution,
+                      talentId: item.talent_id,
+                    }}
+                  />
+                </div>
+
+                <div className="break-words text-sm text-gray-700">
+                  {item.institution}
+                </div>
+
+                <div className="break-words text-xs text-gray-500">
+                  {item.duration}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
-function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId: string } }) {
-    const [isPending, setIsPending] = useState(false);
+function DeleteFormDialog({
+  item,
+}: {
+  item: {
+    id: string;
+    name: string;
+    talentId: string;
+  };
+}) {
+  const [isPending, setIsPending] = useState(false);
 
-    async function onDelete() {
-        setIsPending(true)
-        const result = await deleteEducation(item.id, item.talentId)
+  const onDelete = async () => {
+    setIsPending(true);
 
-        if (result.success == true)
-            toast.success("Education deleted")
-        else
-            toast.error(result.message || "failed to delete project")
+    try {
+      const result = await deleteEducation(
+        item.id,
+        item.talentId,
+      );
 
-        setIsPending(false)
+      if (result.success) {
+        toast.success("Education deleted");
+      } else {
+        toast.error(
+          result.message || "Failed to delete education",
+        );
+      }
+    } finally {
+      setIsPending(false);
     }
+  };
 
-    return (
-        <Dialog.Root>
-            <Dialog.Trigger>
-                <XIcon className='size-4 hover:text-red-500' />
-            </Dialog.Trigger>
-            <Dialog.Portal className="text-black">
-                <Dialog.Backdrop className="fixed inset-0 min-h-dvh backdrop-blur-[2px] " />
-                <Dialog.Viewport>
-                    <Dialog.Popup className="fixed top-1/2 left-1/2 -mt-8 flex flex-col gap-4 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 shadow bg-white border border-gray-300 p-4 rounded-xl transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.9] data-starting-style:opacity-0">
-                        <div className='flex justify-between items-center'>
-                            <Dialog.Title className="font-semibold">Delete {item.name}</Dialog.Title>
-                            <Dialog.Close className="text-black" ><XIcon /></Dialog.Close>
-                        </div>
-                        <Dialog.Description className="text-sm text-gray-500">This action cannot be undone</Dialog.Description>
-                        <div className="flex w-full flex-col gap-4">
-                            <Button
-                                onClick={() => onDelete()}
-                                disabled={isPending}
-                                focusableWhenDisabled
-                                type="submit"
-                                className={cn("bg-red-500 hover:bg-red-600 data-disabled:bg-red-500/50", "text-white rounded-lg  ml-auto justify-center text-sm px-3 h-8 flex gap-1 cursor-pointer transition items-center data-disabled:cursor-default")}
-                            >
-                                {isPending && <span className="w-4 h-4 border-3 border-white/75 rounded-full inline-block animate-spin border-b-white/25" ></span>}
-                                <span>Delete</span>
-                            </Button>
-                        </div>
-                    </Dialog.Popup>
-                </Dialog.Viewport>
-            </Dialog.Portal>
-        </Dialog.Root>
-    );
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>
+        <XIcon className="size-4 hover:text-red-500" />
+      </Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Backdrop className="fixed inset-0 min-h-dvh backdrop-blur-[2px]" />
+
+        <Dialog.Viewport>
+          <Dialog.Popup className="fixed left-1/2 top-1/2 flex w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-xl border border-gray-300 bg-white p-4 shadow transition-[scale,opacity] duration-100 ease-out data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.9] data-starting-style:opacity-0">
+            <div className="flex items-center justify-between">
+              <Dialog.Title className="font-semibold">
+                Delete {item.name}
+              </Dialog.Title>
+
+              <Dialog.Close className="text-black">
+                <XIcon />
+              </Dialog.Close>
+            </div>
+
+            <Dialog.Description className="text-sm text-gray-500">
+              This action cannot be undone.
+            </Dialog.Description>
+
+            <div className="flex w-full justify-end">
+              <Button
+                onClick={onDelete}
+                disabled={isPending}
+                focusableWhenDisabled
+                type="button"
+                className={cn(
+                  "flex h-8 cursor-pointer items-center justify-center gap-1 rounded-lg bg-red-500 px-3 text-sm text-white transition",
+                  "hover:bg-red-600",
+                  "data-disabled:cursor-default data-disabled:bg-red-500/50",
+                )}
+              >
+                {isPending && (
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-3 border-white/75 border-b-white/25" />
+                )}
+
+                <span>Delete</span>
+              </Button>
+            </div>
+          </Dialog.Popup>
+        </Dialog.Viewport>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Helpers                                                                    */
+/* -------------------------------------------------------------------------- */
+
+function formatDuration(totalMonths: number): string {
+  if (totalMonths < 12) {
+    return `${totalMonths} ${
+      totalMonths === 1 ? "month" : "months"
+    }`;
+  }
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  const yearText = `${years} ${
+    years === 1 ? "year" : "years"
+  }`;
+
+  if (months === 0) {
+    return yearText;
+  }
+
+  const monthText = `${months} ${
+    months === 1 ? "month" : "months"
+  }`;
+
+  return `${yearText} ${monthText}`;
+}
+
+function getCurrentMonth(): string {
+  const now = new Date();
+
+  return `${now.getFullYear()}-${String(
+    now.getMonth() + 1,
+  ).padStart(2, "0")}`;
+}
+
+/**
+ * valueAsDate on <input type="month"> yields a UTC date,
+ * so read it back with the UTC getters.
+ */
+function formatMonth(date: Date): string {
+  return `${date.getUTCFullYear()}-${String(
+    date.getUTCMonth() + 1,
+  ).padStart(2, "0")}`;
 }

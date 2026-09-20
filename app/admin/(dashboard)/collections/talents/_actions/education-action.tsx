@@ -1,89 +1,144 @@
 "use server";
-import { FormState } from "@/app/lib/definitions";
-import { createClient } from "@/app/lib/supabase/server";
-import { requireAdmin } from "@/app/lib/auth/requireAdmin";
-import { revalidatePath } from "next/cache";
-import z from "zod";
 
-const Schema = z.object({
-    institution: z
-        .string()
-        .trim()
-        .min(2, { message: 'company must be at least 2 characters long.' })
-        .max(50, { message: 'company cannot exceed 50 characters.' }),
-    qualification: z
-        .string()
-        .trim()
-        .min(2, { message: 'role must be at least 2 characters long.' })
-        .max(50, { message: 'role cannot exceed 50 characters.' }),
-    duration: z
-        .string()
-        .trim()
-        .min(2, { message: 'duration must be at least 2 characters long.' })
-        .max(50, { message: 'duration cannot exceed 50 characters.' }),
-    fieldOfStudy: z
-        .string()
-        .trim()
-        .max(2000, { message: 'description cannot exceed 2000 characters.' })
-        .nullable().optional()
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+import { FormState } from "@/app/lib/definitions";
+import { requireAdmin } from "@/app/lib/auth/requireAdmin";
+import { createClient } from "@/app/lib/supabase/server";
+
+const EducationSchema = z.object({
+  institution: z
+    .string()
+    .trim()
+    .min(2, {
+      message: "Institution must be at least 2 characters long.",
+    })
+    .max(50, {
+      message: "Institution cannot exceed 50 characters.",
+    }),
+
+  qualification: z
+    .string()
+    .uuid({
+      message: "Please select a valid qualification.",
+    }),
+
+  fieldOfStudy: z
+    .string()
+    .uuid({
+      message: "Please select a valid field of study.",
+    })
+    .nullable()
+    .optional(),
+
+  duration: z
+    .string()
+    .trim()
+    .min(2, {
+      message: "Duration must be at least 2 characters long.",
+    })
+    .max(50, {
+      message: "Duration cannot exceed 50 characters.",
+    }),
 });
 
-type SchemaType = z.infer<typeof Schema>
+type EducationSchemaType = z.infer<typeof EducationSchema>;
 
-export async function insertEducation(talentId: string, data: SchemaType): Promise<FormState> {
-    await requireAdmin();
-    const validatedFields = Schema.safeParse(data);
+export async function insertEducation(
+  talentId: string,
+  data: EducationSchemaType,
+): Promise<FormState> {
+  await requireAdmin();
 
-    if (!validatedFields.success) {
-        return {
-            success: false,
-            message: 'Validation failed. Please check the fields.',
-            errors: validatedFields.error.flatten().fieldErrors,
-        };
+  const validatedFields = EducationSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: "Validation failed. Please check the fields.",
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const {
+    institution,
+    qualification,
+    fieldOfStudy,
+    duration,
+  } = validatedFields.data;
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("education")
+      .insert({
+        talent_id: talentId,
+        institution,
+        duration,
+        qualification_id: qualification,
+        field_of_study_id: fieldOfStudy,
+      });
+
+    if (error) {
+      console.error("Failed to insert education:", error);
+      throw error;
     }
 
-    const { institution, qualification, duration, fieldOfStudy } = validatedFields.data;
+    revalidatePath(
+      `/admin/collections/talents/${talentId}`,
+    );
 
-    try {
-        const supabase = await createClient()
-        console.log("in here")
-        const { error, data } = await supabase.from("education").insert({ talent_id: talentId, institution, duration, qualification_id: "354ae6ed-1c89-4ee7-b74b-f07ce6332b1a", field_of_study_id: "354ae6ed-1c89-4ee7-b74b-f07ce6332b1a" })
-        console.log({data})
-        console.log({error})
-        if (error) throw error
-        
-        revalidatePath(`/admin/collections/talents/${talentId}`)
-        return {
-            success: true,
-            message: 'Success! Item added',
-        };
+    return {
+      success: true,
+      message: "Success! Education added.",
+    };
+  } catch (error) {
+    console.error("insertEducation error:", error);
 
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
-    }
+    return {
+      success: false,
+      message:
+        "A database error occurred. Please try again.",
+    };
+  }
 }
 
-export async function deleteEducation(id: string, talentId: string) {
-    await requireAdmin();
-    try {
-        const supabase = await createClient()
-        const { error } = await supabase.from("work_experiences").delete().eq('id', id)
-        if (error) throw error
+export async function deleteEducation(
+  id: string,
+  talentId: string,
+) {
+  await requireAdmin();
 
-        revalidatePath(`/admin/collections/talents/${talentId}`);
-        return {
-            success: true,
-            message: 'Success! Item deleted',
-        };
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'A database error occurred. Please try again.',
-        };
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("education")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Failed to delete education:", error);
+      throw error;
     }
+
+    revalidatePath(
+      `/admin/collections/talents/${talentId}`,
+    );
+
+    return {
+      success: true,
+      message: "Success! Education deleted.",
+    };
+  } catch (error) {
+    console.error("deleteEducation error:", error);
+
+    return {
+      success: false,
+      message:
+        "A database error occurred. Please try again.",
+    };
+  }
 }

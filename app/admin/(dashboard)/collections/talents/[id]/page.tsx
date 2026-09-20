@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
     const { data: education, error: educationError } = await supabase.from("education").select("*")
-    const { data: qualifications, error: qualificationsError } = await supabase.from("qualifications").select("name")
+    const { data: qualifications, error: qualificationsError } = await supabase.from("qualifications").select("*")
     const { data: fieldsOfStudy, error: fieldsOfStudyError } = await supabase.from("fields_of_study").select("*")
 
     const enrolmentData = {
