@@ -143,10 +143,6 @@ export function getCurrentMonth(): string {
   ).padStart(2, "0")}`;
 }
 
-/**
- * valueAsDate on <input type="month"> yields a UTC date,
- * so read it back with the UTC getters.
- */
 export function formatMonth(date: Date): string {
   return `${date.getUTCFullYear()}-${String(
     date.getUTCMonth() + 1,

@@ -34,7 +34,18 @@ export function FormCombobox({
     React.useState<HTMLDivElement | null>(null);
 
   const [inputValue, setInputValue] =
-    React.useState("");
+    React.useState(value ?? "");
+
+  const [prevValue, setPrevValue] =
+    React.useState(value);
+
+  // Sync the visible text when the parent changes `value`
+  // (form reset, setValue(), etc.). Adjusting state during
+  // render avoids the extra render pass an effect would cause.
+  if (value !== prevValue) {
+    setPrevValue(value);
+    setInputValue(value ?? "");
+  }
 
   const selectedOption = React.useMemo(() => {
     const existingOption = options.find(
