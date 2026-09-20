@@ -1,5 +1,5 @@
-create policy "Allow authenticated insert education"
+create policy "Allow public read education"
 on public.education
-for insert
-to authenticated
-with check (true);
+for select
+to anon, authenticated
+using (true);

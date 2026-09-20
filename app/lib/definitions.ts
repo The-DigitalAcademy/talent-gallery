@@ -105,11 +105,11 @@ export interface WorkExperience {
 
 export interface Education {
   id: UUID;
-  field_of_study_id: UUID,
-  qualification_id: UUID,
   talent_id: UUID,
   institution: string,
-  duration: string
+  duration: string,
+  field_of_study: string,
+  qualification: string
 }
 
 export interface Qualifications {

@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
                 <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
-                <EducationForm talentId={talent?.id} education={education!} qualifications={qualifications} fieldsOfStudy={fieldsOfStudy}/>
+                <EducationForm talentId={talent?.id} education={education!} qualifications={qualifications || []} fieldsOfStudy={fieldsOfStudy || []}/>
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />

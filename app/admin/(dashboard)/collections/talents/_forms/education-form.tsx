@@ -86,37 +86,57 @@ export default function EducationForm({
     name: "startDate",
   });
 
-  /**
-   * Memoized so the combobox receives stable option objects
-   * between renders (prevents the selected value from being reset).
+  /*
+   * Find the predefined qualification record.
+   *
+   * This ID is only used to filter the suggested
+   * fields of study. It is NOT saved to education.
+   */
+  const selectedQualificationRecord = useMemo(
+    () =>
+      qualifications.find(
+        (qualification) =>
+          qualification.name === selectedQualification,
+      ) ?? null,
+    [qualifications, selectedQualification],
+  );
+
+  /*
+   * Qualification suggestions.
+   *
+   * The value is the qualification NAME, not the UUID.
+   * This also means a custom qualification can be stored.
    */
   const qualificationOptions = useMemo(
     () =>
       qualifications.map((qualification) => ({
         label: qualification.name,
-        value: qualification.id,
+        value: qualification.name,
       })),
     [qualifications],
   );
 
-  /**
-   * Only show fields of study belonging to the
-   * selected qualification.
+  /*
+   * Field of Study suggestions are filtered using the
+   * predefined qualification ID.
+   *
+   * The value stored in the form is the field NAME.
    */
   const fieldOfStudyOptions = useMemo(
     () =>
-      selectedQualification
+      selectedQualificationRecord
         ? fieldsOfStudy
             .filter(
               (field) =>
-                field.qualification_id === selectedQualification,
+                field.qualification_id ===
+                selectedQualificationRecord.id,
             )
             .map((field) => ({
               label: field.name,
-              value: field.id,
+              value: field.name,
             }))
         : [],
-    [fieldsOfStudy, selectedQualification],
+    [fieldsOfStudy, selectedQualificationRecord],
   );
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -179,10 +199,12 @@ export default function EducationForm({
       isCurrent: false,
     });
   };
-console.log(qualifications[0], qualificationOptions[0]);
+
   return (
     <div>
-      <h2 className="mb-2 font-semibold">Education</h2>
+      <h2 className="mb-2 font-semibold">
+        Education
+      </h2>
 
       <div className="w-full rounded-lg border border-gray-200 bg-white p-6">
         <div className="grid grid-cols-3 gap-7">
@@ -227,7 +249,9 @@ console.log(qualifications[0], qualificationOptions[0]);
             <Controller
               control={control}
               name="qualification"
-              rules={{ required: "Qualification is required" }}
+              rules={{
+                required: "Qualification is required",
+              }}
               render={({ field, fieldState }) => (
                 <Field.Root
                   name={field.name}
@@ -250,8 +274,7 @@ console.log(qualifications[0], qualificationOptions[0]);
                       field.onChange(value ?? "");
 
                       // Qualification changed.
-                      // The previously selected field may no longer
-                      // belong to the new qualification.
+                      // Reset the previous field of study.
                       setValue("fieldOfStudy", null, {
                         shouldDirty: true,
                         shouldValidate: true,
@@ -451,6 +474,13 @@ console.log(qualifications[0], qualificationOptions[0]);
                   {item.institution}
                 </div>
 
+                <div className="break-words text-xs text-gray-700">
+                  {item.qualification}
+                  {item.field_of_study
+                    ? ` • ${item.field_of_study}`
+                    : ""}
+                </div>
+
                 <div className="break-words text-xs text-gray-500">
                   {item.duration}
                 </div>
@@ -472,7 +502,8 @@ function DeleteFormDialog({
     talentId: string;
   };
 }) {
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, setIsPending] =
+    useState(false);
 
   const onDelete = async () => {
     setIsPending(true);
@@ -487,7 +518,8 @@ function DeleteFormDialog({
         toast.success("Education deleted");
       } else {
         toast.error(
-          result.message || "Failed to delete education",
+          result.message ||
+            "Failed to delete education",
         );
       }
     } finally {

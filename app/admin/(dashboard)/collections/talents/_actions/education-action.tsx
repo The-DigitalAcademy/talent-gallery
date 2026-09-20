@@ -20,14 +20,19 @@ const EducationSchema = z.object({
 
   qualification: z
     .string()
-    .uuid({
-      message: "Please select a valid qualification.",
+    .trim()
+    .min(2, {
+      message: "Qualification must be at least 2 characters long.",
+    })
+    .max(150, {
+      message: "Qualification cannot exceed 150 characters.",
     }),
 
   fieldOfStudy: z
     .string()
-    .uuid({
-      message: "Please select a valid field of study.",
+    .trim()
+    .max(150, {
+      message: "Field of study cannot exceed 150 characters.",
     })
     .nullable()
     .optional(),
@@ -76,9 +81,9 @@ export async function insertEducation(
       .insert({
         talent_id: talentId,
         institution,
+        qualification,
+        field_of_study: fieldOfStudy,
         duration,
-        qualification_id: qualification,
-        field_of_study_id: fieldOfStudy,
       });
 
     if (error) {
