@@ -55,6 +55,7 @@ export default function EducationForm({
     reset,
     setError,
     setValue,
+    trigger,
     formState: {
       errors,
       dirtyFields,
@@ -70,6 +71,9 @@ export default function EducationForm({
       isCurrent: false,
     },
   });
+
+  const [focusedField, setFocusedField] =
+    useState<keyof FormValues | null>(null);
 
   const selectedQualification = useWatch({
     control,
@@ -87,9 +91,19 @@ export default function EducationForm({
   });
 
   /*
+   * Validate only the field that receives focus.
+   */
+  const focusField = async (
+    field: keyof FormValues,
+  ) => {
+    setFocusedField(field);
+    await trigger(field);
+  };
+
+  /*
    * Find the predefined qualification record.
    *
-   * This ID is only used to filter the suggested
+   * The ID is only used to filter the suggested
    * fields of study. It is NOT saved to education.
    */
   const selectedQualificationRecord = useMemo(
@@ -104,8 +118,7 @@ export default function EducationForm({
   /*
    * Qualification suggestions.
    *
-   * The value is the qualification NAME, not the UUID.
-   * This also means a custom qualification can be stored.
+   * The actual form value is the qualification name.
    */
   const qualificationOptions = useMemo(
     () =>
@@ -117,10 +130,12 @@ export default function EducationForm({
   );
 
   /*
-   * Field of Study suggestions are filtered using the
-   * predefined qualification ID.
+   * Field of Study suggestions.
    *
-   * The value stored in the form is the field NAME.
+   * The qualification ID is only used to find
+   * suggestions belonging to the selected qualification.
+   *
+   * The actual form value is the field name.
    */
   const fieldOfStudyOptions = useMemo(
     () =>
@@ -192,6 +207,8 @@ export default function EducationForm({
 
     toast.success("Education added");
 
+    setFocusedField(null);
+
     reset({
       institution: "",
       qualification: "",
@@ -216,6 +233,7 @@ export default function EducationForm({
             {/* Institution */}
             <Field.Root
               name="institution"
+              onFocus={() => focusField("institution")}
               className="flex w-full flex-col items-start gap-2"
             >
               <Field.Label className="text-xs text-gray-700">
@@ -240,9 +258,12 @@ export default function EducationForm({
                 className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 placeholder:text-sm focus:border-gray-600"
               />
 
-              <div className="text-xs text-red-700">
-                {errors.institution?.message}
-              </div>
+              {focusedField === "institution" &&
+                errors.institution?.message && (
+                  <div className="text-xs text-red-700">
+                    {errors.institution.message}
+                  </div>
+                )}
             </Field.Root>
 
             {/* Qualification */}
@@ -256,6 +277,9 @@ export default function EducationForm({
                 <Field.Root
                   name={field.name}
                   invalid={fieldState.invalid}
+                  onFocus={() =>
+                    focusField("qualification")
+                  }
                   className={cn(
                     "flex w-full flex-col items-start gap-2",
                     {
@@ -273,8 +297,13 @@ export default function EducationForm({
                     onValueChange={(value) => {
                       field.onChange(value ?? "");
 
-                      // Qualification changed.
-                      // Reset the previous field of study.
+                      /*
+                       * Qualification changed.
+                       *
+                       * Reset the previous field of study
+                       * because it may no longer belong to
+                       * the new qualification.
+                       */
                       setValue("fieldOfStudy", null, {
                         shouldDirty: true,
                         shouldValidate: true,
@@ -284,9 +313,12 @@ export default function EducationForm({
                     options={qualificationOptions}
                   />
 
-                  <div className="text-xs text-red-700">
-                    {fieldState.error?.message}
-                  </div>
+                  {focusedField === "qualification" &&
+                    fieldState.error?.message && (
+                      <div className="text-xs text-red-700">
+                        {fieldState.error.message}
+                      </div>
+                    )}
                 </Field.Root>
               )}
             />
@@ -299,6 +331,9 @@ export default function EducationForm({
                 <Field.Root
                   name={field.name}
                   invalid={fieldState.invalid}
+                  onFocus={() =>
+                    focusField("fieldOfStudy")
+                  }
                   className={cn(
                     "flex w-full flex-col items-start gap-2",
                     {
@@ -323,9 +358,12 @@ export default function EducationForm({
                     options={fieldOfStudyOptions}
                   />
 
-                  <div className="text-xs text-red-700">
-                    {fieldState.error?.message}
-                  </div>
+                  {focusedField === "fieldOfStudy" &&
+                    fieldState.error?.message && (
+                      <div className="text-xs text-red-700">
+                        {fieldState.error.message}
+                      </div>
+                    )}
                 </Field.Root>
               )}
             />
@@ -340,6 +378,9 @@ export default function EducationForm({
                   {/* Start date */}
                   <Field.Root
                     name="startDate"
+                    onFocus={() =>
+                      focusField("startDate")
+                    }
                     className="flex flex-col gap-1"
                   >
                     <Field.Label className="text-sm font-normal text-gray-700">
@@ -349,21 +390,28 @@ export default function EducationForm({
                     <input
                       type="month"
                       {...register("startDate", {
-                        required: "Start date is required",
+                        required:
+                          "Start date is required",
                         valueAsDate: true,
                       })}
                       max={getCurrentMonth()}
                       className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 focus:border-gray-600"
                     />
 
-                    <div className="text-xs text-red-700">
-                      {errors.startDate?.message}
-                    </div>
+                    {focusedField === "startDate" &&
+                      errors.startDate?.message && (
+                        <div className="text-xs text-red-700">
+                          {errors.startDate.message}
+                        </div>
+                      )}
                   </Field.Root>
 
                   {/* End date */}
                   <Field.Root
                     name="endDate"
+                    onFocus={() =>
+                      focusField("endDate")
+                    }
                     className="flex flex-col gap-1"
                   >
                     <Field.Label className="text-sm font-normal text-gray-700">
@@ -399,9 +447,12 @@ export default function EducationForm({
                       className="h-8 w-full rounded-lg border border-gray-300 px-2 text-sm font-normal outline-0 disabled:bg-gray-100 disabled:text-gray-400 focus:border-gray-600"
                     />
 
-                    <div className="text-xs text-red-700">
-                      {errors.endDate?.message}
-                    </div>
+                    {focusedField === "endDate" &&
+                      errors.endDate?.message && (
+                        <div className="text-xs text-red-700">
+                          {errors.endDate.message}
+                        </div>
+                      )}
                   </Field.Root>
                 </div>
 
