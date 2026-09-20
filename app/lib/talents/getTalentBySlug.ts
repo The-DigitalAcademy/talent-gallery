@@ -11,6 +11,7 @@ const TALENT_SELECT = `
     capabilities:talent_capabilities(
         capability:capabilities(id, name)
     ),
+    education(*),
     work_experiences(*),
     projects(
         id,
