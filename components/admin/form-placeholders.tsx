@@ -180,3 +180,42 @@ export function WorkExperienceFormPlaceholder() {
         </div>
     )
 }
+
+export function EducationFormPlaceholder() {
+    return (
+        <div>
+            <h2 className="mb-2 font-semibold">Education</h2>
+            <div className="w-full border border-gray-200 p-6 bg-white rounded-lg">
+                <div className="grid grid-cols-3 gap-7">
+                    <div className="flex flex-col gap-2 border border-gray-200 p-3 rounded-lg">
+                        <div className="border w-full text-gray-300 rounded-lg h-8 outline-0 border-gray-200 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
+                            Institution
+                        </div>
+                        <div className="border w-full text-gray-300 rounded-lg h-8 outline-0 border-gray-200 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
+                            Qualification
+                        </div>
+                        <div className="border w-full text-gray-300 rounded-lg h-8 outline-0 border-gray-200 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
+                            Field of Study
+                        </div>
+                        <div className="border w-full text-gray-300 rounded-lg h-8 outline-0 border-gray-200 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
+                            Start Date
+                        </div>
+                        <div className="border w-full text-gray-300 rounded-lg h-8 outline-0 border-gray-200 flex justify-between items-center gap-3 leading-none whitespace-nowrap text-sm pl-2 pr-1 font-normal">
+                            End Date
+                        </div>
+                        <button
+                            disabled
+                            type="button"
+                            className="rounded-xl justify-center border border-gray-200 ml-auto text-sm text-gray-300 px-3 h-8 flex gap-1 items-center"
+                        >
+                            Add
+                        </button>
+                    </div>
+                    <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
+                        <div className="w-full text-sm text-gray-300 h-full flex items-center justify-center">No Education</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

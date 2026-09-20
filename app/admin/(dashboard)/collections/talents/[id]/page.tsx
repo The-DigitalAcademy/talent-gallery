@@ -12,6 +12,7 @@ import { PublishedStatusForm } from "../_forms/published-status-form";
 import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
 import CapabilitiesSummaryForm from "../_forms/capabilities-summary-form";
 import { ExternalLinkIcon } from "@/app/_components/ui/Icons";
+import EducationForm from "../_forms/education-form";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -30,6 +31,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: projects, error: projectsError } = await supabase.from("projects").select("id, name, description, projectUrl:project_url, talentId:talent_id").eq("talent_id", id)
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
+    const { data: education, error: educationError } = await supabase.from("education").select("*")
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -70,6 +72,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
                 <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
+                <EducationForm talentId={talent?.id} education={education!} />
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
