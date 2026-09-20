@@ -36,10 +36,6 @@ export function FormCombobox({
   const [inputValue, setInputValue] =
     React.useState("");
 
-  /*
-   * If the current value isn't in the predefined options,
-   * treat it as a custom value.
-   */
   const selectedOption = React.useMemo(() => {
     const existingOption = options.find(
       (option) => option.value === value,
@@ -61,9 +57,6 @@ export function FormCombobox({
 
   const trimmedInput = inputValue.trim();
 
-  /*
-   * Check whether the typed value already exists.
-   */
   const matchingOption = React.useMemo(
     () =>
       options.find(
@@ -77,13 +70,6 @@ export function FormCombobox({
   const canCreate =
     trimmedInput.length > 0 && !matchingOption;
 
-  /*
-   * Create a temporary option for the user's custom value.
-   *
-   * It only exists in the Combobox.
-   * It is NOT inserted into the qualifications or
-   * fields_of_study tables.
-   */
   const createOption = React.useMemo<Option | null>(() => {
     if (!canCreate) {
       return null;
@@ -95,9 +81,6 @@ export function FormCombobox({
     };
   }, [canCreate, trimmedInput]);
 
-  /*
-   * Add the "Create" option to the items passed to Base UI.
-   */
   const comboboxItems = React.useMemo(
     () =>
       createOption
@@ -121,10 +104,6 @@ export function FormCombobox({
             return;
           }
 
-          /*
-           * User clicked:
-           * + Add "Something"
-           */
           if (
             newValue.value.startsWith(CREATE_PREFIX)
           ) {
@@ -138,9 +117,6 @@ export function FormCombobox({
             return;
           }
 
-          /*
-           * User selected an existing option.
-           */
           onValueChange(newValue.label);
           setInputValue(newValue.label);
         }}

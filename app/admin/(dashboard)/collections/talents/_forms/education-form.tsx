@@ -90,9 +90,6 @@ export default function EducationForm({
     name: "startDate",
   });
 
-  /*
-   * Validate only the field that receives focus.
-   */
   const focusField = async (
     field: keyof FormValues,
   ) => {
@@ -100,12 +97,6 @@ export default function EducationForm({
     await trigger(field);
   };
 
-  /*
-   * Find the predefined qualification record.
-   *
-   * The ID is only used to filter the suggested
-   * fields of study. It is NOT saved to education.
-   */
   const selectedQualificationRecord = useMemo(
     () =>
       qualifications.find(
@@ -115,11 +106,6 @@ export default function EducationForm({
     [qualifications, selectedQualification],
   );
 
-  /*
-   * Qualification suggestions.
-   *
-   * The actual form value is the qualification name.
-   */
   const qualificationOptions = useMemo(
     () =>
       qualifications.map((qualification) => ({
@@ -129,14 +115,6 @@ export default function EducationForm({
     [qualifications],
   );
 
-  /*
-   * Field of Study suggestions.
-   *
-   * The qualification ID is only used to find
-   * suggestions belonging to the selected qualification.
-   *
-   * The actual form value is the field name.
-   */
   const fieldOfStudyOptions = useMemo(
     () =>
       selectedQualificationRecord
@@ -166,8 +144,6 @@ export default function EducationForm({
 
     const finalEndDate = isCurrent ? new Date() : endDate;
 
-    // valueAsDate on <input type="month"> returns a UTC date,
-    // so use moment.utc to avoid off-by-one-month shifts.
     const totalMonths = moment
       .utc(finalEndDate)
       .diff(moment.utc(startDate), "months");
@@ -297,13 +273,6 @@ export default function EducationForm({
                     onValueChange={(value) => {
                       field.onChange(value ?? "");
 
-                      /*
-                       * Qualification changed.
-                       *
-                       * Reset the previous field of study
-                       * because it may no longer belong to
-                       * the new qualification.
-                       */
                       setValue("fieldOfStudy", null, {
                         shouldDirty: true,
                         shouldValidate: true,
@@ -498,8 +467,8 @@ export default function EducationForm({
             </div>
           </Form>
 
-          {/* EDUCATION LIST */}
-          <div className="col-span-2 flex max-h-65 flex-col gap-3 overflow-y-scroll pr-5">
+          {/* Education list */}
+          <div className="col-span-2 flex flex-col gap-3 overflow-y-scroll pr-5 max-h-94">
             {!education.length && (
               <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
                 No Education
