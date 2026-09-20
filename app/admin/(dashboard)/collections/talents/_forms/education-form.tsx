@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import { toast } from "sonner";
 
-import { cn } from "@/app/lib/utils";
+import { cn, formatDuration, formatMonth, getCurrentMonth } from "@/app/lib/utils";
 import {
   Education,
   FieldsOfStudy,
@@ -596,51 +596,4 @@ function DeleteFormDialog({
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
-
-function formatDuration(totalMonths: number): string {
-  if (totalMonths < 12) {
-    return `${totalMonths} ${
-      totalMonths === 1 ? "month" : "months"
-    }`;
-  }
-
-  const years = Math.floor(totalMonths / 12);
-  const months = totalMonths % 12;
-
-  const yearText = `${years} ${
-    years === 1 ? "year" : "years"
-  }`;
-
-  if (months === 0) {
-    return yearText;
-  }
-
-  const monthText = `${months} ${
-    months === 1 ? "month" : "months"
-  }`;
-
-  return `${yearText} ${monthText}`;
-}
-
-function getCurrentMonth(): string {
-  const now = new Date();
-
-  return `${now.getFullYear()}-${String(
-    now.getMonth() + 1,
-  ).padStart(2, "0")}`;
-}
-
-/**
- * valueAsDate on <input type="month"> yields a UTC date,
- * so read it back with the UTC getters.
- */
-function formatMonth(date: Date): string {
-  return `${date.getUTCFullYear()}-${String(
-    date.getUTCMonth() + 1,
-  ).padStart(2, "0")}`;
 }
