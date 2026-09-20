@@ -46,9 +46,12 @@ export async function insertEducation(talentId: string, data: SchemaType): Promi
 
     try {
         const supabase = await createClient()
-        const { error, data } = await supabase.from("work_experiences").insert({ talent_id: talentId, institution, qualification, duration, fieldOfStudy })
+        console.log("in here")
+        const { error, data } = await supabase.from("education").insert({ talent_id: talentId, institution, duration, qualification_id: "354ae6ed-1c89-4ee7-b74b-f07ce6332b1a", field_of_study_id: "354ae6ed-1c89-4ee7-b74b-f07ce6332b1a" })
+        console.log({data})
+        console.log({error})
         if (error) throw error
-
+        
         revalidatePath(`/admin/collections/talents/${talentId}`)
         return {
             success: true,
