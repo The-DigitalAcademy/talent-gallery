@@ -32,6 +32,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
     const { data: education, error: educationError } = await supabase.from("education").select("*")
+    const { data: qualifications, error: qualificationsError } = await supabase.from("qualifications").select("name")
+    const { data: fieldsOfStudy, error: fieldsOfStudyError } = await supabase.from("fields_of_study").select("*")
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -72,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     talentCapabilities={talent?.capabilities || []}
                     talentId={id} />
                 <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
-                <EducationForm talentId={talent?.id} education={education!} />
+                <EducationForm talentId={talent?.id} education={education!} qualifications={qualifications} fieldsOfStudy={fieldsOfStudy}/>
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />

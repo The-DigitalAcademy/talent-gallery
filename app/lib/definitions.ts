@@ -112,6 +112,17 @@ export interface Education {
   duration: string
 }
 
+export interface Qualifications {
+  id: UUID;
+  name: string;
+}
+
+export interface FieldsOfStudy {
+  id: UUID;
+  qualification_id: UUID,
+  name: string;
+}
+
 export type FormState = {
   success: boolean;
   message: string;

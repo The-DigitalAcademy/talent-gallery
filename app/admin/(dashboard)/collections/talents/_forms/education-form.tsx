@@ -6,8 +6,8 @@ import { cn } from "@/app/lib/utils";
 import { SubmitHandler, useForm } from "react-hook-form";
 import moment from "moment";
 import { toast } from "sonner";
-import { deleteEducation, insertEducation } from "../_actions/education-acrtion";
-import { Education } from "@/app/lib/definitions";
+import { deleteEducation, insertEducation } from "../_actions/education-action";
+import { Education, FieldsOfStudy, Qualifications } from "@/app/lib/definitions";
 
 type FormValues = {
     institution: string,
@@ -18,7 +18,7 @@ type FormValues = {
     isCurrent: boolean
 }
 
-export default function EducationForm({ education, talentId }: { education: Education[], talentId: string }) {
+export default function EducationForm({ education, talentId, qualifications, fieldsOfStudy }: { education: Education[], talentId: string, qualifications: Qualifications[], fieldsOfStudy: FieldsOfStudy[]}) {
     const { handleSubmit, register, reset, setError, watch, formState: { errors, isSubmitting, isValid } } = useForm<FormValues>({ defaultValues: { isCurrent: false } })
 
     const [isCurrent, startDate] = watch(["isCurrent", "startDate"])
