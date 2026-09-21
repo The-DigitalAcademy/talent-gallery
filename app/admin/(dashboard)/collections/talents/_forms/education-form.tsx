@@ -72,11 +72,8 @@ export default function EducationForm({
     },
   });
 
-  const [focusedField, setFocusedField] =
-    useState<keyof FormValues | null>(null);
+  const [focusedField, setFocusedField] = useState<keyof FormValues | null>(null);
 
-  // Bumped after a successful submit to remount the comboboxes,
-  // which clears any leftover text the user typed without selecting.
   const [resetKey, setResetKey] = useState(0);
 
   const selectedQualification = useWatch({
@@ -189,9 +186,6 @@ export default function EducationForm({
 
     setFocusedField(null);
 
-    // Called with no arguments so react-hook-form also resets the
-    // native month inputs in the DOM. reset({...}) with explicit values
-    // skips that step, and startDate/endDate have no default to restore.
     reset();
 
     setResetKey((key) => key + 1);

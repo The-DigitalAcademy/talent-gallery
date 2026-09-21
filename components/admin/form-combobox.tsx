@@ -39,9 +39,6 @@ export function FormCombobox({
   const [prevValue, setPrevValue] =
     React.useState(value);
 
-  // Sync the visible text when the parent changes `value`
-  // (form reset, setValue(), etc.). Adjusting state during
-  // render avoids the extra render pass an effect would cause.
   if (value !== prevValue) {
     setPrevValue(value);
     setInputValue(value ?? "");
