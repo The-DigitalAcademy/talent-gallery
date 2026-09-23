@@ -33,9 +33,6 @@ CREATE TABLE "public"."qualifications" (
 ALTER TABLE "public"."qualifications"
   ENABLE ROW LEVEL SECURITY;
 
-ALTER TABLE "public"."talent_capabilities"
-  ADD COLUMN "sort_position" numeric NOT NULL DEFAULT '1000'::numeric;
-
 ALTER TABLE "public"."education"
   ADD CONSTRAINT "education_talent_id_fkey" FOREIGN KEY (talent_id) REFERENCES public.talents(id);
 
