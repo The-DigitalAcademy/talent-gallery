@@ -10,12 +10,13 @@ import { useShortlistStore } from '@/app/store/useShortlistStore';
 import { useShortlistHydrated } from '@/app/store/useHasHydrated';
 import { toast } from 'sonner';
 import ShortlistTag from './ShortlistTag';
+import { TalentWithCapabilities } from '@/app/talent/actions';
 
 
 const lexend = Lexend({ subsets: ["latin"] })
 
 interface TalentCardProps {
-  talent: Talent
+  talent: TalentWithCapabilities
 }
 
 const getStatusColorClassName = (status: string | undefined) => {
@@ -102,13 +103,13 @@ export default function TalentCard({ talent }: TalentCardProps) {
           </header >
 
           <ul className="flex justify-start items-start text-sm flex-wrap gap-1.5 md:min-h-[50px] max-h-[50px] overflow-hidden">
-            {talent.capabilities?.map((capability, index) => {
+            {talent.talentCapabilities?.toSorted((a, b) => (a.sortPosition) - (b.sortPosition))?.map((capability, index) => {
               return (
                 <li
-                  key={`${index}-${capability.id}`}
+                  key={`${index}-${capability.capability.id}`}
                   className="bg-neutral-200/50 px-1 inline-block whitespace-nowrap"
                 >
-                  {capability.name}
+                  {capability.capability.name}
                 </li>
               );
             })}

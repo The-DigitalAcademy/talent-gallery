@@ -41,7 +41,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
     ? `${talent.location.city}, ${talent.location.country}`
     : null;
 
-  const skills = talent.capabilities.map((c) => c.capability.name);
+  const skills = talent.capabilities.toSorted((a, b) => (a.sortPosition) - (b.sortPosition)).map((c) => c.capability.name);
 
   const projects = talent.projects
   .filter((tp) => tp !== null)

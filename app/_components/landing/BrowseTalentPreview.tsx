@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useTransition } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getFilteredTalents } from "@/app/talent/actions";
+import { getFilteredTalents, TalentWithCapabilities } from "@/app/talent/actions";
 import { Talent } from "@/app/interface-types/talent";
 import TalentCard from "@/app/_components/ui/TalentCard";
 import TalentCardSkeleton from "@/app/talent/_components/TalentCardSkeleton";
@@ -18,7 +18,7 @@ const TABS = [
 
 export default function BrowseTalentPreview() {
   const [activeTab, setActiveTab] = useState("all");
-  const [talents, setTalents] = useState<Talent[]>([]);
+  const [talents, setTalents] = useState<TalentWithCapabilities[]>([]);
   const [isPending, startTransition] = useTransition();
   const [initialLoading, setInitialLoading] = useState(true);
 

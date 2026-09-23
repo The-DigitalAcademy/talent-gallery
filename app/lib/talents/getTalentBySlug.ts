@@ -9,7 +9,8 @@ const TALENT_SELECT = `
     program:programs(name),
     talent_status:talent_statuses(name),
     capabilities:talent_capabilities(
-        capability:capabilities(id, name)
+        capability:capabilities(id, name),
+        sortPosition:sort_position
     ),
     education(*),
     work_experiences(*),

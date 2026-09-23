@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { id } = await params
     const supabase = await createClient();
     const { data: talent, error: talentError } = await supabase.from("talents")
-        .select("id, fullname, bio, profileImageUrl:profile_image_url, roleId:role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities(id, name), capabilities_summary, slug")
+        .select("id, fullname, bio, profileImageUrl:profile_image_url, roleId:role_id, program_id, cohort_id, location_id, talent_status_id, youtube_url, linkedin_url, portfolio_url, github_url, is_published, capabilities_summary, slug")
         .eq("id", id)
         .single()
 
@@ -29,7 +29,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: workExperiences, error: workExperiencesError } = await supabase.from("work_experiences").select().eq("talent_id", id)
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
     const { data: projects, error: projectsError } = await supabase.from("projects").select("id, name, description, projectUrl:project_url, talentId:talent_id").eq("talent_id", id)
-    const { data: capabilities, error: capabilitiesError } = await supabase.from("capabilities").select()
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
     const { data: education, error: educationError } = await supabase.from("education").select("*")
     const { data: qualifications, error: qualificationsError } = await supabase.from("qualifications").select("*")
@@ -69,10 +68,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <BasicInfoForm talentId={talent?.id} values={talent!} roles={roles || []} />
                 <EnrolmentForm values={enrolmentValues} data={enrolmentData} talentId={talent?.id} />
                 <URLsForm talentId={talent?.id} values={urlValues} />
-                <TalentCapabilitiesForm
-                    capabilities={capabilities || []}
-                    talentCapabilities={talent?.capabilities || []}
-                    talentId={id} />
+                <TalentCapabilitiesForm talentId={id} />
                 <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
                 <EducationForm talentId={talent?.id} education={education!} qualifications={qualifications || []} fieldsOfStudy={fieldsOfStudy || []}/>
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
