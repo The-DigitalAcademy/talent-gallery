@@ -14,6 +14,7 @@ const PURPLE_BG = '#B84DF8';
 const LILAC_PHOTO_BG = '#E9B8FF';
 const DARK_TEXT = '#1F2937';
 const MUTED_TEXT = '#4B5563';
+const LEFT_ALIGN_X = 24;
 
 const styles = StyleSheet.create({
   page: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   },
   // ─── LEFT SIDEBAR ──────────────────────────────────────────────────────────
   sidebar: {
-    width: '38%',
+    width: '39%',
     backgroundColor: PURPLE_BG,
     color: '#FFFFFF',
     flexDirection: 'column',
@@ -81,8 +82,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   sidebarContent: {
-    paddingHorizontal: 18,
-    paddingVertical: 16,
+    paddingLeft: LEFT_ALIGN_X,
+    paddingRight: 20,
+    paddingVertical: 18,
     flexDirection: 'column',
     gap: 16,
   },
@@ -91,51 +93,39 @@ const styles = StyleSheet.create({
   },
   sidebarSectionTitle: {
     color: '#FFFFFF',
-    fontSize: 9.5,
+    fontSize: 10.5,
     fontFamily: 'Helvetica-Bold',
-    letterSpacing: 0.8,
+    letterSpacing: 0.9,
     textTransform: 'uppercase',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   sidebarText: {
-    color: '#FDF4FF',
-    fontSize: 8.2,
-    lineHeight: 1.4,
-  },
-  sidebarBulletList: {
-    marginTop: 2,
-  },
-  sidebarBulletItem: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  sidebarBulletIcon: {
     color: '#FFFFFF',
-    fontSize: 8.5,
-    width: 10,
+    fontSize: 9.2,
+    lineHeight: 1.5,
   },
-  sidebarBulletText: {
-    color: '#FDF4FF',
-    fontSize: 7.8,
-    lineHeight: 1.35,
-    flex: 1,
+  sidebarParagraph: {
+    color: '#FFFFFF',
+    fontSize: 8.8,
+    lineHeight: 1.45,
   },
 
   // ─── RIGHT MAIN CONTENT ───────────────────────────────────────────────────
   main: {
-    width: '62%',
+    width: '61%',
     backgroundColor: '#FFFFFF',
-    paddingTop: 20,
-    paddingHorizontal: 22,
-    paddingBottom: 12,
+    paddingTop: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingBottom: 14,
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
   nameContainer: {
-    marginBottom: 3,
+    marginBottom: 4,
   },
   nameFirst: {
-    fontSize: 27,
+    fontSize: 32,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
     letterSpacing: 1.2,
@@ -143,7 +133,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.05,
   },
   nameLast: {
-    fontSize: 27,
+    fontSize: 32,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
     letterSpacing: 1.2,
@@ -151,36 +141,36 @@ const styles = StyleSheet.create({
     lineHeight: 1.05,
   },
   roleTitle: {
-    fontSize: 10.5,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     color: PURPLE_MAIN,
-    letterSpacing: 1.3,
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
-    marginTop: 5,
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 10,
   },
   bioText: {
-    fontSize: 8,
+    fontSize: 8.8,
     color: DARK_TEXT,
-    lineHeight: 1.4,
-    marginBottom: 12,
+    lineHeight: 1.45,
+    marginBottom: 16,
   },
 
   // ─── SECTIONS IN MAIN COLUMN ──────────────────────────────────────────────
   mainSectionTitle: {
-    fontSize: 10.5,
+    fontSize: 11.5,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
     letterSpacing: 1.1,
     textTransform: 'uppercase',
-    marginBottom: 6,
-    marginTop: 4,
+    marginBottom: 8,
+    marginTop: 6,
   },
   itemBlock: {
     marginBottom: 14,
   },
   itemTitleContainer: {
-    marginBottom: 5,
+    marginBottom: 4,
   },
   itemHeader: {
     flexDirection: 'row',
@@ -188,45 +178,46 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   itemTitle: {
-    fontSize: 9.5,
+    fontSize: 10.5,
     fontFamily: 'Helvetica-Bold',
     color: PURPLE_MAIN,
   },
   itemSubtitle: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
   },
   itemMeta: {
-    fontSize: 8.2,
+    fontSize: 8.8,
     color: MUTED_TEXT,
-    marginTop: 4,
-    marginBottom: 7,
+    marginTop: 3,
+    marginBottom: 6,
   },
   itemDescription: {
-    fontSize: 7.8,
+    fontSize: 8.5,
     color: DARK_TEXT,
-    lineHeight: 1.35,
-    marginBottom: 4,
+    lineHeight: 1.42,
+    marginBottom: 6,
   },
   subSectionLabel: {
-    fontSize: 8.2,
+    fontSize: 8.8,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
-    marginTop: 2,
+    marginTop: 4,
     marginBottom: 2,
   },
   techUsedText: {
-    fontSize: 7.6,
+    fontSize: 8.4,
     color: DARK_TEXT,
-    lineHeight: 1.3,
+    lineHeight: 1.35,
     marginBottom: 4,
   },
 
   // ─── SHAPER REVIEW ────────────────────────────────────────────────────────
   reviewSection: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 22,
+    paddingLeft: LEFT_ALIGN_X,
+    paddingRight: 24,
     paddingTop: 10,
     paddingBottom: 12,
     borderTopWidth: 1,
@@ -239,21 +230,21 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   reviewTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: 'Helvetica-Bold',
     color: '#000000',
     letterSpacing: 1.1,
     textTransform: 'uppercase',
   },
   reviewEndorser: {
-    fontSize: 8,
+    fontSize: 8.8,
     fontFamily: 'Helvetica',
     color: MUTED_TEXT,
   },
   reviewText: {
-    fontSize: 7.8,
+    fontSize: 8.6,
     color: DARK_TEXT,
-    lineHeight: 1.35,
+    lineHeight: 1.42,
   },
 
   // ─── FOOTER ───────────────────────────────────────────────────────────────
@@ -262,8 +253,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 22,
-    paddingVertical: 9,
+    paddingLeft: LEFT_ALIGN_X,
+    paddingRight: 24,
+    paddingVertical: 10,
     width: '100%',
   },
   footerContacts: {
@@ -272,11 +264,11 @@ const styles = StyleSheet.create({
   },
   footerContactText: {
     color: '#FFFFFF',
-    fontSize: 7.5,
-    lineHeight: 1.25,
+    fontSize: 8,
+    lineHeight: 1.3,
   },
   footerBrand: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Helvetica-Bold',
     color: '#FFFFFF',
     letterSpacing: 0.5,
@@ -288,10 +280,9 @@ interface TalentPortfolioPDFProps {
 }
 
 export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) {
-  // Candidate Name
-  const nameParts = (talent?.fullname || 'Talent Profile').trim().split(/\s+/);
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
+  // Candidate Name (Hide surname as requested by PR review)
+  const nameParts = (talent?.fullname || 'Talent').trim().split(/\s+/);
+  const firstName = (nameParts[0] || 'TALENT').toUpperCase();
 
   // Role Title (only from DB)
   const roleTitle = talent?.role?.name ? talent.role.name.toUpperCase() : null;
@@ -305,17 +296,6 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
           .map((c: any) => c.capability?.name || c.name)
           .filter(Boolean)
       : [];
-
-  // Core technical capabilities (strictly from capabilities_summary in DB)
-  const parseCapabilities = (summary?: string | null): string[] => {
-    if (!summary || !summary.trim()) return [];
-    return summary
-      .split(/\r?\n|•|\*/)
-      .map((s) => s.trim().replace(/^[-•*]\s*/, ''))
-      .filter((s) => s.length > 0);
-  };
-
-  const coreCapabilities = parseCapabilities(talent?.capabilities_summary);
 
   // Education (strictly from DB: educations relation or talent.education)
   const educationItems: string[] =
@@ -390,26 +370,21 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
                 </View>
               )}
 
-              {/* Technical Skills (only from DB capabilities) */}
+              {/* Technical Skills (pipe separated per PR review) */}
               {skillsList.length > 0 && (
                 <View style={styles.sidebarSection}>
                   <Text style={styles.sidebarSectionTitle}>TECHNICAL SKILLS</Text>
-                  <Text style={styles.sidebarText}>{skillsList.join(', ')}</Text>
+                  <Text style={styles.sidebarText}>{skillsList.join(' | ')}</Text>
                 </View>
               )}
 
-              {/* Core Technical Capabilities (only from DB capabilities_summary) */}
-              {coreCapabilities.length > 0 && (
+              {/* Core Technical Capabilities (rendered as paragraph per PR review) */}
+              {talent?.capabilities_summary && talent.capabilities_summary.trim().length > 0 && (
                 <View style={styles.sidebarSection}>
-                  <Text style={styles.sidebarSectionTitle}>CORE TECHNICAL CAPABILITIES</Text>
-                  <View style={styles.sidebarBulletList}>
-                    {coreCapabilities.map((cap: string, idx: number) => (
-                      <View key={idx} style={styles.sidebarBulletItem}>
-                        <Text style={styles.sidebarBulletIcon}>•</Text>
-                        <Text style={styles.sidebarBulletText}>{cap}</Text>
-                      </View>
-                    ))}
-                  </View>
+                  <Text style={styles.sidebarSectionTitle}>CORE TECHNICAL{'\n'}CAPABILITIES</Text>
+                  <Text style={styles.sidebarParagraph}>
+                    {talent.capabilities_summary.trim()}
+                  </Text>
                 </View>
               )}
             </View>
@@ -417,10 +392,9 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
 
           {/* ── RIGHT MAIN COLUMN ── */}
           <View style={styles.main}>
-            {/* Header / Name */}
+            {/* Header / Name (Surname hidden per client requirements) */}
             <View style={styles.nameContainer}>
               <Text style={styles.nameFirst}>{firstName}</Text>
-              <Text style={styles.nameLast}>{lastName}</Text>
             </View>
 
             {/* Role Title */}
