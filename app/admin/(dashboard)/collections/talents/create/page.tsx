@@ -1,7 +1,7 @@
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import BasicInfoForm from "../_forms/basic-info-form";
-import { CapabilitiesFormPlaceholder, EndorsementsFormPlaceholder, EnrolmentFormPlaceholder, ProfileLinksFormPlaceholder, ProjectsFormPlaceholder, WorkExperienceFormPlaceholder } from "@/components/admin/form-placeholders";
+import { CapabilitiesFormPlaceholder, EducationFormPlaceholder, EndorsementsFormPlaceholder, EnrolmentFormPlaceholder, ProfileLinksFormPlaceholder, ProjectsFormPlaceholder, WorkExperienceFormPlaceholder } from "@/components/admin/form-placeholders";
 import { createClient } from "@/app/lib/supabase/server";
 
 export default async function Page() {
@@ -20,6 +20,7 @@ export default async function Page() {
                 <EnrolmentFormPlaceholder />
                 <ProfileLinksFormPlaceholder />
                 <CapabilitiesFormPlaceholder />
+                <EducationFormPlaceholder/>
                 <WorkExperienceFormPlaceholder />
                 <EndorsementsFormPlaceholder />
                 <ProjectsFormPlaceholder />
