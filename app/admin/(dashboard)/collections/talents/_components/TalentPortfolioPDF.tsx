@@ -1,4 +1,5 @@
 import React from 'react';
+import path from 'path';
 import {
   Document,
   Page,
@@ -7,7 +8,32 @@ import {
   StyleSheet,
   Link,
   Image,
+  Font,
 } from '@react-pdf/renderer';
+
+// Register local TTF fonts so the PDF matches the site's typography
+const FONTS_DIR = path.join(process.cwd(), 'public', 'fonts');
+
+Font.register({
+  family: 'Lexend Deca',
+  fonts: [
+    { src: path.join(FONTS_DIR, 'LexendDeca-Light.ttf'), fontWeight: 300 },
+    { src: path.join(FONTS_DIR, 'LexendDeca-Regular.ttf'), fontWeight: 400 },
+    { src: path.join(FONTS_DIR, 'LexendDeca-SemiBold.ttf'), fontWeight: 600 },
+    { src: path.join(FONTS_DIR, 'LexendDeca-Bold.ttf'), fontWeight: 700 },
+  ],
+});
+
+Font.register({
+  family: 'Montserrat',
+  fonts: [
+    { src: path.join(FONTS_DIR, 'Montserrat-Light.ttf'), fontWeight: 300 },
+    { src: path.join(FONTS_DIR, 'Montserrat-Regular.ttf'), fontWeight: 400 },
+    { src: path.join(FONTS_DIR, 'Montserrat-Medium.ttf'), fontWeight: 500 },
+    { src: path.join(FONTS_DIR, 'Montserrat-SemiBold.ttf'), fontWeight: 600 },
+    { src: path.join(FONTS_DIR, 'Montserrat-Bold.ttf'), fontWeight: 700 },
+  ],
+});
 
 const PURPLE_MAIN = '#BE54FA';
 const PURPLE_BG = '#B84DF8';
@@ -21,7 +47,7 @@ const styles = StyleSheet.create({
     size: 'A4',
     flexDirection: 'column',
     backgroundColor: '#FFFFFF',
-    fontFamily: 'Helvetica',
+    fontFamily: 'Montserrat',
     margin: 0,
     padding: 0,
     position: 'relative',
@@ -62,7 +88,8 @@ const styles = StyleSheet.create({
   photoPlaceholderText: {
     color: '#FFFFFF',
     fontSize: 34,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
   },
   portfolioButton: {
     width: '100%',
@@ -76,7 +103,8 @@ const styles = StyleSheet.create({
   portfolioButtonText: {
     color: '#FFFFFF',
     fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Montserrat',
+    fontWeight: 700,
     letterSpacing: 1.2,
     textAlign: 'center',
     textTransform: 'uppercase',
@@ -94,7 +122,8 @@ const styles = StyleSheet.create({
   sidebarSectionTitle: {
     color: '#FFFFFF',
     fontSize: 10.5,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     letterSpacing: 0.9,
     textTransform: 'uppercase',
     marginBottom: 8,
@@ -102,11 +131,15 @@ const styles = StyleSheet.create({
   sidebarText: {
     color: '#FFFFFF',
     fontSize: 9.2,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     lineHeight: 1.5,
   },
   sidebarParagraph: {
     color: '#FFFFFF',
     fontSize: 8.8,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     lineHeight: 1.45,
   },
 
@@ -126,15 +159,17 @@ const styles = StyleSheet.create({
   },
   nameFirst: {
     fontSize: 32,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: '#000000',
     letterSpacing: 1.2,
     textTransform: 'uppercase',
     lineHeight: 1.05,
   },
-  nameLast: {
+  nameInitial: {
     fontSize: 32,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 300,
     color: '#000000',
     letterSpacing: 1.2,
     textTransform: 'uppercase',
@@ -142,7 +177,8 @@ const styles = StyleSheet.create({
   },
   roleTitle: {
     fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: PURPLE_MAIN,
     letterSpacing: 1.2,
     textTransform: 'uppercase',
@@ -151,6 +187,8 @@ const styles = StyleSheet.create({
   },
   bioText: {
     fontSize: 8.8,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: DARK_TEXT,
     lineHeight: 1.45,
     marginBottom: 16,
@@ -159,7 +197,8 @@ const styles = StyleSheet.create({
   // ─── SECTIONS IN MAIN COLUMN ──────────────────────────────────────────────
   mainSectionTitle: {
     fontSize: 11.5,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: '#000000',
     letterSpacing: 1.1,
     textTransform: 'uppercase',
@@ -179,35 +218,44 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 10.5,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 600,
     color: PURPLE_MAIN,
   },
   itemSubtitle: {
     fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: '#000000',
   },
   itemMeta: {
     fontSize: 8.8,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: MUTED_TEXT,
     marginTop: 3,
     marginBottom: 6,
   },
   itemDescription: {
     fontSize: 8.5,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: DARK_TEXT,
     lineHeight: 1.42,
     marginBottom: 6,
   },
   subSectionLabel: {
     fontSize: 8.8,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Montserrat',
+    fontWeight: 700,
     color: '#000000',
     marginTop: 4,
     marginBottom: 2,
   },
   techUsedText: {
     fontSize: 8.4,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: DARK_TEXT,
     lineHeight: 1.35,
     marginBottom: 4,
@@ -231,18 +279,22 @@ const styles = StyleSheet.create({
   },
   reviewTitle: {
     fontSize: 11,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: '#000000',
     letterSpacing: 1.1,
     textTransform: 'uppercase',
   },
   reviewEndorser: {
     fontSize: 8.8,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: MUTED_TEXT,
   },
   reviewText: {
     fontSize: 8.6,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     color: DARK_TEXT,
     lineHeight: 1.42,
   },
@@ -265,11 +317,14 @@ const styles = StyleSheet.create({
   footerContactText: {
     color: '#FFFFFF',
     fontSize: 8,
+    fontFamily: 'Montserrat',
+    fontWeight: 400,
     lineHeight: 1.3,
   },
   footerBrand: {
     fontSize: 18,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
     color: '#FFFFFF',
     letterSpacing: 0.5,
   },
@@ -280,9 +335,12 @@ interface TalentPortfolioPDFProps {
 }
 
 export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) {
-  // Candidate Name (Hide surname as requested by PR review)
+  // Name: first name bold + last initial light — matches TalentProfile.tsx online display
   const nameParts = (talent?.fullname || 'Talent').trim().split(/\s+/);
   const firstName = (nameParts[0] || 'TALENT').toUpperCase();
+  const lastInitial = nameParts.length > 1
+    ? nameParts[nameParts.length - 1].charAt(0).toUpperCase() + '.'
+    : '';
 
   // Role Title (only from DB)
   const roleTitle = talent?.role?.name ? talent.role.name.toUpperCase() : null;
@@ -392,9 +450,10 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
 
           {/* ── RIGHT MAIN COLUMN ── */}
           <View style={styles.main}>
-            {/* Header / Name (Surname hidden per client requirements) */}
+            {/* Header / Name: first name (bold) + last initial (light) — matches online profile */}
             <View style={styles.nameContainer}>
               <Text style={styles.nameFirst}>{firstName}</Text>
+              {lastInitial ? <Text style={styles.nameInitial}>{lastInitial}</Text> : null}
             </View>
 
             {/* Role Title */}
