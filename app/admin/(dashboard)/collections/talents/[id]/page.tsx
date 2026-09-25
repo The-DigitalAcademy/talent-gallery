@@ -13,6 +13,8 @@ import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
 import CapabilitiesSummaryForm from "../_forms/capabilities-summary-form";
 import { ExternalLinkIcon } from "@/app/_components/ui/Icons";
 
+import DownloadPortfolioButton from "../_components/download-portfolio-button";
+
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient();
@@ -55,9 +57,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <Link href="/admin/collections/talents" className="flex gap-2 text-gray-500 mb-3 hover:text-gray-800">
                     <ChevronLeftIcon className="w-4" /> <span className="text-base">Talents</span>
                 </Link>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold mb flex gap-2">{talent?.fullname}  <Link className="text-blue-600 " target="_blank" href={`/talent/${talent?.slug}`}><ExternalLinkIcon /> </Link></h1>
-                    <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
+                    <div className="flex items-center gap-3">
+                        <DownloadPortfolioButton talentId={talent?.id} talentName={talent?.fullname} />
+                        <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
+                    </div>
                 </div>
             </div>
             <div className="flex w-full flex-col gap-5">
