@@ -999,6 +999,334 @@ INSERT INTO "storage"."buckets" ("id", "name", "public", "file_size_limit", "all
 -- Data for Name: vector_indexes; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
 --
 
+--
+-- Data for Name: qualifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO "public"."qualifications" ("id", "created_at", "name") VALUES
+    (gen_random_uuid(), now(), 'National Certificate'),
+    (gen_random_uuid(), now(), 'Higher Certificate'),
+    (gen_random_uuid(), now(), 'Advanced Certificate'),
+    (gen_random_uuid(), now(), 'Diploma'),
+    (gen_random_uuid(), now(), 'National Diploma'),
+    (gen_random_uuid(), now(), 'Advanced Diploma'),
+    (gen_random_uuid(), now(), 'Bachelor''s Degree'),
+    (gen_random_uuid(), now(), 'Bachelor Honours Degree'),
+    (gen_random_uuid(), now(), 'Postgraduate Diploma'),
+    (gen_random_uuid(), now(), 'Master''s Degree'),
+    (gen_random_uuid(), now(), 'Professional Master''s Degree'),
+    (gen_random_uuid(), now(), 'Doctoral Degree'),
+    (gen_random_uuid(), now(), 'Professional Doctorate');
+
+
+--
+-- Data for Name: fields_of_study; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO "public"."fields_of_study"
+    ("id", "created_at", "name", "qualification_id")
+SELECT
+    gen_random_uuid(),
+    now(),
+    fos.name,
+    q.id
+FROM "public"."qualifications" q
+CROSS JOIN LATERAL (
+    SELECT unnest(
+        CASE q.name
+
+            WHEN 'National Certificate' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Information Technology',
+                'Information Systems',
+                'IT Systems Development'
+            ]
+
+            WHEN 'Higher Certificate' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Information Technology',
+                'Information Systems',
+                'Marketing'
+            ]
+
+            WHEN 'Advanced Certificate' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Information Technology',
+                'Information Systems',
+                'Marketing'
+            ]
+
+            WHEN 'Diploma' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Computing',
+                'Data Analytics',
+                'Finance',
+                'Information Technology',
+                'Information Systems',
+                'Informatics',
+                'Marketing',
+                'Nursing',
+                'Software Development',
+                'Supply Chain Management',
+                'Tourism Management'
+            ]
+
+            WHEN 'National Diploma' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Computing',
+                'Data Analytics',
+                'Finance',
+                'Information Technology',
+                'Information Systems',
+                'Informatics',
+                'Marketing',
+                'Software Development',
+                'Supply Chain Management'
+            ]
+
+            WHEN 'Advanced Diploma' THEN ARRAY[
+                'Accounting',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Data Analytics',
+                'Data Science',
+                'Finance',
+                'Information Technology',
+                'Information Systems',
+                'Informatics',
+                'Marketing',
+                'Software Development',
+                'Statistics',
+                'Supply Chain Management'
+            ]
+
+            WHEN 'Bachelor''s Degree' THEN ARRAY[
+                'Accounting',
+                'Actuarial Science',
+                'Agricultural Science',
+                'Agriculture',
+                'Animal Science',
+                'Anthropology',
+                'Architecture',
+                'Artificial Intelligence',
+                'Biochemistry',
+                'Bioinformatics',
+                'Biological Sciences',
+                'Biology',
+                'Biotechnology',
+                'Business Administration',
+                'Business Analytics',
+                'Business Management',
+                'Chemical Engineering',
+                'Chemistry',
+                'Civil Engineering',
+                'Computer Engineering',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Computer Science and Information Systems',
+                'Computing',
+                'Construction Management',
+                'Data Analytics',
+                'Data Science',
+                'Development Studies',
+                'Economics',
+                'Education',
+                'Electrical Engineering',
+                'Electronic Engineering',
+                'Engineering',
+                'Environmental Science',
+                'Finance',
+                'Financial Mathematics',
+                'Geography',
+                'Geoinformatics',
+                'Geology',
+                'Health Informatics',
+                'History',
+                'Hospitality Management',
+                'Human Resource Management',
+                'Industrial Engineering',
+                'Industrial Psychology',
+                'Information Science',
+                'Information Systems',
+                'Information Technology',
+                'Informatics',
+                'International Relations',
+                'Journalism',
+                'Law',
+                'Linguistics',
+                'Marketing',
+                'Mathematics',
+                'Mechanical Engineering',
+                'Mechatronics Engineering',
+                'Medicine',
+                'Microbiology',
+                'Nursing',
+                'Nutrition and Dietetics',
+                'Pharmacy',
+                'Philosophy',
+                'Physics',
+                'Physiotherapy',
+                'Political Science',
+                'Psychology',
+                'Public Administration',
+                'Public Health',
+                'Social Sciences',
+                'Social Work',
+                'Sociology',
+                'Software Engineering',
+                'Software Development',
+                'Statistics',
+                'Supply Chain Management',
+                'Theology',
+                'Tourism Management',
+                'Town and Regional Planning',
+                'Urban Planning',
+                'Veterinary Science',
+                'Visual Arts',
+                'Web Development',
+                'Zoology'
+            ]
+
+            WHEN 'Bachelor Honours Degree' THEN ARRAY[
+                'Accounting',
+                'Actuarial Science',
+                'Artificial Intelligence',
+                'Business Analytics',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Data Analytics',
+                'Data Science',
+                'Economics',
+                'Finance',
+                'Information Systems',
+                'Information Technology',
+                'Informatics',
+                'Mathematics',
+                'Psychology',
+                'Software Engineering',
+                'Software Development',
+                'Statistics'
+            ]
+
+            WHEN 'Postgraduate Diploma' THEN ARRAY[
+                'Accounting',
+                'Business Analytics',
+                'Business Management',
+                'Computer Science',
+                'Data Analytics',
+                'Data Science',
+                'Finance',
+                'Information Systems',
+                'Information Technology',
+                'Informatics',
+                'Marketing',
+                'Software Development',
+                'Supply Chain Management'
+            ]
+
+            WHEN 'Master''s Degree' THEN ARRAY[
+                'Accounting',
+                'Actuarial Science',
+                'Artificial Intelligence',
+                'Business Analytics',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Data Science',
+                'Economics',
+                'Education',
+                'Engineering',
+                'Finance',
+                'Information Systems',
+                'Information Technology',
+                'Informatics',
+                'Law',
+                'Mathematics',
+                'Psychology',
+                'Software Engineering',
+                'Statistics'
+            ]
+
+            WHEN 'Professional Master''s Degree' THEN ARRAY[
+                'Accounting',
+                'Business Administration',
+                'Business Management',
+                'Education',
+                'Engineering',
+                'Finance',
+                'Information Technology',
+                'Law',
+                'Nursing',
+                'Public Administration',
+                'Public Health'
+            ]
+
+            WHEN 'Doctoral Degree' THEN ARRAY[
+                'Accounting',
+                'Actuarial Science',
+                'Artificial Intelligence',
+                'Business Analytics',
+                'Business Management',
+                'Computer Science',
+                'Computer Science and Informatics',
+                'Data Science',
+                'Economics',
+                'Education',
+                'Engineering',
+                'Finance',
+                'Information Systems',
+                'Information Technology',
+                'Informatics',
+                'Law',
+                'Mathematics',
+                'Medicine',
+                'Nursing',
+                'Pharmacy',
+                'Physics',
+                'Psychology',
+                'Public Health',
+                'Social Sciences',
+                'Software Engineering',
+                'Statistics'
+            ]
+
+            WHEN 'Professional Doctorate' THEN ARRAY[
+                'Accounting',
+                'Business Administration',
+                'Business Management',
+                'Education',
+                'Engineering',
+                'Finance',
+                'Health Sciences',
+                'Information Technology',
+                'Law',
+                'Medicine',
+                'Nursing',
+                'Psychology',
+                'Public Administration',
+                'Public Health',
+                'Social Work'
+            ]
+
+            ELSE ARRAY[]::text[]
+
+        END
+    ) AS name
+) fos;
 
 
 --
