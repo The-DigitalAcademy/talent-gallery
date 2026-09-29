@@ -103,6 +103,26 @@ export interface WorkExperience {
   created_at: Timestamptz;
 }
 
+export interface Education {
+  id: UUID;
+  talent_id: UUID,
+  institution: string,
+  duration: string,
+  field_of_study: string,
+  qualification: string
+}
+
+export interface Qualifications {
+  id: UUID;
+  name: string;
+}
+
+export interface FieldsOfStudy {
+  id: UUID;
+  qualification_id: UUID,
+  name: string;
+}
+
 export type FormState = {
   success: boolean;
   message: string;
