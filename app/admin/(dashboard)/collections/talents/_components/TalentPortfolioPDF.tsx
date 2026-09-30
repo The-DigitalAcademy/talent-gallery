@@ -353,13 +353,12 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
           .filter(Boolean)
       : [];
 
-  // Education (strictly from DB: educations relation or talent.education)
-  const educationItems: string[] =
-    talent?.educations && Array.isArray(talent.educations) && talent.educations.length > 0
-      ? talent.educations
-          .map((e: any) => e.qualification || e.institution || e.degree)
-          .filter(Boolean)
-      : [];
+  // Education (from DB educations table, fallback to talent.education)
+  const educations = (talent?.educations && Array.isArray(talent.educations) && talent.educations.length > 0)
+    ? talent.educations
+    : (talent?.education && Array.isArray(talent.education) && talent.education.length > 0)
+    ? talent.education
+    : [];
 
   // Projects (strictly from projects in DB)
   const projects = talent?.projects && Array.isArray(talent.projects) ? talent.projects : [];
@@ -414,17 +413,7 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
 
             {/* Sidebar Details (Only render sections that exist in the DB) */}
             <View style={styles.sidebarContent}>
-              {/* Education (only if exists in DB) */}
-              {educationItems.length > 0 && (
-                <View style={styles.sidebarSection}>
-                  <Text style={styles.sidebarSectionTitle}>EDUCATION</Text>
-                  {educationItems.map((edu: string, idx: number) => (
-                    <Text key={idx} style={styles.sidebarText}>
-                      {edu}
-                    </Text>
-                  ))}
-                </View>
-              )}
+
 
               {/* Technical Skills (comma separated per PR review) */}
               {skillsList.length > 0 && (
@@ -459,6 +448,27 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
 
             {/* Bio / Summary */}
             {talent?.bio && <Text style={styles.bioText}>{talent.bio}</Text>}
+
+            {/* Education History (strictly from DB) */}
+            {educations.length > 0 && (
+              <View>
+                <Text style={styles.mainSectionTitle}>EDUCATION HISTORY</Text>
+                {educations.slice(0, 3).map((edu: any, idx: number) => (
+                  <View key={edu.id || idx} style={styles.itemBlock}>
+                    <View style={styles.itemTitleContainer}>
+                      <Text style={styles.itemTitle}>
+                        {edu.qualification}
+                        {edu.field_of_study && (
+                          <Text style={styles.itemSubtitle}> | {edu.field_of_study}</Text>
+                        )}
+                      </Text>
+                    </View>
+                    {edu.institution && <Text style={styles.itemMeta}>{edu.institution}</Text>}
+                    {edu.duration && <Text style={styles.itemDescription}>{edu.duration}</Text>}
+                  </View>
+                ))}
+              </View>
+            )}
 
             {/* Selected Projects (strictly from DB) */}
             {projects.length > 0 && (

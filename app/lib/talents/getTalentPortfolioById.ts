@@ -45,29 +45,20 @@ export async function getTalentPortfolioById(idOrSlug: string) {
 
   const talentId = data.id;
 
-  // Future-proof education data check
+  // Safely fetch education data since the table/relation might not exist in live DB yet
   let educations: any[] = [];
   try {
     const { data: eduData, error: eduError } = await supabase
-      .from('educations')
+      .from('education')
       .select('*')
       .eq('talent_id', talentId);
 
     if (!eduError && Array.isArray(eduData)) {
       educations = eduData;
     }
-  } catch {
-    // If the educations table does not exist yet, safely continue
-  }
-
-  // Check if talent already has an education column or field
-  if (educations.length === 0 && (data as any).education) {
-    const rawEdu = (data as any).education;
-    if (Array.isArray(rawEdu)) {
-      educations = rawEdu;
-    } else if (typeof rawEdu === 'string' && rawEdu.trim()) {
-      educations = [{ qualification: rawEdu }];
-    }
+  } catch (err) {
+    // Gracefully handle if the education table hasn't been migrated
+    console.warn("Could not fetch from 'education' table", err);
   }
 
   const enrichedTalent = {
