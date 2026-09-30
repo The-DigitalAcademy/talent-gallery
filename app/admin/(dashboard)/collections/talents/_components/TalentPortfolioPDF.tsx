@@ -262,11 +262,9 @@ const styles = StyleSheet.create({
   },
 
   // ─── SHAPER REVIEW ────────────────────────────────────────────────────────
-  // paddingLeft aligns review content with the main (right) column — sidebar is 39% wide
-  // A4 width = 595pt; 39% sidebar = ~232pt; main paddingLeft = 24pt → total = ~256pt
   reviewSection: {
     backgroundColor: '#FFFFFF',
-    paddingLeft: 256,
+    paddingLeft: LEFT_ALIGN_X,
     paddingRight: 24,
     paddingTop: 10,
     paddingBottom: 12,
@@ -526,14 +524,8 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
         {/* ── SHAPER REVIEW BANNER (Only rendered if an endorsement exists in DB) ── */}
         {firstEndorsement && firstEndorsement.message && (
           <View style={styles.reviewSection}>
-            <View style={styles.reviewTitleRow}>
-              <Text style={styles.reviewTitle}>SHAPER REVIEW</Text>
-              {firstEndorsement.endorser_name && (
-                <Text style={styles.reviewEndorser}>• {firstEndorsement.endorser_name}</Text>
-              )}
-            </View>
-            {/* reviewText paddingLeft aligns body text with the left edge of the heading */}
-            <Text style={[styles.reviewText, { paddingLeft: 0 }]}>{firstEndorsement.message}</Text>
+            <Text style={styles.reviewTitle}>SHAPER REVIEW</Text>
+            <Text style={styles.reviewText}>{firstEndorsement.message}</Text>
           </View>
         )}
 
