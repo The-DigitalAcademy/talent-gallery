@@ -262,9 +262,11 @@ const styles = StyleSheet.create({
   },
 
   // ─── SHAPER REVIEW ────────────────────────────────────────────────────────
+  // paddingLeft aligns review content with the main (right) column — sidebar is 39% wide
+  // A4 width = 595pt; 39% sidebar = ~232pt; main paddingLeft = 24pt → total = ~256pt
   reviewSection: {
     backgroundColor: '#FFFFFF',
-    paddingLeft: LEFT_ALIGN_X,
+    paddingLeft: 256,
     paddingRight: 24,
     paddingTop: 10,
     paddingBottom: 12,
@@ -321,12 +323,10 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     lineHeight: 1.3,
   },
-  footerBrand: {
-    fontSize: 18,
-    fontFamily: 'Lexend Deca',
-    fontWeight: 700,
-    color: '#FFFFFF',
-    letterSpacing: 0.5,
+  footerLogo: {
+    height: 22,
+    width: 80,
+    objectFit: 'contain',
   },
 });
 
@@ -428,11 +428,11 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
                 </View>
               )}
 
-              {/* Technical Skills (pipe separated per PR review) */}
+              {/* Technical Skills (comma separated per PR review) */}
               {skillsList.length > 0 && (
                 <View style={styles.sidebarSection}>
                   <Text style={styles.sidebarSectionTitle}>TECHNICAL SKILLS</Text>
-                  <Text style={styles.sidebarText}>{skillsList.join(' | ')}</Text>
+                  <Text style={styles.sidebarText}>{skillsList.join(', ')}</Text>
                 </View>
               )}
 
@@ -532,7 +532,8 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
                 <Text style={styles.reviewEndorser}>• {firstEndorsement.endorser_name}</Text>
               )}
             </View>
-            <Text style={styles.reviewText}>{firstEndorsement.message}</Text>
+            {/* reviewText paddingLeft aligns body text with the left edge of the heading */}
+            <Text style={[styles.reviewText, { paddingLeft: 0 }]}>{firstEndorsement.message}</Text>
           </View>
         )}
 
@@ -542,7 +543,11 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
             <Text style={styles.footerContactText}>info@shaper.co.za</Text>
             <Text style={styles.footerContactText}>+27 11 568 6887</Text>
           </View>
-          <Text style={styles.footerBrand}>Shaper</Text>
+          {/* Use the official Shaper wordmark image instead of rendered text */}
+          <Image
+            src={path.join(process.cwd(), 'public', 'shaper-wordmark-white.png')}
+            style={styles.footerLogo}
+          />
         </View>
       </Page>
     </Document>
