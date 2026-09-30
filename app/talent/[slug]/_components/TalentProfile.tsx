@@ -1,5 +1,6 @@
 "use client"
 
+import { EducationCard } from "@/app/_components/ui/EducationCard";
 import EmploymentHr from "@/app/_components/ui/EmploymentHr";
 import EmploymentTag from "@/app/_components/ui/EmploymentTag";
 import EndorsementCard from "@/app/_components/ui/EndorsementCard";
@@ -210,6 +211,27 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
 
                 {/* Description */}
                 <p className="text-sm sm:text-base">{talent.capabilities_summary}</p>
+              </div>
+            }
+
+            {/* Education History */}
+            {(talent.education.length > 0) &&
+              <div className="flex flex-col gap-4">
+                <EmploymentHr bgColor={bgColorEmployement} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
+
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-semibold text-xl sm:text-2xl">EDUCATION HISTORY</h2>
+                  {talent.education.toReversed().map((education, index) => (
+                    index < 3 &&
+                    <EducationCard
+                      key={education.id}
+                      qualification={education.qualification}
+                      fieldOfStudy={education.field_of_study}
+                      institution={education.institution}
+                      duration={education.duration}
+                    />
+                  ))}
+                </div>
               </div>
             }
 

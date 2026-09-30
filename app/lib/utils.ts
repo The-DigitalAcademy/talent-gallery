@@ -110,3 +110,41 @@ export function firstLetter(str: string) {
   return str?.split(" ")[str?.split.length - 1][0];
 }
 
+export function formatDuration(totalMonths: number): string {
+  if (totalMonths < 12) {
+    return `${totalMonths} ${
+      totalMonths === 1 ? "month" : "months"
+    }`;
+  }
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  const yearText = `${years} ${
+    years === 1 ? "year" : "years"
+  }`;
+
+  if (months === 0) {
+    return yearText;
+  }
+
+  const monthText = `${months} ${
+    months === 1 ? "month" : "months"
+  }`;
+
+  return `${yearText} ${monthText}`;
+}
+
+export function getCurrentMonth(): string {
+  const now = new Date();
+
+  return `${now.getFullYear()}-${String(
+    now.getMonth() + 1,
+  ).padStart(2, "0")}`;
+}
+
+export function formatMonth(date: Date): string {
+  return `${date.getUTCFullYear()}-${String(
+    date.getUTCMonth() + 1,
+  ).padStart(2, "0")}`;
+}

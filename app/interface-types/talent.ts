@@ -1,3 +1,5 @@
+import { Education } from "../lib/definitions";
+
 export interface Capability {
   id: string;
   name: string;
@@ -92,6 +94,7 @@ export interface TalentProfileInterface {
   talent_status: NamedEntity | null;
 
   capabilities: TalentCapability[];
+  education: Education[];
   work_experiences: WorkExperience[];
   projects: Project[];
   endorsements: Endorsement[];
