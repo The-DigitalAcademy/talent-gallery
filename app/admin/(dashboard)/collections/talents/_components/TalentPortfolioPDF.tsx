@@ -414,6 +414,25 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
             {/* Sidebar Details (Only render sections that exist in the DB) */}
             <View style={styles.sidebarContent}>
 
+              {/* Education in left sidebar */}
+              {educations.length > 0 && (
+                <View style={styles.sidebarSection}>
+                  <Text style={styles.sidebarSectionTitle}>EDUCATION</Text>
+                  {educations.slice(0, 3).map((edu: any, idx: number) => (
+                    <View key={edu.id || idx} style={{ marginBottom: 6 }}>
+                      <Text style={[styles.sidebarText, { fontWeight: 700, color: '#FFFFFF' }]}>
+                        {edu.qualification}{edu.field_of_study ? ` – ${edu.field_of_study}` : ''}
+                      </Text>
+                      {edu.institution && (
+                        <Text style={styles.sidebarText}>{edu.institution}</Text>
+                      )}
+                      {edu.duration && (
+                        <Text style={[styles.sidebarText, { color: '#D8C8F8', fontSize: 7.5 }]}>{edu.duration}</Text>
+                      )}
+                    </View>
+                  ))}
+                </View>
+              )}
 
               {/* Technical Skills (comma separated per PR review) */}
               {skillsList.length > 0 && (
@@ -449,26 +468,6 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
             {/* Bio / Summary */}
             {talent?.bio && <Text style={styles.bioText}>{talent.bio}</Text>}
 
-            {/* Education History (strictly from DB) */}
-            {educations.length > 0 && (
-              <View>
-                <Text style={styles.mainSectionTitle}>EDUCATION HISTORY</Text>
-                {educations.slice(0, 3).map((edu: any, idx: number) => (
-                  <View key={edu.id || idx} style={styles.itemBlock}>
-                    <View style={styles.itemTitleContainer}>
-                      <Text style={styles.itemTitle}>
-                        {edu.qualification}
-                        {edu.field_of_study && (
-                          <Text style={styles.itemSubtitle}> | {edu.field_of_study}</Text>
-                        )}
-                      </Text>
-                    </View>
-                    {edu.institution && <Text style={styles.itemMeta}>{edu.institution}</Text>}
-                    {edu.duration && <Text style={styles.itemDescription}>{edu.duration}</Text>}
-                  </View>
-                ))}
-              </View>
-            )}
 
             {/* Selected Projects (strictly from DB) */}
             {projects.length > 0 && (
