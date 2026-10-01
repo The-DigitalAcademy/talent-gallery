@@ -12,6 +12,9 @@ import { PublishedStatusForm } from "../_forms/published-status-form";
 import { DeleteTalentFormDialog } from "../_forms/delete-talent-form";
 import CapabilitiesSummaryForm from "../_forms/capabilities-summary-form";
 import { ExternalLinkIcon } from "@/app/_components/ui/Icons";
+import EducationForm from "../_forms/education-form";
+
+import DownloadPortfolioButton from "../_components/download-portfolio-button";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -29,6 +32,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { data: endorsements, error: endorsementsError } = await supabase.from("endorsements").select().eq("talent_id", id)
     const { data: projects, error: projectsError } = await supabase.from("projects").select("id, name, description, projectUrl:project_url, talentId:talent_id").eq("talent_id", id)
     const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
+    const { data: education, error: educationError } = await supabase.from("education").select("*").eq("talent_id", id)
+    const { data: qualifications, error: qualificationsError } = await supabase.from("qualifications").select("*")
+    const { data: fieldsOfStudy, error: fieldsOfStudyError } = await supabase.from("fields_of_study").select("*")
 
     const enrolmentData = {
         cohorts: cohorts || [],
@@ -55,9 +61,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <Link href="/admin/collections/talents" className="flex gap-2 text-gray-500 mb-3 hover:text-gray-800">
                     <ChevronLeftIcon className="w-4" /> <span className="text-base">Talents</span>
                 </Link>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold mb flex gap-2">{talent?.fullname}  <Link className="text-blue-600 " target="_blank" href={`/talent/${talent?.slug}`}><ExternalLinkIcon /> </Link></h1>
-                    <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
+                    <div className="flex items-center gap-3">
+                        <DownloadPortfolioButton talentId={talent?.id} talentName={talent?.fullname} />
+                        <PublishedStatusForm talentId={talent?.id} isPublished={talent?.is_published} />
+                    </div>
                 </div>
             </div>
             <div className="flex w-full flex-col gap-5">
@@ -66,6 +75,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <URLsForm talentId={talent?.id} values={urlValues} />
                 <TalentCapabilitiesForm talentId={id} />
                 <CapabilitiesSummaryForm talentId={talent?.id} summary={talent?.capabilities_summary} />
+                <EducationForm talentId={talent?.id} education={education!} qualifications={qualifications || []} fieldsOfStudy={fieldsOfStudy || []}/>
                 <WorkExperienceForm talentId={talent?.id} workExperiences={workExperiences!} />
                 <EndorsementsForm talentId={talent?.id} endorsements={endorsements!} />
                 <ProjectsForm talentId={talent?.id} projects={projects || []} />
