@@ -6,7 +6,6 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import TalentPortfolioPDF from '@/app/admin/(dashboard)/collections/talents/_components/TalentPortfolioPDF';
 import React from 'react';
 
-import sharp from 'sharp';
 
 export async function GET(
   _request: NextRequest,
@@ -28,23 +27,8 @@ export async function GET(
       return new Response('Talent not found', { status: 404 });
     }
 
-    // 3. Convert candidate profile image to PNG data URI (handles WebP/Vercel blob)
+    // 3. Pass original image URL directly (PDF renderer handles cropping via objectFit)
     let processedImageUrl = talent.profile_image_url;
-    if (talent.profile_image_url) {
-      try {
-        const imageRes = await fetch(talent.profile_image_url);
-        if (imageRes.ok) {
-          const imageArrayBuffer = await imageRes.arrayBuffer();
-          const pngBuffer = await sharp(Buffer.from(imageArrayBuffer))
-            .resize(600, 600, { fit: 'cover', position: 'top' })
-            .png()
-            .toBuffer();
-          processedImageUrl = `data:image/png;base64,${pngBuffer.toString('base64')}`;
-        }
-      } catch (imgErr) {
-        console.warn('Could not convert candidate image to PNG for PDF:', imgErr);
-      }
-    }
 
     const pdfData = {
       ...talent,
