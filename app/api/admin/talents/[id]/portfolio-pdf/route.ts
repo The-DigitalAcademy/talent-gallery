@@ -5,6 +5,7 @@ import { slugify } from '@/app/lib/utils';
 import { renderToBuffer } from '@react-pdf/renderer';
 import TalentPortfolioPDF from '@/app/admin/(dashboard)/collections/talents/_components/TalentPortfolioPDF';
 import React from 'react';
+import sharp from 'sharp';
 
 // Helper: fetch a remote image and convert to PNG base64 data URI
 // @react-pdf/renderer only supports JPEG and PNG — not WebP or SVG
