@@ -52,10 +52,8 @@ export async function GET(
     // 3. Convert profile image to base64 data URI (WebP to PNG conversion)
     let processedImageUrl: string | null = talent.profile_image_url || null;
     if (talent.profile_image_url) {
-      console.log('Original image URL:', talent.profile_image_url);
       const dataUri = await toDataUri(talent.profile_image_url);
       if (dataUri) processedImageUrl = dataUri;
-      console.log('Final processed image URL:', processedImageUrl ? 'SET' : 'NULL');
     }
 
     const pdfData = {
