@@ -5,24 +5,22 @@ import { slugify } from '@/app/lib/utils';
 import { renderToBuffer } from '@react-pdf/renderer';
 import TalentPortfolioPDF from '@/app/admin/(dashboard)/collections/talents/_components/TalentPortfolioPDF';
 import React from 'react';
+import sharp from 'sharp';
 
-// Helper: fetch a remote image and convert to PNG base64 data URI
-// @react-pdf/renderer only supports JPEG and PNG — not WebP or SVG
-// Use images.weserv.nl free service to convert WebP to PNG on the fly
+// Helper: fetch a remote image and return a JPEG base64 data URI.
+// @react-pdf/renderer only supports JPEG and PNG — not WebP.
+// Sharp converts any format (WebP, PNG, etc.) → JPEG.
 async function toDataUri(url: string): Promise<string | null> {
   try {
-    // Use images.weserv.nl free image processing service
-    // Format: https://images.weserv.nl/?url={encoded_url}&output=png
-    const encodedUrl = encodeURIComponent(url);
-    const weservUrl = `https://images.weserv.nl/?url=${encodedUrl}&output=png`;
-
-    const res = await fetch(weservUrl, { cache: 'no-store' });
-    if (!res.ok) {
-      console.warn('Failed to fetch converted image:', res.status, res.statusText);
-      return null;
-    }
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return null;
     const buffer = Buffer.from(await res.arrayBuffer());
-    return `data:image/png;base64,${buffer.toString('base64')}`;
+    const jpeg = await sharp(buffer)
+      .flatten({ background: '#E9B8FF' }) // fill WebP transparency with the PDF photo background color
+      .resize(600, 600, { fit: 'cover', position: 'top' })
+      .jpeg({ quality: 85 })
+      .toBuffer();
+    return `data:image/jpeg;base64,${jpeg.toString('base64')}`;
   } catch (err) {
     console.warn('toDataUri failed:', err);
     return null;
@@ -49,13 +47,13 @@ export async function GET(
       return new Response('Talent not found', { status: 404 });
     }
 
-    // 3. Convert profile image to base64 data URI (WebP to PNG conversion)
+    // 3. Convert profile image to base64 data URI so the PDF renderer can embed it.
+    // @react-pdf/renderer cannot resolve external HTTPS URLs inside Vercel serverless
+    // functions without converting them first. No sharp needed — just fetch + Buffer.
     let processedImageUrl: string | null = talent.profile_image_url || null;
     if (talent.profile_image_url) {
-      console.log('Original image URL:', talent.profile_image_url);
       const dataUri = await toDataUri(talent.profile_image_url);
       if (dataUri) processedImageUrl = dataUri;
-      console.log('Final processed image URL:', processedImageUrl ? 'SET' : 'NULL');
     }
 
     const pdfData = {
@@ -70,7 +68,7 @@ export async function GET(
 
     const safeFilename = `${slugify(talent.fullname || 'talent')}-portfolio.pdf`;
 
-    // 5. Return PDF Response
+    // 4. Return PDF Response
     return new Response(pdfBuffer as unknown as BodyInit, {
       status: 200,
       headers: {
