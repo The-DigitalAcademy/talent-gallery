@@ -3,7 +3,7 @@ import { Button, Field, Form } from "@base-ui/react";
 import { CheckIcon, UploadCloudIcon } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { upsertBasicInfo } from "../_actions/basic-info-action";
-import FormSelect from "@/components/admin/form-select";
+import { FormCombobox } from "@/components/admin/form-combobox";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { cn, slugify } from "@/app/lib/utils";
 import { toast } from "sonner";
@@ -13,12 +13,12 @@ type FormValues = {
     fullname?: string | null,
     bio?: string | null,
     profileImageUrl?: string | null,
-    roleId: string | null
+    role: string | null
 }
 
 const supabase = createClient()
 
-export default function BasicInfoForm({ talentId, values, roles }: { talentId?: string, values?: FormValues, roles: { id: string, name: string }[] }) {
+export default function BasicInfoForm({ talentId, values, roles }: { talentId?: string, values?: FormValues, roles: string[] }) {
     const [showCheck, setShowCheck] = useState(false)
     const { handleSubmit, register, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting, isValid } } = useForm<FormValues>({ defaultValues: values })
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null | undefined>(defaultValues?.profileImageUrl)
@@ -128,16 +128,16 @@ export default function BasicInfoForm({ talentId, values, roles }: { talentId?: 
                             />
                             <p className="text-xs text-red-700" >{errors.bio?.message}</p>
                         </Field.Root>
-                        <Field.Root name="role" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.roleId && talentId })} >
+                        <Field.Root name="role" className={cn("flex flex-col items-start gap-2 w-full", { "[& [role=combobox]:bg-yellow-50": dirtyFields.role && talentId })} >
                             <Field.Label className="text-xs text-gray-700" >
                                 Role
                             </Field.Label>
-                            < FormSelect
-                                defaultValue={defaultValues?.roleId}
-                                onValueChange={(val) => setValue("roleId", val === "" ? null : val, { shouldDirty: true })}
+                            <FormCombobox
+                                value={values?.role}
+                                onValueChange={(val) => setValue("role", val, { shouldDirty: true })}
                                 placeholder="Select role"
-                                options={roles?.map(i => ({ label: i.name, value: i.id })) || []} />
-                            <p className="text-xs text-red-700" >{errors.roleId?.message}</p>
+                                options={roles?.map(i => ({ label: i, value: i })) || []} />
+                            <p className="text-xs text-red-700" >{errors.role?.message}</p>
                         </Field.Root>
                     </div>
                     <Field.Root name="image" className="flex flex-col items-start gap-2 mx-auto">

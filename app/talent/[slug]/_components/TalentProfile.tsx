@@ -151,7 +151,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
               </div>
             </div>
             <div className="flex flex-col sm:flex-row justify-between gap-2">
-              <h3 className="text-lg sm:text-xl font-thin">{talent.role?.name}</h3> 
+              <h3 className="text-lg sm:text-xl font-thin">{talent.role}</h3> 
 
               {location &&
                 <div className="flex gap-1 items-center">

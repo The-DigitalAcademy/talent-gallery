@@ -16,7 +16,6 @@ export interface NamedEntity {
 export interface Role {
   id: string;
   name: string;
-  description: string;
 }
 
 export interface Talent {
@@ -25,7 +24,7 @@ export interface Talent {
   bio: string | null;
   slug: string;
   profile_image_url: string | null;
-  role: Role | null
+  role: string | null
 
   location: Location | null;
   cohort: NamedEntity | null;
@@ -66,10 +65,6 @@ export interface Endorsement {
   message: string;
 };
 
-export interface Role {
-  name: string;
-};
-
 export interface TalentProfileInterface {
   id: string;
   fullname: string;
@@ -98,7 +93,7 @@ export interface TalentProfileInterface {
   work_experiences: WorkExperience[];
   projects: Project[];
   endorsements: Endorsement[];
-  role: Role;
+  role?: string | null;
 };
 
 export interface ConfirmedTalentSchema {

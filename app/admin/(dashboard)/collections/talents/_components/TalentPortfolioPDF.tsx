@@ -341,7 +341,7 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
     : '';
 
   // Role Title (only from DB)
-  const roleTitle = talent?.role?.name ? talent.role.name.toUpperCase() : null;
+  const roleTitle = talent?.role ? talent.role.toUpperCase() : null;
 
   // Technical skills (strictly from talent_capabilities in DB)
   const skillsList: string[] =

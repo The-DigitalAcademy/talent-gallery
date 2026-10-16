@@ -27,7 +27,7 @@ const TALENT_PORTFOLIO_SELECT = `
         endorser_name,
         message
     ),
-    role:roles(name),
+    role,
     isPublished:is_published
 `;
 

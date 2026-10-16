@@ -94,7 +94,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
                 <span className='font-bold'>{fullNames[0]}</span>
                 <span className='font-light'> {fullNames.length > 1 ? fullNames[fullNames.length - 1].charAt(0) + "." : ""}</span>
               </h3>
-              <p className="text-sm mb-0.5"> {talent.role?.name} </p>
+              <p className="text-sm mb-0.5"> {talent.role} </p>
               <div className="text-xs text-gray-400 flex items-center gap-1">
                 {talent.location && <MapPinIcon className='opacity-70 size-3' />}
                 {talent.location?.city}, {talent.location?.country}

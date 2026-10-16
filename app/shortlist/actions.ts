@@ -21,7 +21,7 @@ export async function getTalentsByIds(ids: string[]): Promise<Talent[]> {
       bio,
       slug,
       profile_image_url,
-      role:roles(name),
+      role,
       location:locations(city, country),
       cohort:cohorts(name),
       program:programs(name),
@@ -137,7 +137,7 @@ export async function submitEnquiryAction(payload: {
 
   const candidates = talents.map((t) => ({
     fullname: t.fullname,
-    role: t.role?.name ?? null,
+    role: t.role ?? null,
     location: t.location
       ? `${t.location.city}, ${t.location.country}`
       : null,
