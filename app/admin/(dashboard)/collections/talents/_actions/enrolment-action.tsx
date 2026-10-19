@@ -7,7 +7,7 @@ import z from "zod";
 const Schema = z.object({
     program: z.uuid({ error: "required" }).nullable().optional(),
     cohort: z.uuid({ error: "required" }).nullable().optional(),
-    location: z.uuid({ error: "required" }).nullable().optional(),
+    location: z.string().trim().min(2).nullable().optional(),
     status: z.uuid({ error: "required" }).nullable().optional(),
 });
 
@@ -16,7 +16,7 @@ type SchemaType = z.infer<typeof Schema>
 interface DbPayload {
     program_id?: string | null;
     cohort_id?: string | null;
-    location_id?: string | null;
+    location?: string | null;
     talent_status_id?: string | null;
 }
 
@@ -37,7 +37,7 @@ export async function upsertEnrolmentInfo(talentId: string, data: SchemaType): P
     const keyMap = {
         program: "program_id",
         cohort: "cohort_id",
-        location: "location_id",
+        location: "location",
         status: "talent_status_id"
     }
 
@@ -54,7 +54,7 @@ export async function upsertEnrolmentInfo(talentId: string, data: SchemaType): P
         const { error, data: updatedData } = await supabase.from("talents")
             .update(payload)
             .eq('id', talentId)
-            .select("program:program_id, cohort:cohort_id, location:location_id, status:talent_status_id").single()
+            .select("program:program_id, cohort:cohort_id, location, status:talent_status_id").single()
 
         if (error) throw error
         return {

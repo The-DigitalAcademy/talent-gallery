@@ -89,7 +89,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
           {/* Location Element */}
           <div className="text-xs text-slate-400 font-medium flex items-center gap-1 mb-4">
             <span className="text-sm opacity-70">📍</span> 
-            {talent.location ? `${talent.location.city}, ${talent.location.country}` : 'Remote'}
+            {talent.location || 'Remote'}
           </div>
 
           {/* Program and Status Pill Row */}

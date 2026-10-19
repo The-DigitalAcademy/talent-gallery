@@ -22,7 +22,7 @@ export async function getTalentsByIds(ids: string[]): Promise<Talent[]> {
       slug,
       profile_image_url,
       role,
-      location:locations(city, country),
+      location,
       cohort:cohorts(name),
       program:programs(name),
       talent_status:talent_statuses(name),
@@ -138,9 +138,7 @@ export async function submitEnquiryAction(payload: {
   const candidates = talents.map((t) => ({
     fullname: t.fullname,
     role: t.role ?? null,
-    location: t.location
-      ? `${t.location.city}, ${t.location.country}`
-      : null,
+    location: t.location,
     status: t.talent_status?.name ?? null,
     profileUrl: `${baseUrl}/talent/${t.slug}`,
   }));

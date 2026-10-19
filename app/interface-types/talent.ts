@@ -5,11 +5,6 @@ export interface Capability {
   name: string;
 }
 
-export interface Location {
-  city: string;
-  country: string;
-}
-
 export interface NamedEntity {
   name: string;
 }
@@ -26,7 +21,7 @@ export interface Talent {
   profile_image_url: string | null;
   role: string | null
 
-  location: Location | null;
+  location: string | null;
   cohort: NamedEntity | null;
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
@@ -78,12 +73,10 @@ export interface TalentProfileInterface {
   is_published: boolean;
   created_at: string;
   capabilities_summary: string;
-  location_id: string;
+  location: string | null;
   program_id: string;
   cohort_id: string;
   talent_status_id: string;
-
-  location: Location | null;
   cohort: NamedEntity | null;
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
@@ -102,7 +95,7 @@ export interface ConfirmedTalentSchema {
   bio: string | null;
   profile_image_url: string | null;
   slug: string;
-  location: { city: string; country: string } | null;
+  location: string | null;
   cohort: { name: string } | null;
   program: { name: string } | null;
   talent_status: { name: string } | null;

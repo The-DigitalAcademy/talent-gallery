@@ -97,7 +97,7 @@ export default function TalentCard({ talent }: TalentCardProps) {
               <p className="text-sm mb-0.5"> {talent.role} </p>
               <div className="text-xs text-gray-400 flex items-center gap-1">
                 {talent.location && <MapPinIcon className='opacity-70 size-3' />}
-                {talent.location?.city}, {talent.location?.country}
+                {talent.location}
               </div>
             </div>
           </header >

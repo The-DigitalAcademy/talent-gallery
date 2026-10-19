@@ -5,7 +5,7 @@ export interface Talent {
   id: UUID;
   fullname: string;
   bio: string;
-  location_id: UUID;
+  location: string;
   program_id: UUID;
   cohort_id: UUID;
   talent_status_id: UUID;
@@ -15,13 +15,6 @@ export interface Talent {
   linkedin_url: string | null;
   youtube_url: string | null;
   is_published: boolean;
-  created_at: Timestamptz;
-}
-
-export interface Location {
-  id: UUID;
-  city: string;
-  country: string;
   created_at: Timestamptz;
 }
 

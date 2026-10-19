@@ -2,6 +2,7 @@ import Sidebar from "@/components/admin/sidebar";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 import { createClient } from "../../lib/supabase/server";
+import { redirect } from "next/navigation";
 
 
 const inter = Inter({
@@ -13,6 +14,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     const supabase = await createClient()
 
     const { data, error } = await supabase.auth.getUser()
+    if (!data?.user) redirect("/admin/auth/login")
     const userMetadata = data.user?.user_metadata
     return (
         <div className={`${inter.className} h-screen flex overflow-hidden`}>

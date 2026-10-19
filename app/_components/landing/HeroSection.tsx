@@ -8,11 +8,10 @@ import Image from "next/image";
 interface LookupItem {
   id: string | number;
   name?: string;
-  city?: string;
 }
 
 interface HeroSectionProps {
-  locations?: LookupItem[];
+  locations?: string[];
   roles?: LookupItem[];
   capabilities?: LookupItem[];
   statuses?: LookupItem[];
@@ -169,8 +168,8 @@ export default function HeroSection({
                 >
                   <option value="">Select a location</option>
                   {locations.map((loc) => (
-                    <option key={loc.id} value={loc.city} className="text-black">
-                      {loc.city}
+                    <option key={loc} value={loc} className="text-black">
+                      {loc}
                     </option>
                   ))}
                 </select>

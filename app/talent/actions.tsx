@@ -36,7 +36,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     slug,
     profile_image_url,
     role,
-    location:locations${filters.location ? '!inner' : ''}(city, country),
+    location,
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
@@ -63,7 +63,7 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("programs.name", filters.programme);
   }
   if (filters.location) {
-    query = query.ilike("locations.city", filters.location);
+    query = query.ilike("location", filters.location);
   }
   if (filters.capability) {
     query = query.ilike("capability_filter.name", filters.capability);

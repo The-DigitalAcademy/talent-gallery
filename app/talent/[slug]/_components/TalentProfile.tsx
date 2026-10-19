@@ -10,7 +10,7 @@ import { ShareModal } from "@/app/_components/ui/ShareModal";
 import ShortlistTag from "@/app/_components/ui/ShortlistTag";
 import { SkillTag } from "@/app/_components/ui/SkillTag";
 import { TalentProfileInterface } from "@/app/interface-types/talent";
-import { firstWord, getStatusBadgeStyle, getYouTubeEmbedUrl, firstLetter, getTalentStatusColor, getTalentStatusSecondaryColor } from "@/app/lib/utils";
+import { getStatusBadgeStyle, getYouTubeEmbedUrl, getTalentStatusColor, getTalentStatusSecondaryColor } from "@/app/lib/utils";
 import { useShortlistHydrated } from "@/app/store/useHasHydrated";
 import { useShortlistStore } from "@/app/store/useShortlistStore";
 import Link from "next/link";
@@ -36,10 +36,6 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   const isShortlisted = useShortlistStore((s) => s.isShortlisted(talent.id));
   const toggleShortlist = useShortlistStore((s) => s.toggle);
   const hasHydrated = useShortlistHydrated();
-
-  const location = talent.location
-    ? `${talent.location.city}, ${talent.location.country}`
-    : null;
 
   const skills = talent.capabilities.toSorted((a, b) => (a.sortPosition) - (b.sortPosition)).map((c) => c.capability.name);
 
@@ -153,10 +149,10 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             <div className="flex flex-col sm:flex-row justify-between gap-2">
               <h3 className="text-lg sm:text-xl font-thin">{talent.role}</h3> 
 
-              {location &&
+              {talent.location &&
                 <div className="flex gap-1 items-center">
                   <Location/>
-                  <p className="text-[#C1C1C1] text-base sm:text-lg">{location}</p>
+                  <p className="text-[#C1C1C1] text-base sm:text-lg">{talent.location}</p>
                 </div>
               }
             </div>

@@ -4,7 +4,7 @@ import { createClient } from '../supabase/server';
 
 const TALENT_PORTFOLIO_SELECT = `
     *,
-    location:locations(city, country),
+    location,
     cohort:cohorts(name),
     program:programs(name),
     talent_status:talent_statuses(name),
