@@ -7,10 +7,6 @@ import { ShareButton } from '@/app/_components/ui/ShareButton';
 import { ShareModal } from '@/app/_components/ui/ShareModal';
 import { getTalentStatusColor } from '@/app/lib/utils';
 
-interface TalentCardProps {
-  talent: Talent
-}
-
 const getBorderAccent = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
     case 'available for wpe': return 'border-t-4 border-t-orange-500';
@@ -31,7 +27,7 @@ const getStatusBadgeStyle = (status: string | undefined) => {
   }
 };
 
-export default function TalentCard({ talent }: TalentCardProps) {
+export default function TalentCard({ talent }: { talent: Talent }) {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const topAccent = getBorderAccent(talent.talent_status?.name);
   const displayStatus = talent.talent_status?.name;
@@ -113,13 +109,11 @@ export default function TalentCard({ talent }: TalentCardProps) {
 
           <div className="flex flex-wrap gap-1.5 max-h-[58px] overflow-hidden">
             {talent.capabilities?.map((capability, index) => {
-              if (!capability.name) return null;
               return (
-                <span 
-                  key={capability.id || index} 
+                <span key={`${index}-${capability}`}
                   className="text-xs bg-slate-50 border border-slate-100 text-slate-500 font-medium px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap"
                 >
-                  {capability.name}
+                  {capability}
                 </span>
               );
             })}

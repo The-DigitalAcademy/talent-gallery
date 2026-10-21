@@ -1,4 +1,3 @@
-import React from 'react';
 import path from 'path';
 import {
   Document,
@@ -343,16 +342,6 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
   // Role Title (only from DB)
   const roleTitle = talent?.role ? talent.role.toUpperCase() : null;
 
-  // Technical skills (strictly from talent_capabilities in DB)
-  const skillsList: string[] =
-    talent?.capabilities && Array.isArray(talent.capabilities)
-      ? talent.capabilities
-          .slice()
-          .sort((a: any, b: any) => (a.sortPosition ?? 0) - (b.sortPosition ?? 0))
-          .map((c: any) => c.capability?.name || c.name)
-          .filter(Boolean)
-      : [];
-
   // Education (from DB educations table, fallback to talent.education)
   const educations = (talent?.educations && Array.isArray(talent.educations) && talent.educations.length > 0)
     ? talent.educations
@@ -435,10 +424,10 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
               )}
 
               {/* Technical Skills (comma separated per PR review) */}
-              {skillsList.length > 0 && (
+              {talent.capabilities?.length > 0 && (
                 <View style={styles.sidebarSection}>
                   <Text style={styles.sidebarSectionTitle}>TECHNICAL SKILLS</Text>
-                  <Text style={styles.sidebarText}>{skillsList.join(', ')}</Text>
+                  <Text style={styles.sidebarText}>{talent.capabilities.join(', ')}</Text>
                 </View>
               )}
 
@@ -474,11 +463,6 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
               <View>
                 <Text style={styles.mainSectionTitle}>SELECTED PROJECT EXPERIENCE</Text>
                 {projects.slice(0, 2).map((project: any, idx: number) => {
-                  const techList =
-                    project.capabilities && Array.isArray(project.capabilities)
-                      ? project.capabilities.map((c: any) => c.capability?.name || c.name).filter(Boolean).join(', ')
-                      : '';
-
                   return (
                     <View key={project.id || idx} style={styles.itemBlock}>
                       <View style={styles.itemTitleContainer}>
@@ -492,12 +476,6 @@ export default function TalentPortfolioPDF({ talent }: TalentPortfolioPDFProps) 
                       )}
                       {project.description && (
                         <Text style={styles.itemDescription}>{project.description}</Text>
-                      )}
-                      {techList.length > 0 && (
-                        <View>
-                          <Text style={styles.subSectionLabel}>Technology Used</Text>
-                          <Text style={styles.techUsedText}>{techList}</Text>
-                        </View>
                       )}
                     </View>
                   );

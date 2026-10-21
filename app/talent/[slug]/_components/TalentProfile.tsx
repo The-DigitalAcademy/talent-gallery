@@ -37,8 +37,6 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
   const toggleShortlist = useShortlistStore((s) => s.toggle);
   const hasHydrated = useShortlistHydrated();
 
-  const skills = talent.capabilities.toSorted((a, b) => (a.sortPosition) - (b.sortPosition)).map((c) => c.capability.name);
-
   const projects = talent.projects
   .filter((tp) => tp !== null)
   .map((tp) => ({
@@ -46,7 +44,6 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
     title: tp.name,
     description: tp.description ?? "",
     contributions: [],
-    capabilities: tp.capabilities.map((pc) => pc.capability.name),
     project_url: tp.project_url
   }));
 
@@ -186,7 +183,7 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
             </div>
 
             {/* Core Skills */}
-            {(skills.length > 0 || talent.capabilities_summary) &&
+            {(talent.capabilities.length > 0 || talent.capabilities_summary) &&
               <div className="flex flex-col gap-4">
                 <EmploymentHr bgColor={bgColorEmployement} height={"h-1"} width={"w-[30%] sm:w-[18%]"}/>
 
@@ -194,11 +191,11 @@ export function TalentProfile({ talent, onClose, isModal }: TalentProfileProps) 
                   <h2 className="font-semibold text-xl sm:text-2xl">CORE SKILLS</h2>
 
                   {/* Skill tags */}
-                  {skills.length > 0 && (
+                  {talent.capabilities?.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-2">
-                        {skills.map((skill, index) => (
-                          <SkillTag key={index} label={skill} bgColor="bg-gray-100" />
+                        {talent.capabilities.map((skill, index) => (
+                          <SkillTag key={index} label={skill} />
                         ))}
                       </div>
                     </div>

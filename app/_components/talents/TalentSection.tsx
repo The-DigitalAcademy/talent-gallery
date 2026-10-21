@@ -51,7 +51,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
     supabase.from("talents").select("location"),
     supabase.from("programs").select("id, name"),
     supabase.from("talent_statuses").select("id, name"),
-    supabase.from("capabilities").select("id, name"),
+    supabase.from("capabilities").select("name"),
     supabase.from("roles").select("id, name")
   ]);
 
@@ -97,7 +97,7 @@ export default async function TalentSection({searchParams, cohort = undefined, b
                         programs={programs || []}
                         cohorts={cohorts || []}
                         statuses={statuses || []}
-                        capabilities={capabilities || []}
+                        capabilities={capabilities?.map(i => i.name) || []}
                     />
                 </div>
 

@@ -1,45 +1,10 @@
-import { useEffect, useState } from 'react'
-import { TalentCapability } from './capability-form'
 import { Button, Dialog } from '@base-ui/react'
 import { ChevronsUpDownIcon, XIcon } from 'lucide-react'
 import { DragDropProvider } from '@dnd-kit/react'
 import { useSortable } from '@dnd-kit/react/sortable'
 import { move } from '@dnd-kit/helpers'
 
-export default function CapabilityReorderDialog({ capabilities, onPositionUpdate }: { capabilities: TalentCapability[], onPositionUpdate: (value: { id: string, sortPosition: number }) => void }) {
-    const [items, setitems] = useState<TalentCapability[]>(capabilities.toSorted((a, b) => (a.sortPosition) - (b.sortPosition)))
-    const [movedItemId, setMovedItemId] = useState<string | null>(null)
-
-
-    useEffect(() => {
-        setitems(capabilities.toSorted((a, b) => (a.sortPosition) - (b.sortPosition)))
-    }, [capabilities])
-
-    useEffect(() => {
-        async function setNewPosition() {
-            if (movedItemId) {
-                const newIndex = items.findIndex((i) => i.id == movedItemId)
-                const prevItemPosition = items[newIndex - 1]?.sortPosition
-                const nextItemPosition = items[newIndex + 1]?.sortPosition
-
-                if (prevItemPosition === undefined) {
-                    // moved to start of list
-                    const newPos = items[1]?.sortPosition ? items[1]?.sortPosition / 2 : 1000
-                    onPositionUpdate({ id: movedItemId, sortPosition: newPos })
-
-                } else if (nextItemPosition === undefined) {
-                    // moved to end of list
-                    const maxPos = Math.max(...items.map(i => i.sortPosition))
-                    const newPos = maxPos + 1000
-                    onPositionUpdate({ id: movedItemId, sortPosition: newPos })
-                } else {
-                    const newPos = ((prevItemPosition) + (nextItemPosition)) / 2
-                    onPositionUpdate({ id: movedItemId, sortPosition: newPos })
-                }
-            }
-        }
-        setNewPosition()
-    }, [movedItemId])
+export default function CapabilityReorderDialog({ capabilities, onChange }: { capabilities: string[], onChange: (values: string[]) => void }) {
 
     return (
         <Dialog.Root>
@@ -54,15 +19,9 @@ export default function CapabilityReorderDialog({ capabilities, onPositionUpdate
                             <Dialog.Title className="font-semibold">Reorder Talent's Capabilities</Dialog.Title>
                             <Dialog.Close className="text-black" ><XIcon /></Dialog.Close>
                         </div>
-                        <DragDropProvider
-                            onDragEnd={(event) => {
-                                const itemId = String(event.operation.source?.id)
-                                setitems((items => move(items, event)))
-                                setMovedItemId(itemId)
-                            }}
-                        >
+                        <DragDropProvider onDragEnd={(event) => onChange(move(capabilities, event))}>
                             <div className="space-y-1 overflow-y-scroll max-h-[60vh]">
-                                {items.map((c, index) => <DraggableCapability key={c.id} index={index} item={c} />)}
+                                {capabilities.map((c, index) => <DraggableCapability key={c} index={index} item={c} />)}
                             </div>
                         </DragDropProvider>
                     </Dialog.Popup>
@@ -72,11 +31,11 @@ export default function CapabilityReorderDialog({ capabilities, onPositionUpdate
     )
 }
 
-export function DraggableCapability({ item, index }: { index: number, item: TalentCapability }) {
-    const { ref, isDragging } = useSortable({ id: item.id, index })
+export function DraggableCapability({ item, index }: { index: number, item: string }) {
+    const { ref, isDragging } = useSortable({ id: item, index })
     return (
         <Button ref={ref} data-shadow={isDragging || undefined} className="flex items-center justify-between gap-2 w-full hover:bg-gray-100 py-1 px-1 rounded cursor-grab active:cursor-grabbing">
-            <span>{item.name}</span>
+            <span>{item}</span>
             <ChevronsUpDownIcon className="w-4 text-gray-600" />
         </Button>)
 }

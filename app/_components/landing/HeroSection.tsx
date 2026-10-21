@@ -13,7 +13,7 @@ interface LookupItem {
 interface HeroSectionProps {
   locations?: string[];
   roles?: LookupItem[];
-  capabilities?: LookupItem[];
+  capabilities?: string[];
   statuses?: LookupItem[];
 }
 
@@ -189,8 +189,8 @@ export default function HeroSection({
                 >
                   <option value="">Select skills</option>
                   {capabilities.map((cap) => (
-                    <option key={cap.id} value={cap.name} className="text-black">
-                      {cap.name}
+                    <option key={cap} value={cap} className="text-black">
+                      {cap}
                     </option>
                   ))}
                 </select>

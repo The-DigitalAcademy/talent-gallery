@@ -66,12 +66,6 @@ export interface Project {
   talentId: UUID;
 }
 
-export interface TalentCapability {
-  talent_id: UUID;
-  capability_id: UUID;
-  created_at: Timestamptz;
-}
-
 export interface TalentProject {
   id: UUID;
   talent_id: UUID;
@@ -82,7 +76,6 @@ export interface TalentProject {
 export interface ProjectCapability {
   id: UUID;
   project_id: UUID;
-  capability_id: UUID;
   created_at: Timestamptz;
 }
 

@@ -43,7 +43,7 @@ export default async function LandingPage() {
   ] = await Promise.all([
     supabase.from("talents").select("location"),
     supabase.from("roles").select("id, name"),
-    supabase.from("capabilities").select("id, name"),
+    supabase.from("capabilities").select("name"),
     supabase.from("talent_statuses").select("id, name"),
   ]);
 
@@ -54,7 +54,7 @@ export default async function LandingPage() {
       <HeroSection
         locations={uniqueLocations || []}
         roles={roles || []}
-        capabilities={capabilities || []}
+        capabilities={capabilities?.map(i => i.name) || []}
         statuses={statuses || []}
       />
       <HowItWorks />

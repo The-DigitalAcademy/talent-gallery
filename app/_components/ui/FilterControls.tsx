@@ -12,7 +12,7 @@ interface FilterControlsProps {
   programs: LookupItem[];
   cohorts: LookupItem[];
   statuses: LookupItem[];
-  capabilities: LookupItem[];
+  capabilities: string[];
   roles: LookupItem[];
 }
 
@@ -27,7 +27,7 @@ export default function FilterControls({
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-4">
       <FilterItem label="Role" keyName="role" options={roles.map(({ id, name }) => ({ id, value: name }))} />
       <FilterItem keyName="location" options={locations.map(i => ({ id: i, value: i }))} />
-      <FilterItem label="Skills" keyName="capability" options={capabilities.map(({ id, name }) => ({ id, value: name }))} />
+      <FilterItem label="Skills" keyName="capability" options={capabilities.map(cap => ({ id: cap, value: cap }))} />
       <FilterItem label="Availablity" keyName="status" options={statuses.map(({ id, name }) => ({ id, value: name }))} />
     </div>
   );

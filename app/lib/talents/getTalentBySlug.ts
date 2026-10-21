@@ -8,19 +8,13 @@ const TALENT_SELECT = `
     cohort:cohorts(name),
     program:programs(name),
     talent_status:talent_statuses(name),
-    capabilities:talent_capabilities(
-        capability:capabilities(id, name),
-        sortPosition:sort_position
-    ),
+    capabilities,
     education(*),
     work_experiences(*),
     projects(
         id,
         name,
         description,
-        capabilities:project_capabilities(
-        capability:capabilities(name)
-        ),
         project_url
     ),
     endorsements(
@@ -33,13 +27,13 @@ const TALENT_SELECT = `
 `;
 
 export async function getTalentBySlug(slug: string) {
-  const supabase = await createClient();
+    const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from('talents')
-    .select(TALENT_SELECT)
-    .eq('slug', slug)
-    .single();
+    const { data, error } = await supabase
+        .from('talents')
+        .select(TALENT_SELECT)
+        .eq('slug', slug)
+        .single();
 
-  return { data, error };
+    return { data, error };
 }

@@ -1,10 +1,5 @@
 import { Education } from "../lib/definitions";
 
-export interface Capability {
-  id: string;
-  name: string;
-}
-
 export interface NamedEntity {
   name: string;
 }
@@ -20,22 +15,11 @@ export interface Talent {
   slug: string;
   profile_image_url: string | null;
   role: string | null
-
   location: string | null;
   cohort: NamedEntity | null;
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
-
-  capabilities: Capability[];
-}
-
-export interface TalentCapability {
-  capability: Capability;
-  sortPosition: number
-}
-
-export interface ProjectCapability {
-  capability: Pick<Capability, "name">;
+  capabilities: string[];
 }
 
 export interface WorkExperience {
@@ -50,7 +34,6 @@ export interface Project {
   id: string;
   name: string;
   description: string | null;
-  capabilities: ProjectCapability[];
   project_url: string
 };
 
@@ -81,7 +64,7 @@ export interface TalentProfileInterface {
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
 
-  capabilities: TalentCapability[];
+  capabilities: string[];
   education: Education[];
   work_experiences: WorkExperience[];
   projects: Project[];
@@ -99,5 +82,5 @@ export interface ConfirmedTalentSchema {
   cohort: { name: string } | null;
   program: { name: string } | null;
   talent_status: { name: string } | null;
-  capabilities: Array<{ capability: { id: string; name: string } }>;
+  capabilities: string[];
 }
