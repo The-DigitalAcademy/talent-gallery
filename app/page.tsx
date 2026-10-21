@@ -42,19 +42,21 @@ export default async function LandingPage() {
     { data: statuses },
   ] = await Promise.all([
     supabase.from("talents").select("location"),
-    supabase.from("roles").select("id, name"),
-    supabase.from("capabilities").select("name"),
+    supabase.from("talents").select("role"),
+    supabase.from("talents").select("capabilities"),
     supabase.from("talent_statuses").select("id, name"),
   ]);
 
   const uniqueLocations = [...new Set(locations?.map(i => i.location))]
+  const uniqueRoles = [...new Set(roles?.map(i => i.role))]
+  const uniqueCapabilities = [...new Set(capabilities?.map(i => i.capabilities).flat(Infinity))]
 
   return (
     <>
       <HeroSection
-        locations={uniqueLocations || []}
-        roles={roles || []}
-        capabilities={capabilities?.map(i => i.name) || []}
+        locations={uniqueLocations}
+        roles={uniqueRoles}
+        capabilities={uniqueCapabilities}
         statuses={statuses || []}
       />
       <HowItWorks />

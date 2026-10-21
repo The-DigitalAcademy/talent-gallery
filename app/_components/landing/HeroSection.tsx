@@ -12,7 +12,7 @@ interface LookupItem {
 
 interface HeroSectionProps {
   locations?: string[];
-  roles?: LookupItem[];
+  roles?: string[];
   capabilities?: string[];
   statuses?: LookupItem[];
 }
@@ -146,9 +146,9 @@ export default function HeroSection({
                     }`}
                 >
                   <option value="">Select a role</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.name} className="text-black">
-                      {role.name}
+                  {roles.map((role, index) => (
+                    <option key={`${role}-${index}`} value={role} className="text-black">
+                      {role}
                     </option>
                   ))}
                 </select>
