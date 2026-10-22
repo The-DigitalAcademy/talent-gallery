@@ -1,9 +1,8 @@
 import { createClient } from "@/app/lib/supabase/server";
-import CollectionTable from "@/components/admin/collection-table";
-import { columns } from "./columns";
 import CollectionHeader from "@/components/admin/collection-header";
 import CollectionSearch from "@/components/admin/collection-search";
-import { CreateFormDialog } from "./forms";
+import CapabilityPill from "./_components/capability-pill";
+import CapabilityInput from "./_components/capability-input";
 
 type PageProps = {
     searchParams?: Promise<{
@@ -20,12 +19,14 @@ export default async function Page(props: PageProps) {
         <>
             <div className="flex justify-between items-start">
                 <CollectionHeader title="Capabilities" totalEntries={data?.length || 0} />
-                <CreateFormDialog />
             </div>
-            <div className="flex gap-5">
-                <CollectionSearch title="Name" keyName="name" />
+            <div className="flex mb-5">
+                <CollectionSearch title="Capabilities" keyName="name" />
             </div>
-            <CollectionTable data={data || []} columns={columns} />
+            <div className="flex gap-x-4 gap-y-3 flex-wrap mb-5">
+                <CapabilityInput />
+                {data?.map(cap => <CapabilityPill id={cap.id} label={cap.name} />)}
+            </div>
         </>
     )
 }
