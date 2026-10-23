@@ -48,12 +48,16 @@ export default async function TalentSection({searchParams, cohort = undefined, b
   ] = await Promise.all([
     getFilteredTalents(filters),
     supabase.from("cohorts").select("id, name"),
-    supabase.from("locations").select("id, city"),
+    supabase.from("talents").select("location"),
     supabase.from("programs").select("id, name"),
     supabase.from("talent_statuses").select("id, name"),
-    supabase.from("capabilities").select("id, name"),
-    supabase.from("roles").select("id, name")
+    supabase.from("talents").select("capabilities"),
+    supabase.from("talents").select("role")
   ]);
+
+  const uniqueLocations = [...new Set(locations?.map(i => i.location))]
+  const uniqueRoles = [...new Set(roles?.map(i => i.role))]
+  const uniqueCapabilities = [...new Set(capabilities?.map(i => i.capabilities).flat(Infinity))]
 
   // 💡 Safely pull data and count keys out of your response
   const talents = (talentResult?.data as unknown as ConfirmedTalentSchema[]) || [];
@@ -90,12 +94,12 @@ export default async function TalentSection({searchParams, cohort = undefined, b
                 }
                 <div className="bg-white p-5 rounded-[3px]">
                     <FilterControls
-                        roles={roles || []}
-                        locations={locations || []}
+                        roles={uniqueRoles}
+                        locations={uniqueLocations}
                         programs={programs || []}
                         cohorts={cohorts || []}
                         statuses={statuses || []}
-                        capabilities={capabilities || []}
+                        capabilities={uniqueCapabilities}
                     />
                 </div>
 

@@ -1,22 +1,11 @@
 import { Education } from "../lib/definitions";
 
-export interface Capability {
-  id: string;
-  name: string;
-}
-
-export interface Location {
-  city: string;
-  country: string;
-}
-
 export interface NamedEntity {
   name: string;
 }
 export interface Role {
   id: string;
   name: string;
-  description: string;
 }
 
 export interface Talent {
@@ -25,23 +14,12 @@ export interface Talent {
   bio: string | null;
   slug: string;
   profile_image_url: string | null;
-  role: Role | null
-
-  location: Location | null;
+  role: string | null
+  location: string | null;
   cohort: NamedEntity | null;
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
-
-  capabilities: Capability[];
-}
-
-export interface TalentCapability {
-  capability: Capability;
-  sortPosition: number
-}
-
-export interface ProjectCapability {
-  capability: Pick<Capability, "name">;
+  capabilities: string[];
 }
 
 export interface WorkExperience {
@@ -56,7 +34,6 @@ export interface Project {
   id: string;
   name: string;
   description: string | null;
-  capabilities: ProjectCapability[];
   project_url: string
 };
 
@@ -64,10 +41,6 @@ export interface Endorsement {
   id: string;
   endorser_name: string;
   message: string;
-};
-
-export interface Role {
-  name: string;
 };
 
 export interface TalentProfileInterface {
@@ -83,22 +56,20 @@ export interface TalentProfileInterface {
   is_published: boolean;
   created_at: string;
   capabilities_summary: string;
-  location_id: string;
+  location: string | null;
   program_id: string;
   cohort_id: string;
   talent_status_id: string;
-
-  location: Location | null;
   cohort: NamedEntity | null;
   program: NamedEntity | null;
   talent_status: NamedEntity | null;
 
-  capabilities: TalentCapability[];
+  capabilities: string[];
   education: Education[];
   work_experiences: WorkExperience[];
   projects: Project[];
   endorsements: Endorsement[];
-  role: Role;
+  role?: string | null;
 };
 
 export interface ConfirmedTalentSchema {
@@ -107,9 +78,9 @@ export interface ConfirmedTalentSchema {
   bio: string | null;
   profile_image_url: string | null;
   slug: string;
-  location: { city: string; country: string } | null;
+  location: string | null;
   cohort: { name: string } | null;
   program: { name: string } | null;
   talent_status: { name: string } | null;
-  capabilities: Array<{ capability: { id: string; name: string } }>;
+  capabilities: string[];
 }

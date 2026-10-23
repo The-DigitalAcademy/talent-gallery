@@ -17,7 +17,7 @@ const Schema = z.object({
         .min(2, { message: 'bio must be at least 2 characters long.' })
         .max(2000, { message: 'Name cannot exceed 2000 characters.' }).or(z.literal("")).nullable().optional(),
     profileImageUrl: z.url("Invalid URL").nullable().optional(),
-    roleId: z.uuid({ error: "required" }).nullable().optional()
+    role: z.string().trim().min(2).nullable().optional()
 });
 const CreateSchema = z.object({
     fullname: z
@@ -31,14 +31,14 @@ const CreateSchema = z.object({
         .min(2, { message: 'bio must be at least 2 characters long.' })
         .max(2000, { message: 'Name cannot exceed 2000 characters.' }).or(z.literal("")).nullable().optional(),
     profileImageUrl: z.url("Invalid URL").nullable().optional(),
-    roleId: z.uuid({ error: "required" }).nullable().optional()
+    role: z.string().trim().min(2).nullable().optional()
 });
 
 interface DbPayload {
     fullname?: string | null,
     bio?: string | null,
     profile_image_url?: string | null,
-    role_id?: string | null
+    role?: string | null
 }
 
 type SchemaType = z.infer<typeof Schema>
@@ -62,7 +62,7 @@ export async function upsertBasicInfo(talentId: string | null, data: SchemaType)
         fullname: "fullname",
         bio: "bio",
         profileImageUrl: "profile_image_url",
-        roleId: "role_id",
+        role: "role",
     }
 
     // Only assign if the value exists in validatedFields.data
@@ -77,7 +77,7 @@ export async function upsertBasicInfo(talentId: string | null, data: SchemaType)
         let newItemId
         try {
             const supabase = await createClient()
-            const { error, data } = await supabase.from("talents").insert(payload).select("id, fullname, bio, profileImageUrl:profile_image_url, roleId:role_id").single()
+            const { error, data } = await supabase.from("talents").insert(payload).select("id, fullname, bio, profileImageUrl:profile_image_url, role").single()
             if (error) throw error
             newItemId = data.id;
         } catch (error) {
@@ -94,7 +94,7 @@ export async function upsertBasicInfo(talentId: string | null, data: SchemaType)
         try {
             const supabase = await createClient()
             const { error, data: updatedData } = await supabase.from("talents").update(payload)
-                .eq('id', talentId).select("fullname, bio, profileImageUrl:profile_image_url, roleId:role_id").single()
+                .eq('id', talentId).select("fullname, bio, profileImageUrl:profile_image_url, role").single()
             if (error) throw error
 
             return {

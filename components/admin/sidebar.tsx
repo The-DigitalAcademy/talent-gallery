@@ -21,10 +21,6 @@ const mainNav = [
         href: "/admin/collections/cohorts"
     },
     {
-        name: "Locations",
-        href: "/admin/collections/locations"
-    },
-    {
         name: "Capabilities",
         href: "/admin/collections/capabilities"
     },

@@ -4,22 +4,16 @@ import { createClient } from '../supabase/server';
 
 const TALENT_PORTFOLIO_SELECT = `
     *,
-    location:locations(city, country),
+    location,
     cohort:cohorts(name),
     program:programs(name),
     talent_status:talent_statuses(name),
-    capabilities:talent_capabilities(
-        capability:capabilities(id, name),
-        sortPosition:sort_position
-    ),
+    capabilities,
     work_experiences(*),
     projects(
         id,
         name,
         description,
-        capabilities:project_capabilities(
-            capability:capabilities(name)
-        ),
         project_url
     ),
     endorsements(
@@ -27,7 +21,7 @@ const TALENT_PORTFOLIO_SELECT = `
         endorser_name,
         message
     ),
-    role:roles(name),
+    role,
     isPublished:is_published
 `;
 

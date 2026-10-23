@@ -3,21 +3,16 @@
 import { Talent } from '@/app/interface-types/talent';
 import Link from 'next/link';
 import { MapPinIcon, Maximize2Icon, PlusIcon } from 'lucide-react';
-import { Avatar, Button } from '@base-ui/react';
+import { Avatar } from '@base-ui/react';
 import { Lexend } from 'next/font/google';
 import clsx from 'clsx';
 import { useShortlistStore } from '@/app/store/useShortlistStore';
 import { useShortlistHydrated } from '@/app/store/useHasHydrated';
 import { toast } from 'sonner';
 import ShortlistTag from './ShortlistTag';
-import { TalentWithCapabilities } from '@/app/talent/actions';
 
 
 const lexend = Lexend({ subsets: ["latin"] })
-
-interface TalentCardProps {
-  talent: TalentWithCapabilities
-}
 
 const getStatusColorClassName = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
@@ -29,7 +24,7 @@ const getStatusColorClassName = (status: string | undefined) => {
   }
 };
 
-export default function TalentCard({ talent }: TalentCardProps) {
+export default function TalentCard({ talent }: { talent: Talent }) {
   const talentStatus = talent.talent_status?.name;
   const bgColorClass = getStatusColorClassName(talentStatus?.toLowerCase())
   const fullNames = talent?.fullname.split(" ")
@@ -94,22 +89,22 @@ export default function TalentCard({ talent }: TalentCardProps) {
                 <span className='font-bold'>{fullNames[0]}</span>
                 <span className='font-light'> {fullNames.length > 1 ? fullNames[fullNames.length - 1].charAt(0) + "." : ""}</span>
               </h3>
-              <p className="text-sm mb-0.5"> {talent.role?.name} </p>
+              <p className="text-sm mb-0.5"> {talent.role} </p>
               <div className="text-xs text-gray-400 flex items-center gap-1">
                 {talent.location && <MapPinIcon className='opacity-70 size-3' />}
-                {talent.location?.city}, {talent.location?.country}
+                {talent.location}
               </div>
             </div>
           </header >
 
           <ul className="flex justify-start items-start text-sm flex-wrap gap-1.5 md:min-h-[50px] max-h-[50px] overflow-hidden">
-            {talent.talentCapabilities?.toSorted((a, b) => (a.sortPosition) - (b.sortPosition))?.map((capability, index) => {
+            {talent.capabilities?.map((capability, index) => {
               return (
                 <li
-                  key={`${index}-${capability.capability.id}`}
+                  key={`${index}-${capability}`}
                   className="bg-neutral-200/50 px-1 inline-block whitespace-nowrap"
                 >
-                  {capability.capability.name}
+                  {capability}
                 </li>
               );
             })}

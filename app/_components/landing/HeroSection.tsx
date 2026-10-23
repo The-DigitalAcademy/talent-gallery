@@ -8,13 +8,12 @@ import Image from "next/image";
 interface LookupItem {
   id: string | number;
   name?: string;
-  city?: string;
 }
 
 interface HeroSectionProps {
-  locations?: LookupItem[];
-  roles?: LookupItem[];
-  capabilities?: LookupItem[];
+  locations?: string[];
+  roles?: string[];
+  capabilities?: string[];
   statuses?: LookupItem[];
 }
 
@@ -147,9 +146,9 @@ export default function HeroSection({
                     }`}
                 >
                   <option value="">Select a role</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.name} className="text-black">
-                      {role.name}
+                  {roles.map((role, index) => (
+                    <option key={`${role}-${index}`} value={role} className="text-black">
+                      {role}
                     </option>
                   ))}
                 </select>
@@ -169,8 +168,8 @@ export default function HeroSection({
                 >
                   <option value="">Select a location</option>
                   {locations.map((loc) => (
-                    <option key={loc.id} value={loc.city} className="text-black">
-                      {loc.city}
+                    <option key={loc} value={loc} className="text-black">
+                      {loc}
                     </option>
                   ))}
                 </select>
@@ -190,8 +189,8 @@ export default function HeroSection({
                 >
                   <option value="">Select skills</option>
                   {capabilities.map((cap) => (
-                    <option key={cap.id} value={cap.name} className="text-black">
-                      {cap.name}
+                    <option key={cap} value={cap} className="text-black">
+                      {cap}
                     </option>
                   ))}
                 </select>
