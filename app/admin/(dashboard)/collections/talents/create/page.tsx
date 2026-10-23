@@ -6,7 +6,7 @@ import { createClient } from "@/app/lib/supabase/server";
 
 export default async function Page() {
     const supabase = await createClient();
-    const { data: roles, error: rolesError } = await supabase.from("roles").select("id, name")
+    const { data: roles, error: rolesError } = await supabase.from("roles").select("name")
     return (
         <div>
             <div className="mb-5">
@@ -16,7 +16,7 @@ export default async function Page() {
                 <h1 className="text-2xl font-bold mb">Create a new Talent</h1>
             </div>
             <div className="flex w-full flex-col gap-5">
-                <BasicInfoForm roles={roles || []} />
+                <BasicInfoForm roles={roles?.map(i => i.name) || []} />
                 <EnrolmentFormPlaceholder />
                 <ProfileLinksFormPlaceholder />
                 <CapabilitiesFormPlaceholder />

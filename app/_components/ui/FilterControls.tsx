@@ -5,16 +5,15 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 interface LookupItem {
   id: string | number;
   name?: string;
-  city?: string;
 }
 
 interface FilterControlsProps {
-  locations: LookupItem[];
+  locations: string[];
   programs: LookupItem[];
   cohorts: LookupItem[];
   statuses: LookupItem[];
-  capabilities: LookupItem[];
-  roles: LookupItem[];
+  capabilities: string[];
+  roles: string[];
 }
 
 export default function FilterControls({
@@ -26,9 +25,9 @@ export default function FilterControls({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-4">
-      <FilterItem label="Role" keyName="role" options={roles.map(({ id, name }) => ({ id, value: name }))} />
-      <FilterItem keyName="location" options={locations.map(({ id, city }) => ({ id, value: city }))} />
-      <FilterItem label="Skills" keyName="capability" options={capabilities.map(({ id, name }) => ({ id, value: name }))} />
+      <FilterItem label="Role" keyName="role" options={roles.map(role => ({ id: role, value: role }))} />
+      <FilterItem keyName="location" options={locations.map(i => ({ id: i, value: i }))} />
+      <FilterItem label="Skills" keyName="capability" options={capabilities.map(cap => ({ id: cap, value: cap }))} />
       <FilterItem label="Availablity" keyName="status" options={statuses.map(({ id, name }) => ({ id, value: name }))} />
     </div>
   );

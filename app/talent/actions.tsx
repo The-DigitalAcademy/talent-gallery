@@ -23,11 +23,6 @@ export async function getFilteredTalents(filters: FilterParams) {
 
   const supabase = await createClient();
 
-  // 💡 THE JSON FIX: Filter the embedded collection array down to just the requested tag if active
-  const capabilitySelectFilter = filters.capability
-    ? `(capability:capabilities!inner(id, name))`
-    : `(capability:capabilities(id, name))`;
-
   // 💡 THE INFINITE PAGINATION FIX: Added { count: 'exact' } options block here
   let query = supabase.from("talents").select(`
     id,
@@ -35,14 +30,12 @@ export async function getFilteredTalents(filters: FilterParams) {
     bio,
     slug,
     profile_image_url,
-    role:roles${filters.role ? '!inner' : ''} (name),
-    location:locations${filters.location ? '!inner' : ''}(city, country),
+    role,
+    location,
     cohort:cohorts${filters.cohort ? '!inner' : ''}(name),
     program:programs${filters.programme ? '!inner' : ''}(name),
     talent_status:talent_statuses${filters.status ? '!inner' : ''}(name),
-    ${filters.capability ? 'capability_filter:capabilities!inner(name),' : ''}
-    capabilities(name),
-    talentCapabilities:talent_capabilities(capability:capabilities(id, name), sortPosition:sort_position),
+    capabilities,
     work_experiences(id, role, company, duration, description),
     projects:talent_projects(
       project:projects(id, name, description)
@@ -57,16 +50,16 @@ export async function getFilteredTalents(filters: FilterParams) {
     query = query.ilike("cohorts.name", filters.cohort);
   }
   if (filters.role) {
-    query = query.ilike("roles.name", filters.role);
+    query = query.ilike("role", filters.role);
   }
   if (filters.programme) {
     query = query.ilike("programs.name", filters.programme);
   }
   if (filters.location) {
-    query = query.ilike("locations.city", filters.location);
+    query = query.ilike("location", filters.location);
   }
   if (filters.capability) {
-    query = query.ilike("capability_filter.name", filters.capability);
+    query = query.contains("capabilities", [filters.capability]);
   }
   if (filters.status) {
     query = query.ilike("talent_statuses.name", filters.status);
@@ -84,9 +77,7 @@ export async function getFilteredTalents(filters: FilterParams) {
 
   // Return both data and count so your frontend knows when to stop paginating
   return {
-    data: (data ?? []) as unknown as TalentWithCapabilities[],
+    data: (data ?? []) as unknown as Talent[],
     count: count ?? 0,
   };
 }
-
-export type TalentWithCapabilities = Talent & { talentCapabilities: { capability: { id: string, name: string }, sortPosition: number }[] }

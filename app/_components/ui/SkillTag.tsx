@@ -1,17 +1,12 @@
 import { cn } from "../../lib/utils";
 
-interface SkillTagProps {
-  label: string;
-  bgColor?: string;
-}
-
-export function SkillTag({ label, bgColor = "bg-white" }: SkillTagProps) {
+export function SkillTag({ label }: { label: string }) {
   return (
     <span
       className={cn(
         "inline-flex items-center px-3 py-1 text-sm sm:text-base",
-        "rounded-[3px] text-gray-700", 
-        bgColor
+        "rounded-[3px] text-gray-700",
+        "bg-gray-100"
       )}
     >
       {label}

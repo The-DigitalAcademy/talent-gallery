@@ -1,5 +1,5 @@
 "use client"
-import { Cohort, Location, Program, TalentStatus } from "@/app/lib/definitions"
+import { Cohort, Program, TalentStatus } from "@/app/lib/definitions"
 import FormSelect from "@/components/admin/form-select"
 import { Button, Field, Form } from "@base-ui/react"
 import { upsertEnrolmentInfo } from "../_actions/enrolment-action";
@@ -7,11 +7,12 @@ import { CheckIcon } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { cn } from "@/app/lib/utils";
 import { useEffect, useState } from "react";
+import { FormCombobox } from "@/components/admin/form-combobox";
+import { toast } from "sonner";
 
 type Props = {
     data: {
         cohorts: Cohort[],
-        locations: Location[],
         programs: Program[],
         statuses: TalentStatus[]
     },
@@ -29,6 +30,20 @@ type FormValues = {
 export default function EnrolmentForm({ values, data, talentId }: Props) {
     const [showCheck, setShowCheck] = useState(false)
     const { handleSubmit, reset, setValue, setError, formState: { defaultValues, isDirty, dirtyFields, errors, isSubmitting } } = useForm<FormValues>({ defaultValues: values })
+    const [locations, setLocations] = useState<string[]>([])
+
+    useEffect(() => {
+        // load locations -> 'city, Country'
+        fetch("https://countriesnow.space/api/v0.1/countries/cities",
+            {
+                method: "POST",
+                body: JSON.stringify({ country: "south africa" }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(res => res.json())
+            .then(res => setLocations(res?.data?.map((i: string) => `${i}, South Africa`)))
+            .catch(err => toast.error("Could'nt load location options", { description: err.message }))
+    }, [])
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         // get changed values only
@@ -77,12 +92,11 @@ export default function EnrolmentForm({ values, data, talentId }: Props) {
                         <Field.Label className="text-xs text-gray-700" >
                             Location
                         </Field.Label>
-                        < FormSelect
-                            onValueChange={(val) => setValue("location", val === "" ? null : val, { shouldDirty: true })}
-                            defaultValue={defaultValues?.location}
-                            placeholder="Select location"
-                            options={data.locations?.map(i => ({ label: `${i.city}, ${i.country}`, value: i.id })) || []
-                            } />
+                        <FormCombobox
+                            onValueChange={(val) => setValue("location", val, { shouldDirty: true })}
+                            value={values?.location}
+                            placeholder="Select locations"
+                            options={locations?.map(i => ({ label: i, value: i })) || []} />
                         <div className="text-xs text-red-700">{errors.location?.message}</div>
                     </Field.Root>
                     < Field.Root name="program" className={cn("flex flex-col items-start gap-2 w-full", { "[&>button]:bg-yellow-50": dirtyFields.program })} >

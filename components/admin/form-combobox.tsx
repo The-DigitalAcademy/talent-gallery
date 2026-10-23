@@ -17,6 +17,7 @@ type FormComboboxProps = {
   options: Option[];
   value?: string | null;
   onValueChange: (value: string | null) => void;
+  clearInputOnValueChange?: boolean
   placeholder?: string;
   disabled?: boolean;
 };
@@ -29,6 +30,7 @@ export function FormCombobox({
   onValueChange,
   placeholder = "Select...",
   disabled = false,
+  clearInputOnValueChange = false
 }: FormComboboxProps) {
   const [portalContainer, setPortalContainer] =
     React.useState<HTMLDivElement | null>(null);
@@ -126,7 +128,7 @@ export function FormCombobox({
           }
 
           onValueChange(newValue.label);
-          setInputValue(newValue.label);
+          clearInputOnValueChange ? setInputValue("") : setInputValue(newValue.label);
         }}
         isItemEqualToValue={(item, selected) =>
           item.value === selected.value

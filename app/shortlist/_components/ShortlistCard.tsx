@@ -76,13 +76,13 @@ export default function ShortlistCard({ talent, onRemove }: ShortlistCardProps) 
             )}
           </h3>
           <p className="text-xs sm:text-sm md:text-base text-gray-600 font-medium truncate mt-0.5 sm:mt-1">
-            {talent.role?.name}
+            {talent.role}
           </p>
           {talent.location && (
             <p className="text-[11px] sm:text-xs md:text-sm text-black flex items-center gap-1 mt-1 sm:mt-1.5 truncate">
               <MapPinIcon size={12} className="shrink-0 text-gray-400" />
               <span>
-                {talent.location.city}, {talent.location.country}
+                {talent.location}
               </span>
             </p>
           )}
