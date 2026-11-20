@@ -5,11 +5,13 @@ import clsx from "clsx";
 import {
   AlertTriangle,
   Briefcase,
+  Camera,
   CheckCircle2,
   ChevronDown,
   ChevronRight,
   ChevronUp,
   Code2,
+  FileText,
   GraduationCap,
   Headphones,
   Info,
@@ -451,10 +453,16 @@ export default function CandidateDashboard() {
                 id="profile-picture"
                 className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#1E3A5F] p-5 shadow-2xs scroll-mt-6"
               >
-                <h3 className="text-xs font-bold text-[#02183B]">
-                  Profile Image
-                </h3>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <div className="flex items-center gap-2">
+                  <span className="size-6 rounded-md bg-[#F4F6F9] flex items-center justify-center text-[#02183B]">
+                    <Camera className="size-3.5" />
+                  </span>
+                  <h3 className="text-xs font-bold text-[#02183B]">
+                    Profile Image
+                  </h3>
+                  <Info className="size-3.5 text-slate-400" />
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1.5">
                   Upload a profile image to personalize your profile.
                 </p>
 
@@ -539,7 +547,7 @@ export default function CandidateDashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="size-6 rounded-md bg-[#F4F6F9] flex items-center justify-center text-[#02183B]">
-                      <Briefcase className="size-3.5" />
+                      <FileText className="size-3.5" />
                     </span>
                     <h3 className="text-xs font-bold text-[#02183B]">Bio</h3>
                     <Info className="size-3.5 text-slate-400" />
@@ -720,7 +728,10 @@ export default function CandidateDashboard() {
                 className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#C8102E] p-5 shadow-2xs scroll-mt-6"
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-[#02183B]">
+                  <span className="size-6 rounded-md bg-[#FDE8E8] flex items-center justify-center text-[#C8102E]">
+                    <Briefcase className="size-3.5" />
+                  </span>
+                  <h3 className="text-xs font-bold text-[#02183B]">
                     Professional Experience
                   </h3>
                   <Info className="size-3.5 text-slate-400" />
