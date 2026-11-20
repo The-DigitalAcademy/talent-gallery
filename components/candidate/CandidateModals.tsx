@@ -119,17 +119,35 @@ function ModalOverlay({
 /* 1. Edit Profile Image Modal */
 export function EditProfileImageModal({
   currentFileName,
+  currentPreviewUrl,
   onSave,
   onClose,
 }: {
   currentFileName: string;
-  onSave: (fileName: string) => void;
+  currentPreviewUrl?: string | null;
+  onSave: (fileName: string, previewUrl: string | null) => void;
   onClose: () => void;
 }) {
   const [pickedFile, setPickedFile] = useState<string>(
     currentFileName !== "No file chosen" ? currentFileName : ""
   );
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    currentPreviewUrl ?? null
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPickedFile(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setPreviewUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[500px]">
@@ -157,26 +175,36 @@ export function EditProfileImageModal({
           Profile image
         </div>
 
-        <div className="bg-[#F4F5F8] border border-dashed border-slate-300 rounded-lg py-7 px-6 flex flex-col items-center justify-center text-center">
-          <p className="text-xs text-slate-600 mb-3.5">
-            Upload a profile image to personalize your profile.
-          </p>
+        <div className="bg-[#F4F5F8] border border-dashed border-slate-300 rounded-lg py-6 px-6 flex flex-col items-center justify-center text-center">
+          {previewUrl ? (
+            <div className="mb-3.5 flex flex-col items-center">
+              <div className="size-24 rounded-full overflow-hidden border-2 border-[#02183B]/15 shadow-sm bg-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={previewUrl}
+                  alt="Profile preview"
+                  className="size-full object-cover"
+                />
+              </div>
+            </div>
+          ) : (
+            <p className="text-xs text-slate-600 mb-3.5">
+              Upload a profile image to personalize your profile.
+            </p>
+          )}
           <input
             ref={inputRef}
             type="file"
             accept="image/jpeg,image/png"
             className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setPickedFile(file.name);
-            }}
+            onChange={handleFileChange}
           />
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
             className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-semibold px-4 py-2.5 rounded-md transition cursor-pointer"
           >
-            Choose image
+            {previewUrl ? "Change image" : "Choose image"}
           </button>
           <div className="text-[11px] text-slate-500 mt-2.5">
             {pickedFile || "No file chosen"}
@@ -203,7 +231,7 @@ export function EditProfileImageModal({
         <button
           type="button"
           onClick={() => {
-            if (pickedFile) onSave(pickedFile);
+            if (pickedFile) onSave(pickedFile, previewUrl);
             onClose();
           }}
           className={clsx(

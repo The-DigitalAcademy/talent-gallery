@@ -126,6 +126,9 @@ export default function CandidateDashboard() {
   // Editable Profile Module states
   const [selectedFileName, setSelectedFileName] =
     useState<string>("No file chosen");
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
+    null
+  );
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [bioText, setBioText] = useState<string>(
     "Transforms messy survey and trade data into reliable financial health predictions for SMEs. Data practitioner with an engineering core specializing in building exploratory data pipelines, automated credit scoring heuristics, and deploying interpretable ML models."
@@ -449,6 +452,16 @@ export default function CandidateDashboard() {
                 </p>
 
                 <div className="mt-3 bg-[#F4F6F9] rounded-md p-1.5 flex items-center gap-3">
+                  {profileImagePreview && (
+                    <div className="size-9 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-white">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={profileImagePreview}
+                        alt="Saved profile"
+                        className="size-full object-cover"
+                      />
+                    </div>
+                  )}
                   <button
                     type="button"
                     onClick={() => setActiveModal("profile-image")}
@@ -1089,7 +1102,11 @@ export default function CandidateDashboard() {
       {activeModal === "profile-image" && (
         <EditProfileImageModal
           currentFileName={selectedFileName}
-          onSave={(fileName) => setSelectedFileName(fileName)}
+          currentPreviewUrl={profileImagePreview}
+          onSave={(fileName, previewUrl) => {
+            setSelectedFileName(fileName);
+            setProfileImagePreview(previewUrl);
+          }}
           onClose={() => setActiveModal(null)}
         />
       )}
