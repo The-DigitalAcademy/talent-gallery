@@ -514,7 +514,7 @@ export default function CandidateDashboard() {
             {isSectionVisible("bio") && (
               <section
                 id="bio"
-                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#1E3A5F] p-5 shadow-2xs scroll-mt-6"
+                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-emerald-600 p-5 shadow-2xs scroll-mt-6"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -525,8 +525,8 @@ export default function CandidateDashboard() {
                     <Info className="size-3.5 text-slate-400" />
                   </div>
 
-                  <span className="inline-flex items-center gap-1 bg-[#F4F6F9] text-[#02183B] text-[10px] font-semibold px-2.5 py-1 rounded-full">
-                    <CheckCircle2 className="size-3 text-[#02183B]" />
+                  <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                    <CheckCircle2 className="size-3 text-emerald-600" />
                     <span>Completed</span>
                   </span>
                 </div>
@@ -555,7 +555,7 @@ export default function CandidateDashboard() {
             {isSectionVisible("location") && (
               <section
                 id="location"
-                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#1E3A5F] p-5 shadow-2xs scroll-mt-6"
+                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-emerald-600 p-5 shadow-2xs scroll-mt-6"
               >
                 <div className="flex items-center gap-2">
                   <MapPin className="size-3.5 text-[#02183B]" />
@@ -577,7 +577,7 @@ export default function CandidateDashboard() {
             {isSectionVisible("skills") && (
               <section
                 id="skills"
-                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#1E3A5F] p-5 shadow-2xs scroll-mt-6"
+                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-emerald-600 p-5 shadow-2xs scroll-mt-6"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -590,8 +590,8 @@ export default function CandidateDashboard() {
                     <Info className="size-3.5 text-slate-400" />
                   </div>
 
-                  <span className="inline-flex items-center gap-1 bg-[#F4F6F9] text-[#02183B] text-[10px] font-semibold px-2.5 py-1 rounded-full">
-                    <CheckCircle2 className="size-3 text-[#02183B]" />
+                  <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                    <CheckCircle2 className="size-3 text-emerald-600" />
                     <span>Completed</span>
                   </span>
                 </div>
@@ -862,7 +862,7 @@ export default function CandidateDashboard() {
             {isSectionVisible("education") && (
               <section
                 id="education"
-                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-[#1E3A5F] p-5 shadow-2xs scroll-mt-6"
+                className="bg-white rounded-lg border border-slate-200/80 border-t-[3px] border-t-emerald-600 p-5 shadow-2xs scroll-mt-6"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -875,8 +875,8 @@ export default function CandidateDashboard() {
                     <Info className="size-3.5 text-slate-400" />
                   </div>
 
-                  <span className="inline-flex items-center gap-1 bg-[#F4F6F9] text-[#02183B] text-[10px] font-semibold px-2.5 py-1 rounded-full">
-                    <CheckCircle2 className="size-3 text-[#02183B]" />
+                  <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                    <CheckCircle2 className="size-3 text-emerald-600" />
                     <span>Completed</span>
                   </span>
                 </div>

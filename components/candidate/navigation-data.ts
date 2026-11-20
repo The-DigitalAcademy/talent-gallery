@@ -1,4 +1,4 @@
-export type SectionStatus = "alert" | "locked" | "pending" | "revision";
+export type SectionStatus = "alert" | "approved" | "locked" | "pending" | "revision";
 
 export type FilterCategory =
   | "all"
@@ -29,19 +29,19 @@ export const CANDIDATE_PROFILE_SECTIONS: CandidateSectionNav[] = [
   {
     id: "bio",
     label: "Bio",
-    status: "alert",
+    status: "approved",
     category: "approved_locked",
   },
   {
     id: "location",
     label: "Location",
-    status: "locked",
+    status: "approved",
     category: "approved_locked",
   },
   {
     id: "skills",
     label: "Skills",
-    status: "locked",
+    status: "approved",
     category: "approved_locked",
   },
   {
@@ -65,7 +65,7 @@ export const CANDIDATE_PROFILE_SECTIONS: CandidateSectionNav[] = [
   {
     id: "education",
     label: "Education",
-    status: "revision",
+    status: "approved",
     category: "approved_locked",
   },
   {

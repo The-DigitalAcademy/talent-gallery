@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import {
   AlertCircle,
+  CheckCircle2,
   Hourglass,
   LayoutGrid,
   Lock,
@@ -31,6 +32,8 @@ function StatusIcon({ status }: { status: SectionStatus }) {
   switch (status) {
     case "alert":
       return <AlertCircle className="size-3.5 text-[#D91B24] shrink-0" />;
+    case "approved":
+      return <CheckCircle2 className="size-3.5 text-emerald-600 shrink-0" />;
     case "locked":
       return <Lock className="size-3.5 text-slate-600 shrink-0" />;
     case "pending":
