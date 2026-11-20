@@ -77,12 +77,10 @@ function ModalOverlay({
   onClose,
   children,
   maxWidth = "max-w-[540px]",
-  showTopAccent = true,
 }: {
   onClose: () => void;
   children: React.ReactNode;
   maxWidth?: string;
-  showTopAccent?: boolean;
 }) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -107,9 +105,6 @@ function ModalOverlay({
           maxWidth
         )}
       >
-        {showTopAccent && (
-          <div className="h-1 w-full bg-linear-to-r from-[#02183B] via-[#1E3A5F] to-[#C8102E] shrink-0" />
-        )}
         <div className="overflow-y-auto flex-1">{children}</div>
       </div>
     </div>
@@ -532,11 +527,7 @@ export function EditSkillsModal({
   };
 
   return (
-    <ModalOverlay
-      onClose={onClose}
-      maxWidth="max-w-[590px]"
-      showTopAccent={false}
-    >
+    <ModalOverlay onClose={onClose} maxWidth="max-w-[590px]">
       <div className="bg-[#F6F5FA] px-5 md:px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="size-9 rounded-lg bg-[#02183B] text-white flex items-center justify-center shrink-0">
