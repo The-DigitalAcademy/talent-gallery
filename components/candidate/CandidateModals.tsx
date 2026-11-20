@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import {
+  AlertTriangle,
   ChevronDown,
   Code2,
   Search,
@@ -30,6 +31,7 @@ export interface ExperienceItem {
   startYear: string;
   endYear: string;
   description: string;
+  feedback?: string;
 }
 
 export interface ProjectItem {
@@ -39,6 +41,7 @@ export interface ProjectItem {
   tools: string;
   url: string;
   variant: "highlight" | "default";
+  feedback?: string;
 }
 
 export interface EducationItem {
@@ -57,6 +60,7 @@ export interface EndorsementItem {
   organisation: string;
   relationship: string;
   statement: string;
+  feedback?: string;
 }
 
 export interface UrlsData {
@@ -768,6 +772,20 @@ export function EditExperienceModal({
       </div>
 
       <div className="p-6 space-y-4">
+        {form.feedback && (
+          <div className="bg-[#FDF2F2] border border-[#F8D7DA] rounded-md px-3.5 py-2.5 flex items-start gap-2.5">
+            <AlertTriangle className="size-4 text-[#C8102E] shrink-0 mt-0.5" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-wider text-[#C8102E]">
+                Reviewer Feedback
+              </div>
+              <p className="text-[11.5px] text-[#9B1C1C] mt-0.5 leading-relaxed">
+                {form.feedback}
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label className="block text-xs font-bold text-slate-900 mb-1.5">
@@ -913,6 +931,20 @@ export function EditProjectModal({
       </div>
 
       <div className="p-6 space-y-4">
+        {form.feedback && (
+          <div className="bg-[#FDF2F2] border border-[#F8D7DA] rounded-md px-3.5 py-2.5 flex items-start gap-2.5">
+            <AlertTriangle className="size-4 text-[#C8102E] shrink-0 mt-0.5" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-wider text-[#C8102E]">
+                Reviewer Feedback
+              </div>
+              <p className="text-[11.5px] text-[#9B1C1C] mt-0.5 leading-relaxed">
+                {form.feedback}
+              </p>
+            </div>
+          </div>
+        )}
+
         <div>
           <label className="block text-xs font-bold text-slate-900 mb-1.5">
             Project name
@@ -1212,6 +1244,20 @@ export function EditEndorsementModal({
       </div>
 
       <div className="p-6 space-y-4">
+        {form.feedback && (
+          <div className="bg-[#FDF2F2] border border-[#F8D7DA] rounded-md px-3.5 py-2.5 flex items-start gap-2.5">
+            <AlertTriangle className="size-4 text-[#C8102E] shrink-0 mt-0.5" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-wider text-[#C8102E]">
+                Reviewer Feedback
+              </div>
+              <p className="text-[11.5px] text-[#9B1C1C] mt-0.5 leading-relaxed">
+                {form.feedback}
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label className="block text-xs font-bold text-slate-900 mb-1.5">
