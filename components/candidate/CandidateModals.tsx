@@ -6,14 +6,15 @@ import {
   AlertTriangle,
   ChevronDown,
   Code2,
+  GripVertical,
   Search,
   SquareUserRound,
+  Trash2,
   X,
 } from "lucide-react";
 
 export type CandidateModalType =
   | "profile-image"
-  | "role"
   | "bio"
   | "location"
   | "skills"
@@ -70,12 +71,21 @@ export interface UrlsData {
   extraUrls: string[];
 }
 
-const ROLE_OPTIONS = [
-  "Full-Stack Engineer",
-  "Junior Data Scientist",
-  "Quantitative Risk Analyst",
-  "Project Manager",
-];
+function isValidHttpUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <p className="text-[11px] font-medium text-[#C8102E] mt-1">{message}</p>
+  );
+}
 
 function ModalOverlay({
   onClose,
@@ -95,7 +105,7 @@ function ModalOverlay({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-[2px] animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-[2px]">
       <div
         className="fixed inset-0"
         onClick={onClose}
@@ -120,11 +130,13 @@ export function EditProfileImageModal({
   currentFileName,
   currentPreviewUrl,
   onSave,
+  onRemove,
   onClose,
 }: {
   currentFileName: string;
   currentPreviewUrl?: string | null;
   onSave: (fileName: string, previewUrl: string | null) => void;
+  onRemove?: () => void;
   onClose: () => void;
 }) {
   const [pickedFile, setPickedFile] = useState<string>(
@@ -133,11 +145,23 @@ export function EditProfileImageModal({
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentPreviewUrl ?? null
   );
+  const [error, setError] = useState<string>("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      setError("Please select a JPG or PNG image.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image size must be 5 MB or less.");
+      return;
+    }
+
+    setError("");
     setPickedFile(file.name);
     const reader = new FileReader();
     reader.onload = () => {
@@ -213,137 +237,64 @@ export function EditProfileImageModal({
           </div>
         </div>
 
+        <FieldError message={error} />
+
         <div className="mt-3.5 bg-[#F4F5F8] rounded-md px-3.5 py-2.5 text-[11px] text-slate-500 leading-relaxed">
           Choose an image to preview it before saving. Your current profile
           remains unchanged until you save.
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (pickedFile) onSave(pickedFile, previewUrl);
-            onClose();
-          }}
-          className={clsx(
-            "text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer",
-            pickedFile
-              ? "bg-[#02183B] hover:bg-[#052659] text-white"
-              : "bg-[#E2E5EC] text-slate-500"
-          )}
-        >
-          Save image
-        </button>
-      </div>
-    </ModalOverlay>
-  );
-}
-
-/* 2. Edit Role Modal */
-export function EditRoleModal({
-  currentRole,
-  onSave,
-  onClose,
-}: {
-  currentRole: string;
-  onSave: (role: string) => void;
-  onClose: () => void;
-}) {
-  const [selected, setSelected] = useState<string>(currentRole);
-
-  return (
-    <ModalOverlay onClose={onClose} maxWidth="max-w-[500px]">
-      <div className="bg-[#F6F5FA] px-6 py-5 border-b border-slate-100 flex items-start justify-between">
+      <div className="border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-2.5">
         <div>
-          <h2 className="text-lg font-extrabold text-[#02183B]">Edit role</h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Choose the role you want hiring partners to consider you for.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="size-7 rounded-md bg-slate-200/70 hover:bg-slate-300/70 flex items-center justify-center text-slate-600 cursor-pointer shrink-0"
-          aria-label="Close modal"
-        >
-          <X className="size-4" />
-        </button>
-      </div>
-
-      <div className="p-6">
-        <label className="block text-xs font-bold text-slate-900 mb-2">
-          Primary role
-        </label>
-
-        <div className="bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 flex items-center justify-between text-xs text-slate-600">
-          <span>{selected || "Select Role"}</span>
-          <ChevronDown className="size-4 text-slate-500" />
-        </div>
-
-        <div className="mt-2.5 border border-slate-200 rounded-lg divide-y divide-slate-100 overflow-hidden bg-white">
-          {ROLE_OPTIONS.map((role) => {
-            const isSelected = selected === role;
-            return (
-              <button
-                key={role}
-                type="button"
-                onClick={() => setSelected(role)}
-                className={clsx(
-                  "w-full text-left px-4 py-2.5 text-xs transition cursor-pointer",
-                  isSelected
-                    ? "bg-[#F1F5F9] font-bold text-[#02183B]"
-                    : "text-[#1E3A5F] hover:bg-slate-50 font-medium"
-                )}
-              >
-                {role}
-              </button>
-            );
-          })}
-        </div>
-
-        <p className="text-[11px] text-slate-500 mt-2.5">
-          Choose one role that best represents the opportunities you are looking
-          for.
-        </p>
-      </div>
-
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (selected) onSave(selected);
-            onClose();
-          }}
-          className={clsx(
-            "text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer",
-            selected
-              ? "bg-[#02183B] hover:bg-[#052659] text-white"
-              : "bg-[#E2E5EC] text-slate-500"
+          {previewUrl && onRemove && (
+            <button
+              type="button"
+              onClick={() => {
+                onRemove();
+                onClose();
+              }}
+              className="text-xs font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Remove photo</span>
+            </button>
           )}
-        >
-          Save role
-        </button>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!pickedFile) {
+                setError("Please choose an image before saving.");
+                return;
+              }
+              onSave(pickedFile, previewUrl);
+              onClose();
+            }}
+            className={clsx(
+              "text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer",
+              pickedFile
+                ? "bg-[#02183B] hover:bg-[#052659] text-white"
+                : "bg-[#E2E5EC] text-slate-500"
+            )}
+          >
+            Save image
+          </button>
+        </div>
       </div>
     </ModalOverlay>
   );
 }
 
-/* 3. Edit Summary / Bio Modal */
+/* 2. Edit Summary / Bio Modal */
 export function EditBioModal({
   currentBio,
   onSave,
@@ -354,6 +305,17 @@ export function EditBioModal({
   onClose: () => void;
 }) {
   const [bio, setBio] = useState<string>(currentBio);
+  const [error, setError] = useState<string>("");
+
+  const handleSave = () => {
+    const trimmed = bio.trim();
+    if (trimmed.length < 20) {
+      setError("Please write at least 20 characters so hiring partners understand your strengths.");
+      return;
+    }
+    onSave(trimmed);
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[540px]">
@@ -383,7 +345,12 @@ export function EditBioModal({
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <label className="text-xs font-bold text-[#02183B]">Bio</label>
-          <span className="text-[11px] font-semibold text-slate-500">
+          <span
+            className={clsx(
+              "text-[11px] font-semibold",
+              bio.trim().length < 20 ? "text-[#C8102E]" : "text-slate-500"
+            )}
+          >
             {bio.length} / 500 characters
           </span>
         </div>
@@ -392,9 +359,14 @@ export function EditBioModal({
           rows={5}
           maxLength={500}
           value={bio}
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => {
+            setBio(e.target.value);
+            if (error) setError("");
+          }}
+          placeholder="Summarize your core strengths, projects, and the impact you bring..."
           className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-lg p-3.5 text-xs text-slate-700 leading-relaxed focus:outline-none focus:ring-1 focus:ring-[#02183B]"
         />
+        <FieldError message={error} />
       </div>
 
       <div className="border-t border-slate-100 px-6 py-4 flex items-center gap-2.5">
@@ -407,10 +379,7 @@ export function EditBioModal({
         </button>
         <button
           type="button"
-          onClick={() => {
-            onSave(bio);
-            onClose();
-          }}
+          onClick={handleSave}
           className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-7 py-2.5 rounded-md transition cursor-pointer"
         >
           Save
@@ -420,7 +389,7 @@ export function EditBioModal({
   );
 }
 
-/* 4. Edit Location Modal */
+/* 3. Edit Location Modal */
 export function EditLocationModal({
   currentLocation,
   onSave,
@@ -431,6 +400,7 @@ export function EditLocationModal({
   onClose: () => void;
 }) {
   const [city, setCity] = useState<string>(currentLocation);
+  const [error, setError] = useState<string>("");
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[500px]">
@@ -460,10 +430,14 @@ export function EditLocationModal({
         <input
           type="text"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder="Enter city or town"
+          onChange={(e) => {
+            setCity(e.target.value);
+            if (error) setError("");
+          }}
+          placeholder="e.g. Johannesburg, South Africa"
           className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
         />
+        <FieldError message={error} />
 
         <div className="mt-3 bg-[#F4F5F8] rounded-md px-3.5 py-2.5 text-[11px] text-slate-500 leading-relaxed">
           Use your current location. This information is shown to companies
@@ -482,7 +456,11 @@ export function EditLocationModal({
         <button
           type="button"
           onClick={() => {
-            onSave(city);
+            if (!city.trim()) {
+              setError("Please enter your city or town.");
+              return;
+            }
+            onSave(city.trim());
             onClose();
           }}
           className={clsx(
@@ -499,7 +477,7 @@ export function EditLocationModal({
   );
 }
 
-/* 5. Edit Technical & Core Skills Modal (Desktop & Mobile responsive) */
+/* 4. Edit Technical & Core Skills Modal (Drag-and-Drop + Add/Remove + Validation) */
 export function EditSkillsModal({
   currentSkills,
   onSave,
@@ -511,23 +489,41 @@ export function EditSkillsModal({
 }) {
   const [skills, setSkills] = useState<string[]>(currentSkills);
   const [newSkill, setNewSkill] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
 
   const handleAddSkill = (e?: React.FormEvent) => {
     e?.preventDefault();
     const trimmed = newSkill.trim();
-    if (!trimmed) return;
-    if (!skills.includes(trimmed)) {
-      const updated = [...skills, trimmed];
-      setSkills(updated);
-      onSave(updated);
+    if (!trimmed) {
+      setError("Enter a skill name before clicking Add Skill.");
+      return;
     }
+    if (skills.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+      setError(`"${trimmed}" is already in your skill list.`);
+      return;
+    }
+    const updated = [...skills, trimmed];
+    setSkills(updated);
+    onSave(updated);
     setNewSkill("");
+    setError("");
   };
 
   const handleRemoveSkill = (skillToRemove: string) => {
     const updated = skills.filter((s) => s !== skillToRemove);
     setSkills(updated);
     onSave(updated);
+  };
+
+  const handleDrop = (targetIndex: number) => {
+    if (dragIndex === null || dragIndex === targetIndex) return;
+    const updated = [...skills];
+    const [moved] = updated.splice(dragIndex, 1);
+    updated.splice(targetIndex, 0, moved);
+    setSkills(updated);
+    onSave(updated);
+    setDragIndex(null);
   };
 
   return (
@@ -553,7 +549,7 @@ export function EditSkillsModal({
       </div>
 
       <div className="p-5 md:p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
           <h3 className="text-xs md:text-sm font-bold text-slate-900">
             Primary Verified Stack &amp; Competencies
           </h3>
@@ -562,36 +558,60 @@ export function EditSkillsModal({
           </span>
         </div>
 
+        <p className="text-[11px] text-slate-500 mb-3">
+          Drag skills to reorder them from most important to least important.
+        </p>
+
         <div className="bg-[#F4F4F8] border border-slate-200/70 rounded-lg p-3.5 flex flex-wrap gap-2 min-h-[84px]">
-          {skills.map((skill) => (
-            <span
-              key={skill}
-              className="bg-white border border-slate-200/80 rounded-md px-3 py-1.5 text-[11px] font-bold text-slate-800 inline-flex items-center gap-2 shadow-2xs"
-            >
-              <span>{skill}</span>
-              <button
-                type="button"
-                onClick={() => handleRemoveSkill(skill)}
-                className="text-slate-400 hover:text-slate-700 cursor-pointer"
-                aria-label={`Remove ${skill}`}
+          {skills.length > 0 ? (
+            skills.map((skill, idx) => (
+              <span
+                key={skill}
+                draggable
+                onDragStart={() => setDragIndex(idx)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => handleDrop(idx)}
+                onDragEnd={() => setDragIndex(null)}
+                className={clsx(
+                  "bg-white border rounded-md px-2.5 py-1.5 text-[11px] font-bold text-slate-800 inline-flex items-center gap-1.5 shadow-2xs cursor-grab active:cursor-grabbing select-none transition",
+                  dragIndex === idx
+                    ? "opacity-50 border-[#02183B]"
+                    : "border-slate-200/80 hover:border-slate-300"
+                )}
               >
-                <X className="size-3" />
-              </button>
-            </span>
-          ))}
+                <GripVertical className="size-3 text-slate-400 shrink-0" />
+                <span>{skill}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSkill(skill)}
+                  className="text-slate-400 hover:text-[#C8102E] cursor-pointer ml-0.5"
+                  aria-label={`Remove ${skill}`}
+                >
+                  <X className="size-3" />
+                </button>
+              </span>
+            ))
+          ) : (
+            <div className="w-full text-center text-xs text-slate-400 py-4">
+              No skills added yet. Add your core technical and soft skills below.
+            </div>
+          )}
         </div>
 
         <form
           onSubmit={handleAddSkill}
-          className="mt-4 flex items-center gap-2.5"
+          className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5"
         >
           <div className="relative flex-1">
             <Search className="size-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={newSkill}
-              onChange={(e) => setNewSkill(e.target.value)}
-              placeholder="Add skill (e.g. PyTorch, Apache Spark, Snowflake)..."
+              onChange={(e) => {
+                setNewSkill(e.target.value);
+                if (error) setError("");
+              }}
+              placeholder="Add skill (e.g. PyTorch, Apache Spark, Communication)..."
               className="w-full bg-white border border-slate-200 rounded-md pl-8 pr-3 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
           </div>
@@ -602,12 +622,13 @@ export function EditSkillsModal({
             + Add Skill
           </button>
         </form>
+        <FieldError message={error} />
       </div>
     </ModalOverlay>
   );
 }
 
-/* 6. Edit Profile URLs Modal */
+/* 5. Edit Profile URLs Modal (with validation + remove extra URL) */
 export function EditUrlsModal({
   currentUrls,
   onSave,
@@ -618,6 +639,37 @@ export function EditUrlsModal({
   onClose: () => void;
 }) {
   const [form, setForm] = useState<UrlsData>(currentUrls);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleSave = () => {
+    const nextErrors: Record<string, string> = {};
+    if (form.github.trim() && !isValidHttpUrl(form.github.trim())) {
+      nextErrors.github = "Enter a valid URL starting with https:// or http://";
+    }
+    if (form.portfolio.trim() && !isValidHttpUrl(form.portfolio.trim())) {
+      nextErrors.portfolio = "Enter a valid URL starting with https:// or http://";
+    }
+    if (form.linkedin.trim() && !isValidHttpUrl(form.linkedin.trim())) {
+      nextErrors.linkedin = "Enter a valid URL starting with https:// or http://";
+    }
+    form.extraUrls.forEach((url, idx) => {
+      if (url.trim() && !isValidHttpUrl(url.trim())) {
+        nextErrors[`extra-${idx}`] =
+          "Enter a valid URL starting with https:// or http://";
+      }
+    });
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    onSave({
+      ...form,
+      extraUrls: form.extraUrls.map((u) => u.trim()).filter(Boolean),
+    });
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[500px]">
@@ -648,10 +700,14 @@ export function EditUrlsModal({
           <input
             type="url"
             value={form.github}
-            onChange={(e) => setForm({ ...form, github: e.target.value })}
-            placeholder="https://github.com/"
+            onChange={(e) => {
+              setForm({ ...form, github: e.target.value });
+              setErrors((prev) => ({ ...prev, github: "" }));
+            }}
+            placeholder="https://github.com/username"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.github} />
           <p className="text-[10.5px] text-slate-400 mt-1">
             Link to your public profile or the repository you want to share.
           </p>
@@ -664,10 +720,14 @@ export function EditUrlsModal({
           <input
             type="url"
             value={form.portfolio}
-            onChange={(e) => setForm({ ...form, portfolio: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, portfolio: e.target.value });
+              setErrors((prev) => ({ ...prev, portfolio: "" }));
+            }}
             placeholder="https://your-portfolio.com"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.portfolio} />
         </div>
 
         <div>
@@ -677,17 +737,36 @@ export function EditUrlsModal({
           <input
             type="url"
             value={form.linkedin}
-            onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, linkedin: e.target.value });
+              setErrors((prev) => ({ ...prev, linkedin: "" }));
+            }}
             placeholder="https://www.linkedin.com/in/your-profile"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.linkedin} />
         </div>
 
         {form.extraUrls.map((extra, idx) => (
           <div key={idx}>
-            <label className="block text-xs font-bold text-slate-900 mb-1.5">
-              Additional URL {idx + 1}
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold text-slate-900">
+                Additional URL {idx + 1}
+              </label>
+              <button
+                type="button"
+                onClick={() =>
+                  setForm({
+                    ...form,
+                    extraUrls: form.extraUrls.filter((_, i) => i !== idx),
+                  })
+                }
+                className="text-[11px] font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+              >
+                <Trash2 className="size-3" />
+                <span>Remove</span>
+              </button>
+            </div>
             <input
               type="url"
               value={extra}
@@ -695,10 +774,12 @@ export function EditUrlsModal({
                 const updated = [...form.extraUrls];
                 updated[idx] = e.target.value;
                 setForm({ ...form, extraUrls: updated });
+                setErrors((prev) => ({ ...prev, [`extra-${idx}`]: "" }));
               }}
               placeholder="https://"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors[`extra-${idx}`]} />
           </div>
         ))}
 
@@ -725,10 +806,7 @@ export function EditUrlsModal({
         </button>
         <button
           type="button"
-          onClick={() => {
-            onSave(form);
-            onClose();
-          }}
+          onClick={handleSave}
           className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
         >
           Save URLs
@@ -738,24 +816,56 @@ export function EditUrlsModal({
   );
 }
 
-/* 7. Edit Professional Experience Modal */
+/* 6. Edit / Add Professional Experience Modal */
 export function EditExperienceModal({
   experience,
+  isNew = false,
   onSave,
+  onDelete,
   onClose,
 }: {
   experience: ExperienceItem;
+  isNew?: boolean;
   onSave: (item: ExperienceItem) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
 }) {
   const [form, setForm] = useState<ExperienceItem>(experience);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleSave = () => {
+    const nextErrors: Record<string, string> = {};
+    if (!form.company.trim()) nextErrors.company = "Company name is required.";
+    if (!form.jobTitle.trim()) nextErrors.jobTitle = "Job title is required.";
+    if (!form.startYear.trim())
+      nextErrors.startYear = "Start year is required.";
+    if (form.description.trim().length < 15) {
+      nextErrors.description =
+        "Please describe your responsibilities and outcomes (min. 15 characters).";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+    onSave({
+      ...form,
+      company: form.company.trim(),
+      jobTitle: form.jobTitle.trim(),
+      startYear: form.startYear.trim(),
+      description: form.description.trim(),
+    });
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[540px]">
       <div className="bg-[#F6F5FA] px-6 py-5 border-b border-slate-100 flex items-start justify-between">
         <div>
           <h2 className="text-lg font-extrabold text-[#02183B]">
-            Edit professional experience
+            {isNew
+              ? "Add professional experience"
+              : "Edit professional experience"}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Show where you worked, what you did, and the impact you made.
@@ -794,10 +904,14 @@ export function EditExperienceModal({
             <input
               type="text"
               value={form.company}
-              onChange={(e) => setForm({ ...form, company: e.target.value })}
+              onChange={(e) => {
+                setForm({ ...form, company: e.target.value });
+                setErrors((p) => ({ ...p, company: "" }));
+              }}
               placeholder="Company name"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.company} />
           </div>
 
           <div>
@@ -807,10 +921,14 @@ export function EditExperienceModal({
             <input
               type="text"
               value={form.jobTitle}
-              onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
+              onChange={(e) => {
+                setForm({ ...form, jobTitle: e.target.value });
+                setErrors((p) => ({ ...p, jobTitle: "" }));
+              }}
               placeholder="Role / title"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.jobTitle} />
           </div>
         </div>
 
@@ -822,10 +940,14 @@ export function EditExperienceModal({
             <input
               type="text"
               value={form.startYear}
-              onChange={(e) => setForm({ ...form, startYear: e.target.value })}
-              placeholder="2012"
+              onChange={(e) => {
+                setForm({ ...form, startYear: e.target.value });
+                setErrors((p) => ({ ...p, startYear: "" }));
+              }}
+              placeholder="2023"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.startYear} />
           </div>
 
           <div>
@@ -864,9 +986,14 @@ export function EditExperienceModal({
           <textarea
             rows={4}
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, description: e.target.value });
+              setErrors((p) => ({ ...p, description: "" }));
+            }}
+            placeholder="Describe your responsibilities, tools used, and measurable achievements..."
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md p-3.5 text-xs text-slate-700 leading-relaxed focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.description} />
           <p className="text-[10.5px] text-slate-400 mt-1.5">
             Include your responsibilities, the tools you used, and the outcomes
             of your work.
@@ -874,47 +1001,92 @@ export function EditExperienceModal({
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            onSave(form);
-            onClose();
-          }}
-          className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Save experience
-        </button>
+      <div className="border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-2.5">
+        <div>
+          {!isNew && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                onDelete(form.id);
+                onClose();
+              }}
+              className="text-xs font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Remove</span>
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Save experience
+          </button>
+        </div>
       </div>
     </ModalOverlay>
   );
 }
 
-/* 8. Edit Project Modal */
+/* 7. Edit / Add Project Modal */
 export function EditProjectModal({
   project,
+  isNew = false,
   onSave,
+  onDelete,
   onClose,
 }: {
   project: ProjectItem;
+  isNew?: boolean;
   onSave: (project: ProjectItem) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
 }) {
   const [form, setForm] = useState<ProjectItem>(project);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleSave = () => {
+    const nextErrors: Record<string, string> = {};
+    if (!form.name.trim()) nextErrors.name = "Project name is required.";
+    if (form.description.trim().length < 15) {
+      nextErrors.description =
+        "Please describe the project, your role, and key outcomes (min. 15 characters).";
+    }
+    if (form.url.trim() && !isValidHttpUrl(form.url.trim())) {
+      nextErrors.url = "Enter a valid URL starting with https:// or http://";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    onSave({
+      ...form,
+      name: form.name.trim(),
+      description: form.description.trim(),
+      tools: form.tools.trim(),
+      url: form.url.trim(),
+    });
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[540px]">
       <div className="bg-[#F6F5FA] px-6 py-5 border-b border-slate-100 flex items-start justify-between">
         <div>
           <h2 className="text-lg font-extrabold text-[#02183B]">
-            Edit project
+            {isNew ? "Add project" : "Edit project"}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Showcase your contribution, tools, and measurable project outcomes.
@@ -952,10 +1124,14 @@ export function EditProjectModal({
           <input
             type="text"
             value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, name: e.target.value });
+              setErrors((p) => ({ ...p, name: "" }));
+            }}
             placeholder="Project name"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.name} />
         </div>
 
         <div>
@@ -965,10 +1141,14 @@ export function EditProjectModal({
           <textarea
             rows={3}
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, description: e.target.value });
+              setErrors((p) => ({ ...p, description: "" }));
+            }}
             placeholder="Describe the project, your role, and the key outcomes to showcase your work."
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md p-3.5 text-xs text-slate-700 leading-relaxed focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.description} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -980,7 +1160,7 @@ export function EditProjectModal({
               type="text"
               value={form.tools}
               onChange={(e) => setForm({ ...form, tools: e.target.value })}
-              placeholder="Add tools used"
+              placeholder="e.g. React, Python, SQL"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
           </div>
@@ -992,51 +1172,95 @@ export function EditProjectModal({
             <input
               type="url"
               value={form.url}
-              onChange={(e) => setForm({ ...form, url: e.target.value })}
+              onChange={(e) => {
+                setForm({ ...form, url: e.target.value });
+                setErrors((p) => ({ ...p, url: "" }));
+              }}
               placeholder="https://"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.url} />
           </div>
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            onSave(form);
-            onClose();
-          }}
-          className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Save project
-        </button>
+      <div className="border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-2.5">
+        <div>
+          {!isNew && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                onDelete(form.id);
+                onClose();
+              }}
+              className="text-xs font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Remove</span>
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Save project
+          </button>
+        </div>
       </div>
     </ModalOverlay>
   );
 }
 
-/* 9. Edit / Add Education & Qualifications Modal */
+/* 8. Edit / Add Education & Qualifications Modal */
 export function EditEducationModal({
   education,
   isNew = false,
   onSave,
+  onDelete,
   onClose,
 }: {
   education: EducationItem;
   isNew?: boolean;
   onSave: (education: EducationItem) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
 }) {
   const [form, setForm] = useState<EducationItem>(education);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const certInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSave = () => {
+    const nextErrors: Record<string, string> = {};
+    if (!form.qualification.trim())
+      nextErrors.qualification = "Qualification title is required.";
+    if (!form.institution.trim())
+      nextErrors.institution = "Institution name is required.";
+    if (!form.graduationYear.trim())
+      nextErrors.graduationYear = "Graduation year is required.";
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    onSave({
+      ...form,
+      qualification: form.qualification.trim(),
+      institution: form.institution.trim(),
+      graduationYear: form.graduationYear.trim(),
+    });
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[540px]">
@@ -1069,12 +1293,14 @@ export function EditEducationModal({
           <input
             type="text"
             value={form.qualification}
-            onChange={(e) =>
-              setForm({ ...form, qualification: e.target.value })
-            }
+            onChange={(e) => {
+              setForm({ ...form, qualification: e.target.value });
+              setErrors((p) => ({ ...p, qualification: "" }));
+            }}
             placeholder="e.g. Bachelor of Science in Computer Science"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.qualification} />
         </div>
 
         <div>
@@ -1084,10 +1310,14 @@ export function EditEducationModal({
           <input
             type="text"
             value={form.institution}
-            onChange={(e) => setForm({ ...form, institution: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, institution: e.target.value });
+              setErrors((p) => ({ ...p, institution: "" }));
+            }}
             placeholder="e.g. University of the Witwatersrand"
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.institution} />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -1098,12 +1328,14 @@ export function EditEducationModal({
             <input
               type="text"
               value={form.graduationYear}
-              onChange={(e) =>
-                setForm({ ...form, graduationYear: e.target.value })
-              }
+              onChange={(e) => {
+                setForm({ ...form, graduationYear: e.target.value });
+                setErrors((p) => ({ ...p, graduationYear: "" }));
+              }}
               placeholder="e.g. 2024"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.graduationYear} />
           </div>
 
           <div>
@@ -1135,16 +1367,30 @@ export function EditEducationModal({
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) {
-                setForm({
-                  ...form,
-                  certificateName: file.name,
-                  certificateMeta: `Updated just now • ${Math.max(
-                    1,
-                    Math.round(file.size / 1024)
-                  )} KB`,
-                });
+              if (!file) return;
+              if (file.type !== "application/pdf") {
+                setErrors((p) => ({
+                  ...p,
+                  certificate: "Supporting certificates must be PDF files.",
+                }));
+                return;
               }
+              if (file.size > 10 * 1024 * 1024) {
+                setErrors((p) => ({
+                  ...p,
+                  certificate: "PDF file must be 10 MB or less.",
+                }));
+                return;
+              }
+              setErrors((p) => ({ ...p, certificate: "" }));
+              setForm({
+                ...form,
+                certificateName: file.name,
+                certificateMeta: `Updated just now • ${Math.max(
+                  1,
+                  Math.round(file.size / 1024)
+                )} KB`,
+              });
             }}
           />
           <div className="bg-[#F4F5F8] border border-slate-200/70 rounded-md px-4 py-3 flex items-center justify-between gap-3">
@@ -1176,6 +1422,7 @@ export function EditEducationModal({
               {form.certificateName ? "Replace" : "Upload PDF"}
             </button>
           </div>
+          <FieldError message={errors.certificate} />
           <p className="text-[10.5px] text-slate-400 mt-1.5">
             {form.certificateName
               ? "The current certificate is kept unless you replace it."
@@ -1184,43 +1431,83 @@ export function EditEducationModal({
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (!form.qualification.trim()) return;
-            onSave(form);
-            onClose();
-          }}
-          className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Save education
-        </button>
+      <div className="border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-2.5">
+        <div>
+          {!isNew && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                onDelete(form.id);
+                onClose();
+              }}
+              className="text-xs font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Remove</span>
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Save education
+          </button>
+        </div>
       </div>
     </ModalOverlay>
   );
 }
 
-/* 10. Edit / Add Endorsement Modal */
+/* 9. Edit / Add Endorsement Modal */
 export function EditEndorsementModal({
   endorsement,
   isNew = false,
   onSave,
+  onDelete,
   onClose,
 }: {
   endorsement: EndorsementItem;
   isNew?: boolean;
   onSave: (endorsement: EndorsementItem) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
 }) {
   const [form, setForm] = useState<EndorsementItem>(endorsement);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleSave = () => {
+    const nextErrors: Record<string, string> = {};
+    if (!form.facilitatorName.trim())
+      nextErrors.facilitatorName = "Facilitator name is required.";
+    if (!form.organisation.trim())
+      nextErrors.organisation = "Organisation is required.";
+    if (form.statement.trim().length < 20)
+      nextErrors.statement =
+        "Please provide an endorsement statement (min. 20 characters).";
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    onSave({
+      ...form,
+      facilitatorName: form.facilitatorName.trim(),
+      organisation: form.organisation.trim(),
+      statement: form.statement.trim(),
+    });
+    onClose();
+  };
 
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-[540px]">
@@ -1266,12 +1553,14 @@ export function EditEndorsementModal({
             <input
               type="text"
               value={form.facilitatorName}
-              onChange={(e) =>
-                setForm({ ...form, facilitatorName: e.target.value })
-              }
+              onChange={(e) => {
+                setForm({ ...form, facilitatorName: e.target.value });
+                setErrors((p) => ({ ...p, facilitatorName: "" }));
+              }}
               placeholder="e.g. Kabelo Molefe"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.facilitatorName} />
           </div>
 
           <div>
@@ -1281,12 +1570,14 @@ export function EditEndorsementModal({
             <input
               type="text"
               value={form.organisation}
-              onChange={(e) =>
-                setForm({ ...form, organisation: e.target.value })
-              }
+              onChange={(e) => {
+                setForm({ ...form, organisation: e.target.value });
+                setErrors((p) => ({ ...p, organisation: "" }));
+              }}
               placeholder="e.g. Shaper Academy"
               className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md px-3.5 py-2.5 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#02183B]"
             />
+            <FieldError message={errors.organisation} />
           </div>
         </div>
 
@@ -1317,10 +1608,14 @@ export function EditEndorsementModal({
           <textarea
             rows={4}
             value={form.statement}
-            onChange={(e) => setForm({ ...form, statement: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, statement: e.target.value });
+              setErrors((p) => ({ ...p, statement: "" }));
+            }}
             placeholder="Write or paste the facilitator endorsement statement..."
             className="w-full bg-[#F4F5F8] border border-slate-200/80 rounded-md p-3.5 text-xs text-slate-700 placeholder:text-slate-400 leading-relaxed focus:outline-none focus:ring-1 focus:ring-[#02183B]"
           />
+          <FieldError message={errors.statement} />
         </div>
 
         <div className="bg-[#F4F5F8] rounded-md px-3.5 py-2.5 text-[11px] text-slate-500">
@@ -1329,25 +1624,38 @@ export function EditEndorsementModal({
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-2.5">
-        <button
-          type="button"
-          onClick={onClose}
-          className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (!form.statement.trim() && !form.facilitatorName.trim()) return;
-            onSave(form);
-            onClose();
-          }}
-          className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
-        >
-          Save endorsement
-        </button>
+      <div className="border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-2.5">
+        <div>
+          {!isNew && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                onDelete(form.id);
+                onClose();
+              }}
+              className="text-xs font-semibold text-[#C8102E] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              <span>Remove</span>
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-[#F4F5F8] hover:bg-slate-200/80 text-[#02183B] text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="bg-[#02183B] hover:bg-[#052659] text-white text-xs font-bold px-4 py-2.5 rounded-md transition cursor-pointer"
+          >
+            Save endorsement
+          </button>
+        </div>
       </div>
     </ModalOverlay>
   );

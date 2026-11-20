@@ -26,32 +26,54 @@ interface CandidateSidebarProps {
   onSelectSection: (sectionId: string) => void;
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
+  readinessPercent?: number;
+  stepsRemaining?: number;
+  alertCount?: number;
+  sectionStatuses?: Record<string, SectionStatus>;
 }
 
 function StatusIcon({ status }: { status: SectionStatus }) {
   switch (status) {
     case "alert":
-      return <AlertCircle className="size-3.5 text-[#D91B24] shrink-0" />;
+      return (
+        <span title="Action required / incomplete">
+          <AlertCircle className="size-3.5 text-[#D91B24] shrink-0" />
+        </span>
+      );
     case "approved":
-      return <CheckCircle2 className="size-3.5 text-emerald-600 shrink-0" />;
+      return (
+        <span title="Approved & completed">
+          <CheckCircle2 className="size-3.5 text-emerald-600 shrink-0" />
+        </span>
+      );
     case "locked":
-      return <Lock className="size-3.5 text-slate-600 shrink-0" />;
+      return (
+        <span title="Approved & locked">
+          <Lock className="size-3.5 text-slate-600 shrink-0" />
+        </span>
+      );
     case "pending":
-      return <Hourglass className="size-3.5 text-slate-600 shrink-0" />;
+      return (
+        <span title="Pending review">
+          <Hourglass className="size-3.5 text-slate-600 shrink-0" />
+        </span>
+      );
     case "revision":
       return (
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          className="size-3.5 text-slate-400 shrink-0"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M3 5.5h8.5M9.5 3.5l2 2-2 2" />
-          <path d="M13 10.5H4.5M6.5 8.5l-2 2 2 2" />
-        </svg>
+        <span title="Needs revision">
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            className="size-3.5 text-slate-400 shrink-0"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 5.5h8.5M9.5 3.5l2 2-2 2" />
+            <path d="M13 10.5H4.5M6.5 8.5l-2 2 2 2" />
+          </svg>
+        </span>
       );
   }
 }
@@ -61,6 +83,10 @@ export default function CandidateSidebar({
   onSelectSection,
   mobileOpen = false,
   onCloseMobile,
+  readinessPercent = MOCK_CANDIDATE_USER.sidebarReadiness,
+  stepsRemaining = 2,
+  alertCount = MOCK_CANDIDATE_USER.dashboardAlertCount,
+  sectionStatuses,
 }: CandidateSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -115,22 +141,30 @@ export default function CandidateSidebar({
             Profile Readiness
           </span>
           <span className="text-xs font-extrabold text-[#02183B]">
-            {MOCK_CANDIDATE_USER.sidebarReadiness}%
+            {readinessPercent}%
           </span>
         </div>
         <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden my-2">
           <div
-            className="bg-[#C8102E] h-full rounded-full transition-all duration-300"
-            style={{ width: `${MOCK_CANDIDATE_USER.sidebarReadiness}%` }}
+            className={clsx(
+              "h-full rounded-full transition-all duration-300",
+              readinessPercent >= 100 ? "bg-emerald-600" : "bg-[#C8102E]"
+            )}
+            style={{ width: `${Math.min(100, readinessPercent)}%` }}
           />
         </div>
         <div className="text-[11px] text-slate-500">
-          {MOCK_CANDIDATE_USER.stepsToGallery}
+          {stepsRemaining === 0
+            ? "Ready for live gallery"
+            : `${stepsRemaining} ${stepsRemaining === 1 ? "step" : "steps"} to live gallery`}
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-2.5 pb-6" aria-label="Candidate Portal Navigation">
+      <nav
+        className="flex-1 px-2.5 pb-6"
+        aria-label="Candidate Portal Navigation"
+      >
         {/* Dashboard Parent Item */}
         <Link
           href="/candidate"
@@ -146,15 +180,18 @@ export default function CandidateSidebar({
             <LayoutGrid className="size-4 shrink-0" />
             <span>Dashboard</span>
           </span>
-          <span className="bg-[#D91B24] text-white text-[10px] font-bold size-4 rounded-full flex items-center justify-center">
-            {MOCK_CANDIDATE_USER.dashboardAlertCount}
-          </span>
+          {alertCount > 0 && (
+            <span className="bg-[#D91B24] text-white text-[10px] font-bold size-4 rounded-full flex items-center justify-center">
+              {alertCount}
+            </span>
+          )}
         </Link>
 
         {/* Sub-navigation Tree for Candidate Profile Sections */}
         <div className="relative ml-4 pl-3.5 mt-1.5 space-y-0.5 before:content-[''] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-px before:bg-slate-200">
           {CANDIDATE_PROFILE_SECTIONS.map((section) => {
             const isActive = isDashboard && activeSection === section.id;
+            const liveStatus = sectionStatuses?.[section.id] ?? section.status;
             return (
               <button
                 key={section.id}
@@ -177,7 +214,7 @@ export default function CandidateSidebar({
                   )}
                 />
                 <span className="truncate">{section.label}</span>
-                <StatusIcon status={section.status} />
+                <StatusIcon status={liveStatus} />
               </button>
             );
           })}
@@ -226,4 +263,3 @@ export default function CandidateSidebar({
     </>
   );
 }
-
