@@ -13,8 +13,9 @@ export default function PublicLayout({
 }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
+  const isCandidate = pathname?.startsWith("/candidate");
 
-  if (isAdmin) {
+  if (isAdmin || isCandidate) {
     return <>{children}</>;
   }
 
