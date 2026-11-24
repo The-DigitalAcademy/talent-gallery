@@ -74,3 +74,63 @@ export async function deleteEndorsement(id: string, talentId: string) {
         };
     }
 }
+
+export async function updateEndorsement(
+    id: string,
+    talentId: string,
+    data: SchemaType
+): Promise<FormState> {
+    await requireAdmin();
+
+    const validatedFields = Schema.safeParse(data);
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            message: 'Validation failed. Please check the fields.',
+            errors: validatedFields.error.flatten().fieldErrors,
+        };
+    }
+
+    const { message, name } = validatedFields.data;
+
+    try {
+        const supabase = await createClient();
+
+        const { data: updatedEndorsement, error } = await supabase
+            .from("endorsements")
+            .update({
+                message,
+                endorser_name: name,
+            })
+            .eq("id", id)
+            .eq("talent_id", talentId)
+            .select("id")
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!updatedEndorsement) {
+            return {
+                success: false,
+                message: "Endorsement not found or could not be updated.",
+            };
+        }
+
+        revalidatePath(`/admin/collections/talents/${talentId}`);
+
+        return {
+            success: true,
+            message: "Endorsement updated successfully!",
+        };
+
+    } catch (error) {
+        console.log(error);
+
+        return {
+            success: false,
+            message: "A database error occurred. Please try again.",
+        };
+    }
+}
+
