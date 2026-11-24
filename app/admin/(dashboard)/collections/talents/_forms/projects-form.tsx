@@ -1,9 +1,9 @@
 "use client"
 import { Project } from "@/app/lib/definitions"
 import { Button, Dialog, Field, Form } from "@base-ui/react"
-import { XIcon } from "lucide-react"
+import { XIcon,PencilIcon } from "lucide-react"
 import { useState } from "react";
-import { deleteProject, insertProject } from "../_actions/projects-action";
+import { deleteProject, insertProject,updateProject } from "../_actions/projects-action";
 import Link from "next/link";
 import { cn } from "@/app/lib/utils";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -88,17 +88,182 @@ export default function ProjectsForm({ projects, talentId }: { projects: Project
                     <div className="flex flex-col gap-3 col-span-2 overflow-y-scroll max-h-55 pr-5">
                         {!projects.length && <div className="w-full text-sm text-gray-400 h-full flex items-center justify-center">No Projects</div>}
                         {projects?.toReversed().map(item => (
-                            <blockquote key={item.id} className="border border-gray-200 rounded-lg p-3 relative space-y-2">
-                                <div className="absolute right-2 top-1"><DeleteFormDialog item={item} /></div>
-                                <p className="capitalize font-semibold text-base">{item.name}</p>
-                                <p className="text-sm text-gray-500">{item.description}</p>
-                                {item.projectUrl && <Link href={item.projectUrl} className="text-sm text-blue-500">{item.projectUrl}</Link>}
-                            </blockquote>))}
+                         <ProjectCard key={item.id} item={item} />
+                     ))}
                     </div>
                 </div>
             </div>
         </div>
     )
+}
+
+function ProjectCard({ item }: { item: Project }) {
+    const [isEditing, setIsEditing] = useState(false);
+
+    const {
+        handleSubmit,
+        register,
+        reset,
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<FormValues>({
+        defaultValues: {
+            name: item.name,
+            description: item.description,
+            url: item.projectUrl || "",
+        },
+    });
+
+    function onCancel() {
+        reset({
+            name: item.name,
+            description: item.description,
+            url: item.projectUrl || "",
+        });
+        setIsEditing(false);
+    }
+
+    const onSave: SubmitHandler<FormValues> = async (data) => {
+        const result = await updateProject(item.id, item.talentId, data);
+
+        if (!result.success) {
+            setError("root", { message: result.message });
+
+            if (result.errors) {
+                for (const key in result.errors) {
+                    const errKey = key as keyof FormValues;
+                    setError(errKey, {
+                        message: result.errors[errKey]?.toString(),
+                    });
+                }
+            }
+
+            toast.error(result.message || "Failed to update project");
+            return;
+        }
+
+        toast.success("Project updated successfully");
+        reset(data);
+        setIsEditing(false);
+    };
+
+    return (
+        <blockquote className="border border-gray-200 rounded-lg p-3 relative space-y-2">
+
+            {!isEditing && (
+                <>
+                    <div className="absolute right-2 top-2 flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setIsEditing(true)}
+                            className="text-gray-500 hover:text-blue-600 cursor-pointer"
+                            title="Edit project"
+                        >
+                            <PencilIcon className="size-4" />
+                        </button>
+
+                        <DeleteFormDialog item={item} />
+                    </div>
+
+                    <p className="capitalize font-semibold text-base pr-16">
+                        {item.name}
+                    </p>
+
+                    <p className="text-sm text-gray-500">
+                        {item.description}
+                    </p>
+
+                    {item.projectUrl && (
+                        <Link
+                            href={item.projectUrl}
+                            target="_blank"
+                            className="text-sm text-blue-500"
+                        >
+                            {item.projectUrl}
+                        </Link>
+                    )}
+                </>
+            )}
+
+            {isEditing && (
+                <form
+                    onSubmit={handleSubmit(onSave)}
+                    className="flex flex-col gap-3"
+                >
+                    <input
+                        {...register("name", {
+                            required: "Project name is required",
+                            minLength: 2,
+                            maxLength: 50,
+                        })}
+                        placeholder="Project name"
+                        className="border border-gray-300 rounded-lg p-2 text-sm w-full"
+                    />
+                    {errors.name && (
+                        <p className="text-xs text-red-700">
+                            {errors.name.message}
+                        </p>
+                    )}
+
+                    <textarea
+                        {...register("description", {
+                            required: "Description is required",
+                            minLength: 2,
+                            maxLength: 2000,
+                        })}
+                        rows={4}
+                        placeholder="Description"
+                        className="border border-gray-300 rounded-lg p-2 text-sm w-full"
+                    />
+                    {errors.description && (
+                        <p className="text-xs text-red-700">
+                            {errors.description.message}
+                        </p>
+                    )}
+
+                    <input
+                        {...register("url")}
+                        placeholder="Project URL"
+                        className="border border-gray-300 rounded-lg p-2 text-sm w-full"
+                    />
+
+                    {errors.url && (
+                        <p className="text-xs text-red-700">
+                            {errors.url.message}
+                        </p>
+                    )}
+
+                    {errors.root && (
+                        <p className="text-xs text-red-700">
+                            {errors.root.message}
+                        </p>
+                    )}
+
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            type="button"
+                            onClick={onCancel}
+                            disabled={isSubmitting}
+                            className="border border-gray-300 text-gray-700 rounded-lg text-sm px-3 h-8"
+                        >
+                            Cancel
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm px-3 h-8 flex items-center gap-2"
+                        >
+                            {isSubmitting && (
+                                <span className="w-4 h-4 border-2 border-white/75 rounded-full inline-block animate-spin border-b-transparent" />
+                            )}
+                            Save
+                        </Button>
+                    </div>
+                </form>
+            )}
+        </blockquote>
+    );
 }
 
 function DeleteFormDialog({ item }: { item: { id: string, name: string, talentId: string } }) {
