@@ -75,3 +75,62 @@ export async function deleteProject(id: string, talentId: string) {
         };
     }
 }
+
+export async function updateProject(
+    id: string,
+    talentId: string,
+    data: SchemaType
+): Promise<FormState> {
+    await requireAdmin();
+
+    const validatedFields = Schema.safeParse(data);
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            message: "Validation failed. Please check the fields.",
+            errors: validatedFields.error.flatten().fieldErrors,
+        };
+    }
+
+    const { description, name, url } = validatedFields.data;
+
+    try {
+        const supabase = await createClient();
+
+        const { data: updatedProject, error } = await supabase
+            .from("projects")
+            .update({
+                name,
+                description,
+                project_url: url,
+            })
+            .eq("id", id)
+            .eq("talent_id", talentId)
+            .select("id")
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!updatedProject) {
+            return {
+                success: false,
+                message: "Project not found or could not be updated.",
+            };
+        }
+
+        revalidatePath(`/admin/collections/talents/${talentId}`);
+
+        return {
+            success: true,
+            message: "Project updated successfully.",
+        };
+    } catch (error) {
+        console.log(error);
+
+        return {
+            success: false,
+            message: "A database error occurred. Please try again.",
+        };
+    }
+}
